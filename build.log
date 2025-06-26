@@ -1,0 +1,404 @@
+--progress is a global compose flag, better use `docker compose --progress xx build ...
+time="2025-06-27T02:00:11+09:00" level=warning msg="/home/ryu/portforio/docker-compose.yml: the attribute `version` is obsolete, it will be ignored, please remove it to avoid potential confusion"
+#0 building with "default" instance using docker driver
+
+#1 [web internal] load build definition from Dockerfile
+#1 transferring dockerfile: 337B done
+#1 DONE 0.0s
+
+#2 [web internal] load metadata for docker.io/library/ruby:3.1.4
+#2 DONE 1.8s
+
+#3 [web internal] load .dockerignore
+#3 transferring context: 2B done
+#3 DONE 0.0s
+
+#4 [web 1/6] FROM docker.io/library/ruby:3.1.4@sha256:8ebc619f459ec62a7d0763f910e50787cc7999de3c09632536b22aaf8725d3f1
+#4 resolve docker.io/library/ruby:3.1.4@sha256:8ebc619f459ec62a7d0763f910e50787cc7999de3c09632536b22aaf8725d3f1 0.0s done
+#4 CACHED
+
+#5 [web internal] load build context
+#5 transferring context: 42.89kB 0.2s done
+#5 DONE 0.2s
+
+#6 [web 2/6] RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - &&     apt-get update -qq &&     apt-get install -y nodejs yarn postgresql-client
+#6 0.568 [38;5;79m2025-06-26 17:00:14 - Installing pre-requisites[0m
+#6 0.731 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+#6 0.770 Get:2 http://deb.debian.org/debian bookworm-updates InRelease [55.4 kB]
+#6 0.786 Get:3 http://deb.debian.org/debian-security bookworm-security InRelease [48.0 kB]
+#6 0.914 Get:4 http://deb.debian.org/debian bookworm/main amd64 Packages [8793 kB]
+#6 1.236 Get:5 http://deb.debian.org/debian bookworm-updates/main amd64 Packages [756 B]
+#6 1.238 Get:6 http://deb.debian.org/debian-security bookworm-security/main amd64 Packages [269 kB]
+#6 1.982 Fetched 9317 kB in 1s (7042 kB/s)
+#6 1.982 Reading package lists...
+#6 2.527 Reading package lists...
+#6 3.008 Building dependency tree...
+#6 3.157 Reading state information...
+#6 3.389 gnupg is already the newest version (2.2.40-1.1).
+#6 3.389 The following additional packages will be installed:
+#6 3.390   libcurl3-gnutls libcurl4 libcurl4-openssl-dev
+#6 3.393 Suggested packages:
+#6 3.393   libcurl4-doc libidn-dev libldap2-dev librtmp-dev libssh2-1-dev
+#6 3.426 The following NEW packages will be installed:
+#6 3.427   apt-transport-https
+#6 3.428 The following packages will be upgraded:
+#6 3.430   ca-certificates curl libcurl3-gnutls libcurl4 libcurl4-openssl-dev
+#6 3.490 5 upgraded, 1 newly installed, 0 to remove and 131 not upgraded.
+#6 3.490 Need to get 1766 kB of archives.
+#6 3.490 After this operation, 34.8 kB of additional disk space will be used.
+#6 3.490 Get:1 http://deb.debian.org/debian bookworm-updates/main amd64 ca-certificates all 20230311+deb12u1 [155 kB]
+#6 3.536 Get:2 http://deb.debian.org/debian bookworm/main amd64 apt-transport-https all 2.6.1 [25.2 kB]
+#6 3.539 Get:3 http://deb.debian.org/debian bookworm/main amd64 libcurl4-openssl-dev amd64 7.88.1-10+deb12u12 [492 kB]
+#6 3.571 Get:4 http://deb.debian.org/debian bookworm/main amd64 curl amd64 7.88.1-10+deb12u12 [315 kB]
+#6 3.592 Get:5 http://deb.debian.org/debian bookworm/main amd64 libcurl4 amd64 7.88.1-10+deb12u12 [391 kB]
+#6 3.614 Get:6 http://deb.debian.org/debian bookworm/main amd64 libcurl3-gnutls amd64 7.88.1-10+deb12u12 [386 kB]
+#6 3.871 debconf: delaying package configuration, since apt-utils is not installed
+#6 3.921 Fetched 1766 kB in 0s (9174 kB/s)
+#6 3.983 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 23248 files and directories currently installed.)
+#6 4.129 Preparing to unpack .../0-ca-certificates_20230311+deb12u1_all.deb ...
+#6 4.144 Unpacking ca-certificates (20230311+deb12u1) over (20230311) ...
+#6 4.730 Selecting previously unselected package apt-transport-https.
+#6 4.734 Preparing to unpack .../1-apt-transport-https_2.6.1_all.deb ...
+#6 4.738 Unpacking apt-transport-https (2.6.1) ...
+#6 4.785 Preparing to unpack .../2-libcurl4-openssl-dev_7.88.1-10+deb12u12_amd64.deb ...
+#6 4.799 Unpacking libcurl4-openssl-dev:amd64 (7.88.1-10+deb12u12) over (7.88.1-10+deb12u5) ...
+#6 4.958 Preparing to unpack .../3-curl_7.88.1-10+deb12u12_amd64.deb ...
+#6 4.971 Unpacking curl (7.88.1-10+deb12u12) over (7.88.1-10+deb12u5) ...
+#6 5.071 Preparing to unpack .../4-libcurl4_7.88.1-10+deb12u12_amd64.deb ...
+#6 5.090 Unpacking libcurl4:amd64 (7.88.1-10+deb12u12) over (7.88.1-10+deb12u5) ...
+#6 5.189 Preparing to unpack .../5-libcurl3-gnutls_7.88.1-10+deb12u12_amd64.deb ...
+#6 5.204 Unpacking libcurl3-gnutls:amd64 (7.88.1-10+deb12u12) over (7.88.1-10+deb12u5) ...
+#6 5.326 Setting up apt-transport-https (2.6.1) ...
+#6 5.342 Setting up libcurl3-gnutls:amd64 (7.88.1-10+deb12u12) ...
+#6 5.355 Setting up ca-certificates (20230311+deb12u1) ...
+#6 5.462 debconf: unable to initialize frontend: Dialog
+#6 5.462 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#6 5.462 debconf: falling back to frontend: Readline
+#6 5.476 debconf: unable to initialize frontend: Readline
+#6 5.476 debconf: (This frontend requires a controlling tty.)
+#6 5.476 debconf: falling back to frontend: Teletype
+#6 8.410 Updating certificates in /etc/ssl/certs...
+#6 10.28 rehash: warning: skipping ca-certificates.crt,it does not contain exactly one certificate or CRL
+#6 10.28 2 added, 0 removed; done.
+#6 10.33 Setting up libcurl4:amd64 (7.88.1-10+deb12u12) ...
+#6 10.34 Setting up curl (7.88.1-10+deb12u12) ...
+#6 10.35 Setting up libcurl4-openssl-dev:amd64 (7.88.1-10+deb12u12) ...
+#6 10.37 Processing triggers for libc-bin (2.36-9+deb12u4) ...
+#6 10.59 Processing triggers for ca-certificates (20230311+deb12u1) ...
+#6 10.60 Updating certificates in /etc/ssl/certs...
+#6 11.76 0 added, 0 removed; done.
+#6 11.76 Running hooks in /etc/ca-certificates/update.d...
+#6 11.77 done.
+#6 12.03 Hit:1 http://deb.debian.org/debian bookworm InRelease
+#6 12.04 Hit:2 http://deb.debian.org/debian bookworm-updates InRelease
+#6 12.05 Hit:3 http://deb.debian.org/debian-security bookworm-security InRelease
+#6 12.13 Get:4 https://deb.nodesource.com/node_18.x nodistro InRelease [12.1 kB]
+#6 12.44 Get:5 https://deb.nodesource.com/node_18.x nodistro/main amd64 Packages [11.5 kB]
+#6 12.47 Fetched 23.6 kB in 0s (48.9 kB/s)
+#6 12.47 Reading package lists...
+#6 12.97 [1;34m2025-06-26 17:00:26 - Repository configured successfully.[0m
+#6 12.97 [38;5;79m2025-06-26 17:00:26 - To install Node.js, run: apt-get install nodejs -y[0m
+#6 12.97 [38;5;79m2025-06-26 17:00:26 - You can use N|solid Runtime as a node.js alternative[0m
+#6 12.98 [1;32m2025-06-26 17:00:26 - To install N|solid Runtime, run: apt-get install nsolid -y 
+#6 12.98 [0m
+#6 13.97 Reading package lists...
+#6 14.47 Building dependency tree...
+#6 14.61 Reading state information...
+#6 14.86 The following additional packages will be installed:
+#6 14.86   libpq-dev libpq5 postgresql-client-15 postgresql-client-common
+#6 14.86   python3-cliapp python3-markdown python3-pkg-resources python3-pygments
+#6 14.86   python3-ttystatus python3-yaml
+#6 14.86 Suggested packages:
+#6 14.86   postgresql-doc-15 postgresql-15 python3-xdg python-markdown-doc
+#6 14.86   python3-setuptools python-pygments-doc ttf-bitstream-vera
+#6 14.96 The following NEW packages will be installed:
+#6 14.96   cmdtest nodejs postgresql-client postgresql-client-15
+#6 14.96   postgresql-client-common python3-cliapp python3-markdown
+#6 14.96   python3-pkg-resources python3-pygments python3-ttystatus python3-yaml
+#6 14.96 The following packages will be upgraded:
+#6 14.97   libpq-dev libpq5
+#6 15.03 2 upgraded, 11 newly installed, 0 to remove and 129 not upgraded.
+#6 15.03 Need to get 33.1 MB of archives.
+#6 15.03 After this operation, 203 MB of additional disk space will be used.
+#6 15.03 Get:1 http://deb.debian.org/debian bookworm/main amd64 python3-yaml amd64 6.0-3+b2 [119 kB]
+#6 15.06 Get:2 http://deb.debian.org/debian bookworm/main amd64 python3-cliapp all 1.20180812.1-4 [46.3 kB]
+#6 15.07 Get:3 http://deb.debian.org/debian bookworm/main amd64 python3-markdown all 3.4.1-2 [64.7 kB]
+#6 15.07 Get:4 http://deb.debian.org/debian bookworm/main amd64 python3-ttystatus all 0.38-4 [15.7 kB]
+#6 15.08 Get:5 https://deb.nodesource.com/node_18.x nodistro/main amd64 nodejs amd64 18.20.6-1nodesource1 [29.7 MB]
+#6 15.08 Get:6 http://deb.debian.org/debian bookworm/main amd64 cmdtest all 0.32.14.gcdfe14e-5 [21.7 kB]
+#6 15.08 Get:7 http://deb.debian.org/debian bookworm/main amd64 libpq-dev amd64 15.13-0+deb12u1 [147 kB]
+#6 15.09 Get:8 http://deb.debian.org/debian bookworm/main amd64 libpq5 amd64 15.13-0+deb12u1 [192 kB]
+#6 15.10 Get:9 http://deb.debian.org/debian bookworm/main amd64 postgresql-client-common all 248 [35.1 kB]
+#6 15.10 Get:10 http://deb.debian.org/debian bookworm/main amd64 postgresql-client-15 amd64 15.13-0+deb12u1 [1725 kB]
+#6 15.16 Get:11 http://deb.debian.org/debian bookworm/main amd64 postgresql-client all 15+248 [10.1 kB]
+#6 15.16 Get:12 http://deb.debian.org/debian bookworm/main amd64 python3-pkg-resources all 66.1.1-1+deb12u1 [296 kB]
+#6 15.18 Get:13 http://deb.debian.org/debian bookworm/main amd64 python3-pygments all 2.14.0+dfsg-1 [783 kB]
+#6 16.17 debconf: delaying package configuration, since apt-utils is not installed
+#6 16.21 Fetched 33.1 MB in 1s (31.6 MB/s)
+#6 16.25 Selecting previously unselected package python3-yaml.
+#6 16.25 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 23254 files and directories currently installed.)
+#6 16.27 Preparing to unpack .../00-python3-yaml_6.0-3+b2_amd64.deb ...
+#6 16.28 Unpacking python3-yaml (6.0-3+b2) ...
+#6 16.35 Selecting previously unselected package python3-cliapp.
+#6 16.35 Preparing to unpack .../01-python3-cliapp_1.20180812.1-4_all.deb ...
+#6 16.35 Unpacking python3-cliapp (1.20180812.1-4) ...
+#6 16.42 Selecting previously unselected package python3-markdown.
+#6 16.42 Preparing to unpack .../02-python3-markdown_3.4.1-2_all.deb ...
+#6 16.42 Unpacking python3-markdown (3.4.1-2) ...
+#6 16.48 Selecting previously unselected package python3-ttystatus.
+#6 16.49 Preparing to unpack .../03-python3-ttystatus_0.38-4_all.deb ...
+#6 16.49 Unpacking python3-ttystatus (0.38-4) ...
+#6 16.55 Selecting previously unselected package cmdtest.
+#6 16.55 Preparing to unpack .../04-cmdtest_0.32.14.gcdfe14e-5_all.deb ...
+#6 16.56 Unpacking cmdtest (0.32.14.gcdfe14e-5) ...
+#6 16.61 Preparing to unpack .../05-libpq-dev_15.13-0+deb12u1_amd64.deb ...
+#6 16.62 Unpacking libpq-dev (15.13-0+deb12u1) over (15.6-0+deb12u1) ...
+#6 16.76 Preparing to unpack .../06-libpq5_15.13-0+deb12u1_amd64.deb ...
+#6 16.78 Unpacking libpq5:amd64 (15.13-0+deb12u1) over (15.6-0+deb12u1) ...
+#6 16.98 Selecting previously unselected package nodejs.
+#6 16.98 Preparing to unpack .../07-nodejs_18.20.6-1nodesource1_amd64.deb ...
+#6 16.99 Unpacking nodejs (18.20.6-1nodesource1) ...
+#6 19.89 Selecting previously unselected package postgresql-client-common.
+#6 19.89 Preparing to unpack .../08-postgresql-client-common_248_all.deb ...
+#6 19.90 Unpacking postgresql-client-common (248) ...
+#6 19.96 Selecting previously unselected package postgresql-client-15.
+#6 19.96 Preparing to unpack .../09-postgresql-client-15_15.13-0+deb12u1_amd64.deb ...
+#6 19.97 Unpacking postgresql-client-15 (15.13-0+deb12u1) ...
+#6 20.19 Selecting previously unselected package postgresql-client.
+#6 20.19 Preparing to unpack .../10-postgresql-client_15+248_all.deb ...
+#6 20.20 Unpacking postgresql-client (15+248) ...
+#6 20.30 Selecting previously unselected package python3-pkg-resources.
+#6 20.30 Preparing to unpack .../11-python3-pkg-resources_66.1.1-1+deb12u1_all.deb ...
+#6 20.31 Unpacking python3-pkg-resources (66.1.1-1+deb12u1) ...
+#6 20.39 Selecting previously unselected package python3-pygments.
+#6 20.39 Preparing to unpack .../12-python3-pygments_2.14.0+dfsg-1_all.deb ...
+#6 20.40 Unpacking python3-pygments (2.14.0+dfsg-1) ...
+#6 20.56 Setting up python3-pkg-resources (66.1.1-1+deb12u1) ...
+#6 20.88 Setting up postgresql-client-common (248) ...
+#6 20.90 Setting up python3-ttystatus (0.38-4) ...
+#6 21.04 Setting up libpq5:amd64 (15.13-0+deb12u1) ...
+#6 21.05 Setting up postgresql-client-15 (15.13-0+deb12u1) ...
+#6 22.27 update-alternatives: using /usr/share/postgresql/15/man/man1/psql.1.gz to provide /usr/share/man/man1/psql.1.gz (psql.1.gz) in auto mode
+#6 22.35 Setting up python3-yaml (6.0-3+b2) ...
+#6 22.50 Setting up libpq-dev (15.13-0+deb12u1) ...
+#6 22.51 Setting up nodejs (18.20.6-1nodesource1) ...
+#6 22.54 Setting up python3-cliapp (1.20180812.1-4) ...
+#6 22.69 Setting up python3-pygments (2.14.0+dfsg-1) ...
+#6 23.26 Setting up python3-markdown (3.4.1-2) ...
+#6 23.42 Setting up cmdtest (0.32.14.gcdfe14e-5) ...
+#6 23.54 Setting up postgresql-client (15+248) ...
+#6 23.56 Processing triggers for libc-bin (2.36-9+deb12u4) ...
+#6 DONE 24.0s
+
+#7 [web 3/6] WORKDIR /app
+#7 DONE 0.1s
+
+#8 [web 4/6] COPY Gemfile* ./
+#8 DONE 0.1s
+
+#9 [web 5/6] RUN bundle install
+#9 2.521 Fetching gem metadata from https://rubygems.org/.........
+#9 4.940 Fetching rake 13.3.0
+#9 5.095 Installing rake 13.3.0
+#9 5.131 Fetching minitest 5.25.5
+#9 5.159 Fetching erubi 1.13.1
+#9 5.189 Fetching base64 0.3.0
+#9 5.191 Fetching marcel 1.0.4
+#9 5.195 Fetching mini_mime 1.1.5
+#9 5.195 Fetching timeout 0.4.3
+#9 5.195 Fetching concurrent-ruby 1.3.4
+#9 5.195 Fetching builder 3.3.0
+#9 5.195 Fetching racc 1.8.1
+#9 5.195 Fetching crass 1.0.6
+#9 5.195 Fetching nio4r 2.7.4
+#9 5.195 Fetching websocket-extensions 0.1.5
+#9 5.195 Fetching date 3.4.1
+#9 5.195 Fetching rack 2.2.17
+#9 5.310 Fetching public_suffix 6.0.2
+#9 5.310 Fetching bindex 0.8.1
+#9 5.703 Installing base64 0.3.0
+#9 5.707 Installing erubi 1.13.1
+#9 5.724 Installing timeout 0.4.3
+#9 5.730 Installing crass 1.0.6
+#9 5.741 Installing websocket-extensions 0.1.5
+#9 5.764 Installing mini_mime 1.1.5
+#9 5.789 Installing marcel 1.0.4
+#9 5.792 Installing builder 3.3.0
+#9 5.797 Installing bindex 0.8.1 with native extensions
+#9 5.826 Installing racc 1.8.1 with native extensions
+#9 5.831 Installing date 3.4.1 with native extensions
+#9 5.838 Installing minitest 5.25.5
+#9 5.861 Using bundler 2.3.26
+#9 5.866 Fetching msgpack 1.8.0
+#9 5.870 Fetching matrix 0.4.3
+#9 5.939 Fetching regexp_parser 2.10.0
+#9 5.987 Fetching cgi 0.5.0
+#9 6.025 Installing nio4r 2.7.4 with native extensions
+#9 6.084 Installing public_suffix 6.0.2
+#9 6.110 Installing rack 2.2.17
+#9 6.134 Installing matrix 0.4.3
+#9 6.157 Fetching prettyprint 0.2.0
+#9 6.202 Installing msgpack 1.8.0 with native extensions
+#9 6.204 Fetching stringio 3.1.7
+#9 6.245 Installing cgi 0.5.0 with native extensions
+#9 6.271 Installing regexp_parser 2.10.0
+#9 6.310 Installing prettyprint 0.2.0
+#9 6.330 Fetching io-console 0.8.0
+#9 6.336 Installing stringio 3.1.7 with native extensions
+#9 6.399 Fetching method_source 1.1.0
+#9 6.499 Fetching thor 1.3.2
+#9 6.559 Installing method_source 1.1.0
+#9 6.571 Fetching zeitwerk 2.6.18
+#9 6.610 Installing io-console 0.8.0 with native extensions
+#9 6.651 Installing concurrent-ruby 1.3.4
+#9 6.691 Fetching logger 1.7.0
+#9 6.771 Installing thor 1.3.2
+#9 6.855 Installing zeitwerk 2.6.18
+#9 6.887 Installing logger 1.7.0
+#9 6.991 Fetching pg 1.5.9
+#9 7.059 Fetching rexml 3.4.1
+#9 7.291 Fetching rubyzip 2.4.1
+#9 7.535 Fetching websocket 1.2.11
+#9 7.593 Fetching websocket-driver 0.8.0
+#9 7.600 Installing rubyzip 2.4.1
+#9 7.656 Fetching net-protocol 0.2.2
+#9 7.660 Installing rexml 3.4.1
+#9 7.826 Installing websocket 1.2.11
+#9 7.830 Installing net-protocol 0.2.2
+#9 7.834 Installing websocket-driver 0.8.0 with native extensions
+#9 7.888 Installing pg 1.5.9 with native extensions
+#9 8.029 Fetching addressable 2.8.7
+#9 8.086 Fetching pp 0.6.2
+#9 8.140 Fetching erb 4.0.4
+#9 8.278 Installing pp 0.6.2
+#9 8.300 Installing erb 4.0.4 with native extensions
+#9 8.354 Fetching nokogiri 1.18.8 (x86_64-linux-gnu)
+#9 8.439 Installing addressable 2.8.7
+#9 8.735 Fetching net-pop 0.1.2
+#9 8.879 Fetching net-smtp 0.5.1
+#9 8.938 Installing net-pop 0.1.2
+#9 8.958 Fetching rack-test 2.2.0
+#9 9.092 Installing net-smtp 0.5.1
+#9 9.145 Installing rack-test 2.2.0
+#9 9.360 Fetching selenium-webdriver 4.32.0
+#9 10.03 Fetching i18n 1.14.7
+#9 10.04 Fetching tzinfo 2.0.6
+#9 10.07 Fetching sprockets 4.2.2
+#9 10.25 Installing i18n 1.14.7
+#9 10.27 Installing tzinfo 2.0.6
+#9 10.30 Installing sprockets 4.2.2
+#9 10.63 Fetching activesupport 7.0.8.7
+#9 10.83 Installing activesupport 7.0.8.7
+#9 11.02 Installing nokogiri 1.18.8 (x86_64-linux-gnu)
+#9 11.65 Fetching globalid 1.2.1
+#9 11.69 Fetching activemodel 7.0.8.7
+#9 11.79 Installing globalid 1.2.1
+#9 11.82 Installing activemodel 7.0.8.7
+#9 11.86 Fetching activejob 7.0.8.7
+#9 11.99 Installing activejob 7.0.8.7
+#9 12.10 Installing selenium-webdriver 4.32.0
+#9 12.26 Fetching activerecord 7.0.8.7
+#9 12.70 Installing activerecord 7.0.8.7
+#9 12.71 Fetching xpath 3.2.0
+#9 12.75 Fetching loofah 2.24.1
+#9 12.75 Fetching rails-dom-testing 2.3.0
+#9 12.87 Installing xpath 3.2.0
+#9 12.89 Installing rails-dom-testing 2.3.0
+#9 12.91 Installing loofah 2.24.1
+#9 12.95 Fetching capybara 3.40.0
+#9 13.09 Fetching reline 0.6.1
+#9 13.20 Fetching rails-html-sanitizer 1.6.2
+#9 13.27 Installing reline 0.6.1
+#9 13.32 Installing rails-html-sanitizer 1.6.2
+#9 13.36 Installing capybara 3.40.0
+#9 13.42 Fetching actionview 7.0.8.7
+#9 13.45 Fetching puma 5.6.9
+#9 13.63 Installing actionview 7.0.8.7
+#9 13.67 Installing puma 5.6.9 with native extensions
+#9 14.21 Fetching jbuilder 2.13.0
+#9 14.21 Fetching actionpack 7.0.8.7
+#9 14.36 Installing jbuilder 2.13.0
+#9 14.46 Installing actionpack 7.0.8.7
+#9 14.96 Fetching actioncable 7.0.8.7
+#9 14.96 Fetching sprockets-rails 3.5.2
+#9 14.96 Fetching railties 7.0.8.7
+#9 14.99 Fetching activestorage 7.0.8.7
+#9 15.18 Installing sprockets-rails 3.5.2
+#9 15.19 Installing actioncable 7.0.8.7
+#9 15.20 Installing activestorage 7.0.8.7
+#9 15.25 Installing railties 7.0.8.7
+#9 15.52 Fetching actiontext 7.0.8.7
+#9 15.66 Installing actiontext 7.0.8.7
+#9 15.85 Fetching importmap-rails 2.1.0
+#9 15.86 Fetching turbo-rails 2.0.12
+#9 15.86 Fetching stimulus-rails 1.3.4
+#9 15.86 Fetching web-console 4.2.1
+#9 16.07 Installing importmap-rails 2.1.0
+#9 16.10 Installing web-console 4.2.1
+#9 16.14 Installing stimulus-rails 1.3.4
+#9 16.17 Installing turbo-rails 2.0.12
+#9 16.34 Fetching bootsnap 1.18.6
+#9 16.44 Installing bootsnap 1.18.6 with native extensions
+#9 18.48 Fetching net-imap 0.5.9
+#9 18.48 Fetching psych 5.2.6
+#9 18.61 Installing psych 5.2.6 with native extensions
+#9 18.65 Installing net-imap 0.5.9
+#9 18.70 Fetching mail 2.8.1
+#9 18.85 Installing mail 2.8.1
+#9 19.12 Fetching actionmailbox 7.0.8.7
+#9 19.12 Fetching actionmailer 7.0.8.7
+#9 19.24 Installing actionmailer 7.0.8.7
+#9 19.25 Installing actionmailbox 7.0.8.7
+#9 19.30 Fetching rails 7.0.8.7
+#9 19.38 Installing rails 7.0.8.7
+#9 20.89 Fetching rdoc 6.14.1
+#9 21.05 Installing rdoc 6.14.1
+#9 21.13 Fetching irb 1.15.2
+#9 21.23 Installing irb 1.15.2
+#9 21.26 Fetching debug 1.11.0
+#9 21.36 Installing debug 1.11.0 with native extensions
+#9 24.24 Bundle complete! 14 Gemfile dependencies, 80 gems now installed.
+#9 24.24 Use `bundle info [gemname]` to see where a bundled gem is installed.
+#9 24.24 Post-install message from rubyzip:
+#9 24.24 RubyZip 3.0 is coming!
+#9 24.24 **********************
+#9 24.24 
+#9 24.24 The public API of some Rubyzip classes has been modernized to use named
+#9 24.24 parameters for optional arguments. Please check your usage of the
+#9 24.24 following classes:
+#9 24.24   * `Zip::File`
+#9 24.24   * `Zip::Entry`
+#9 24.24   * `Zip::InputStream`
+#9 24.24   * `Zip::OutputStream`
+#9 24.24   * `Zip::DOSTime`
+#9 24.24 
+#9 24.24 Run your test suite with the `RUBYZIP_V3_API_WARN` environment
+#9 24.24 variable set to see warnings about usage of the old API. This will
+#9 24.24 help you to identify any changes that you need to make to your code.
+#9 24.24 See https://github.com/rubyzip/rubyzip/wiki/Updating-to-version-3.x for
+#9 24.24 more information.
+#9 24.24 
+#9 24.24 Please ensure that your Gemfiles and .gemspecs are suitably restrictive
+#9 24.24 to avoid an unexpected breakage when 3.0 is released (e.g. ~> 2.3.0).
+#9 24.24 See https://github.com/rubyzip/rubyzip for details. The Changelog also
+#9 24.24 lists other enhancements and bugfixes that have been implemented since
+#9 24.24 version 2.3.0.
+#9 DONE 24.6s
+
+#10 [web 6/6] COPY . .
+#10 DONE 0.6s
+
+#11 [web] exporting to image
+#11 exporting layers
+#11 exporting layers 7.9s done
+#11 exporting manifest sha256:479ed297f8d65bd5b17c3d5b6bea184f118608a08bda761e793f55e198afe389 0.0s done
+#11 exporting config sha256:cee115b01f3c6cae98df02cb46dc55040d11e535b41b039b38311d2baf9a1a05 0.0s done
+#11 exporting attestation manifest sha256:bc1f2fb2c2e7c37fcc40744f7a730af9bd3f4d8b48ffa819d994531965b63713 0.0s done
+#11 exporting manifest list sha256:06985a3e08ba2d0a24c24d0d6bb0b7ffdfd9d99b6d0968937dd7a509e3b29181 0.0s done
+#11 naming to docker.io/library/portforio-web:latest done
+#11 unpacking to docker.io/library/portforio-web:latest
+#11 unpacking to docker.io/library/portforio-web:latest 6.7s done
+#11 DONE 14.7s
+
+#12 [web] resolving provenance for metadata file
+#12 DONE 0.0s
