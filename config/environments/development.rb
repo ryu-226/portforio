@@ -71,5 +71,5 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.debug = false
   config.assets.digest = false
-
+  config.assets.precompile += %w( application.css )
 end
