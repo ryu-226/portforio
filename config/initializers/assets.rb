@@ -11,6 +11,6 @@ Rails.application.config.assets.version = "1.0"
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
-# Rails.application.config.assets.paths << Rails.root.join('app', 'assets', 'builds')
-# Rails.application.config.assets.precompile += %w( builds/tailwind.css )
-Rails.application.config.assets.precompile += %w( application.css )
+Rails.application.config.assets.paths << Rails.root.join('app', 'assets', 'builds')
+Rails.application.config.assets.precompile += %w( builds/tailwind.css )
+# Rails.application.config.assets.precompile += %w( application.css )
