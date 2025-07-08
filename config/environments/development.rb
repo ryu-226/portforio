@@ -67,9 +67,7 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
-
   config.assets.compile = true
   config.assets.debug = false
   config.assets.digest = false
-  config.assets.precompile += %w( application.css )
 end
