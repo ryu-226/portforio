@@ -11,6 +11,7 @@ module App
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
     config.hosts << "meshigacha-7446224a9bf0.herokuapp.com"
+    config.assets.paths << Rails.root.join("app", "assets", "builds")
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
