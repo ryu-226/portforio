@@ -1,0 +1,5 @@
+{
+  "scripts":{ 
+    "build": "tailwindcss -i ./app/assets/stylesheets/application.tailwind.css -o ./app/assets/builds/tailwind.css"
+  }
+}
