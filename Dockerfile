@@ -12,5 +12,7 @@ RUN bundle install
 
 COPY . .
 
+RUN bundle exec rails assets:precompile
+
 ENTRYPOINT ["./entrypoint.sh"]
-CMD ["rails", "server", "-b", "0.0.0.0"]
+CMD ["rails", "server", "-b", "0.0.0.0", "-e", "production"]
