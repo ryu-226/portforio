@@ -7,10 +7,24 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
-
   </head>
 
   <body>
-      <%= yield %>
+    <%# --- ヘッダー ---%>
+    <% if defined?(user_signed_in?) && user_signed_in? %>
+      <%= render "layouts/header_logged_in" %>
+    <% else %>
+      <%= render "layouts/header" %>
+    <% end %>
+
+    <%# --- メインコンテンツ --- %>
+    <%= yield %>
+
+    <%# --- フッター --- %>
+    <% if defined?(user_signed_in?) && user_signed_in? %>
+      <%= render "layouts/footer_logged_in" %>
+    <% else %>
+      <%= render "layouts/footer" %>
+    <% end %>
   </body>
 </html>
