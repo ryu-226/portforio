@@ -1,13 +1,13 @@
 <!-- フッター -->
 <footer class="w-full py-6 mt-16 bg-gray-900 text-gray-300">
-  <div class="max-w-2xl mx-auto px-4 flex flex-col items-center">
+  <div class="w-full flex flex-col md:flex-row items-center md:items-end">
     <!-- 利用規約・プライバシーポリシー・お問い合わせ -->
-    <nav class="flex flex-col md:flex-row gap-3 md:gap-20 text-sm items-center mx-auto">
+    <nav class="flex flex-col md:flex-row gap-3 md:gap-20 text-sm items-center mx-auto md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
       <a href="/terms" class="hover:text-white transition">利用規約</a>
       <a href="/privacy" class="hover:text-white transition">プライバシーポリシー</a>
       <a href="/contact" class="hover:text-white transition">お問い合わせ</a>
     </nav>
     <!-- コピーライト -->
-    <div class="text-xs mt-6 md:mt-0 md:ml-10 md:self-end">&copy; <%= Time.current.year %>めしガチャ</div>
+    <div class="text-xs mt-6 md:mt-0 md:mr-10 md:self-end md:ml-auto">&copy; <%= Time.current.year %>めしガチャ</div>
   </div>
 </footer>
