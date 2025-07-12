@@ -6,11 +6,29 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
 
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   </head>
 
-  <body>
-      <%= yield %>
+  <body class="font-sans">
+    <%# --- ヘッダー ---%>
+    <% if defined?(user_signed_in?) && user_signed_in? %>
+      <%= render "layouts/header_logged_in" %>
+    <% else %>
+      <%= render "layouts/header" %>
+    <% end %>
+
+    <%# --- メインコンテンツ --- %>
+    <%= yield %>
+
+    <%# --- フッター --- %>
+    <% if defined?(user_signed_in?) && user_signed_in? %>
+      <%= render "layouts/footer_logged_in" %>
+    <% else %>
+      <%= render "layouts/footer" %>
+    <% end %>
   </body>
 </html>

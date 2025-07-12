@@ -1,31 +1,11 @@
-<!-- ヘッダー　-->
-<header class="flex justify-between items-center px-4 md:px-8 py-4">
-  <!-- 左側：ロゴ　-->
-  <div class="flex items-center">
-    <%= link_to root_path do %>
-      <%= image_tag "logo.png", alt: "めしガチャ ロゴ", class: "h-30 w-auto mr-2" %>
-    <% end %>
-  </div>
-  <!-- 右側：新規登録・ログイン -->
-  <nav class="space-x-6">
-    <a href="/login" class="hidden sm:inline-block px-4 py-2 text-primary rounded-xl hover:bg-gray-300 transition font-semibold">ログイン</a>
-    <a href="/signup" class="hidden sm:inline-block px-4 py-2 text-primary rounded-xl hover:bg-gray-300 transition font-semibold">新規登録</a>
-    <!-- スマホ表示ボタン -->
-    <div class="sm:hidden flex flex-row space-x-3">
-      <a href="/login" class="sm:inline-block px-4 py-2 text-white rounded-xl bg-primary font-semibold">ログイン</a>
-      <a href="/signup" class="sm:inline-block px-4 py-2 text-white rounded-xl bg-primary font-semibold">新規登録</a>
-    </div>
-  </nav>
-</header>
-
 <!-- メイン -->
-<main class="flex flex-col md:flex-row items-center justify-center py-10 md:py-20 px-4 max-w-5xl mx-auto shadow bg-yellow-200">
+<main class="flex flex-col md:flex-row items-center justify-center py-10 md:py-20 px-4 max-w-5xl mx-auto shadow bg-yellow-200 rounded-2xl">
   <!-- 画像（スマホは先頭、PCは右）-->
-  <div class="order-1 md:order-2 flex-[1.5] flex justify-center items-center mb-2 md:mb-0">
+  <div class="order-1 md:order-2 flex-[1.6] flex justify-center items-center mb-2 md:mb-0">
     <%= image_tag "lunch.png", alt: "ランチ風景", class: "w-full max-w-xl h-auto object-cover" %>
   </div>
   <!-- 説明＆ボタン（スマホは下、PCは左） -->
-  <div class="order-2 md:order-1 flex-[1.2] flex flex-col items-center md:items-start justify-center">
+  <div class="order-2 md:order-1 flex-[1.0] flex flex-col items-center md:items-start justify-center">
     <h1 class="text-3xl md:text-4xl text-gray-700 font-bold mb-6 text-center md:text-left tracking-wide">
       めしガチャで<br>
       毎日のランチをもっと楽しく
@@ -42,17 +22,3 @@
     </div>
   </div>
 </main>
-
-<!-- フッター -->
-<footer class="w-full py-6 mt-16 bg-gray-900 text-gray-300">
-  <div class="max-w-2xl mx-auto px-4 flex flex-col items-center">
-    <!-- 利用規約・プライバシーポリシー・お問い合わせ -->
-    <nav class="flex flex-col md:flex-row gap-3 md:gap-20 text-sm items-center mx-auto">
-      <a href="/terms" class="hover:text-white transition">利用規約</a>
-      <a href="/privacy" class="hover:text-white transition">プライバシーポリシー</a>
-      <a href="/contact" class="hover:text-white transition">お問い合わせ</a>
-    </nav>
-    <!-- コピーライト -->
-    <div class="text-xs mt-6 md:mt-0 md:ml-10 md:self-end">&copy; <%= Time.current.year %>めしガチャ</div>
-  </div>
-</footer>
