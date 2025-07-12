@@ -10,7 +10,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+        sans: ['"M PLUS Rounded 1c"', ...defaultTheme.fontFamily.sans],
       },
     },
   },
