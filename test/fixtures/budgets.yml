@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  monthly_budget: 1
+  draw_days: 1
+  min_amount: 1
+  max_amount: 1
+
+two:
+  user: two
+  monthly_budget: 1
+  draw_days: 1
+  min_amount: 1
+  max_amount: 1
