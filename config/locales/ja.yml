@@ -7,6 +7,11 @@ ja:
         password: パスワード
         password_confirmation: 確認用パスワード
         nickname: ニックネーム
+      budget:
+        monthly_budget: 月の予算
+        draw_days: 抽選日数
+        min_amount: 1日の最低金額
+        max_amount: 1日の最高金額
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'

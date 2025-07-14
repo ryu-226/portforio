@@ -1,1 +1,22 @@
-<footer class="...">ログイン中のフッター（後でデザイン作り直す）</footer>
+<!-- ログイン後フッター -->
+<footer class="fixed bottom-0 left-0 w-full bg-gray-100 border-t border-gray-300 z-40">
+  <nav class="max-w-md mx-auto flex justify-between items-center px-6 py-2">
+    <!-- 履歴ページ -->
+    <%= link_to "#history_path", class: "flex flex-col items-center flex-1", title: "履歴" do %>
+      <i class="fa-solid fa-calendar-days text-3xl text-primary p-2 rounded-xl hover:bg-gray-200 transition"></i>
+      <span class="text-xs text-primary">履歴</span>
+    <% end %>
+
+    <!-- ホーム（メイン）ページ -->
+    <%= link_to main_path, class: "flex flex-col items-center flex-1", title: "ホーム" do %>
+      <i class="fa-solid fa-house text-3xl text-primary p-2 rounded-xl hover:bg-gray-200 transition"></i>
+      <span class="text-xs text-primary">ホーム</span>
+    <% end %>
+
+    <!-- 探すページ -->
+    <%= link_to "#search_path ", class: "flex flex-col items-center flex-1", title: "探す" do %>
+      <i class="fa-solid fa-utensils text-3xl text-primary p-2 rounded-xl hover:bg-gray-200 transition"></i>
+      <span class="text-xs text-primary">探す</span>
+    <% end %>
+  </nav>
+</footer>

@@ -10,22 +10,36 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   </head>
 
   <body class="font-sans">
     <%# --- ヘッダー ---%>
-    <% if defined?(user_signed_in?) && user_signed_in? %>
+    <% if logged_in? %>
       <%= render "layouts/header_logged_in" %>
     <% else %>
       <%= render "layouts/header" %>
+    <% end %>
+
+    <%# --- フラッシュメッセージ --- %>
+    <% if notice %>
+      <div class="mb-4 bg-green-100 text-green-600 rounded px-4 py-3 max-w-xl mx-auto">
+        <%= notice %>
+      </div>
+    <% end %>
+    <% if alert %>
+      <div class="mb-4 bg-red-100 text-red-600 rounded px-4 py-3 max-w-xl mx-auto">
+        <%= alert %>
+      </div>
     <% end %>
 
     <%# --- メインコンテンツ --- %>
     <%= yield %>
 
     <%# --- フッター --- %>
-    <% if defined?(user_signed_in?) && user_signed_in? %>
+    <% if logged_in? %>
       <%= render "layouts/footer_logged_in" %>
     <% else %>
       <%= render "layouts/footer" %>
