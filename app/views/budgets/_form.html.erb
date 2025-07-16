@@ -50,5 +50,21 @@
         </div>
       <% end %>
     </div>
+
+    <!-- LINE通知設定 -->
+    <div class="mb-6">
+      <label class="block font-semibold mb-1">LINE通知</label>
+      <div class="flex items-center space-x-3">
+        <span>通知</span>
+        <!-- 疑似的なトグルデザイン -->
+        <label class="relative inline-flex items-center cursor-default select-none">
+          <input type="checkbox" class="sr-only peer" disabled>
+          <div class="w-10 h-6 bg-gray-300 peer-focus:outline-none rounded-full peer-checked:bg-green-400 transition"></div>
+          <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition peer-checked:translate-x-4"></div>
+        </label>
+        <span class="text-gray-400 text-xs">(近日実装)</span>
+      </div>
+    </div>
+
     <%= f.submit '設定を完了する', class: "w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition" %>
   <% end %>  

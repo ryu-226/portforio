@@ -1,4 +1,54 @@
-<main class="max-w-lg mx-auto my-12 p-8 bg-white rounded-2xl shadow">
-  <h1 class="text-xl font-bold mb-6 text-center">マイページ</h1>
-  <p>ここにユーザー情報や設定情報を表示します（今後実装）</p>
+<main class="max-w-4xl mx-auto my-8 p-6 pb-24 text-gray-700 bg-yellow-200 rounded-2xl shadow">
+  <h1 class="text-2xl font-bold mb-6 text-center">マイページ</h1>
+  <div class="flex flex-col md:flex-row gap-6">
+    <!-- 左カラム：ユーザー情報・利用履歴 -->
+    <div class="flex-1 space-y-6">
+      <!-- ユーザー情報 -->
+      <section class="bg-white/80 rounded-xl shadow p-4">
+        <h2 class="font-semibold text-lg mb-2 text-primary">ユーザー情報</h2>
+        <div class="mb-2"><span class="font-bold">ニックネーム：</span><span><%= @user.nickname %></span></div>
+        <div class="mb-2"><span class="font-bold">メールアドレス：</span><span><%= @user.email %></span></div>
+        <div class="mb-2"><span class="font-bold">登録日：</span><%= @user.created_at.strftime('%Y年%m月%d日') %></div>
+        <div><span class="font-bold">会員歴：</span><%= @member_days %>日</div>
+      </section>
+      <!-- 利用履歴 -->
+      <section class="bg-white/80 rounded-xl shadow p-4">
+        <h2 class="font-semibold text-lg mb-2 text-primary">利用履歴</h2>
+        <div class="mb-2"><span class="font-bold">ガチャを回した回数：</span><%= @gacha_count %>回</div>
+      </section>
+    </div>
+
+    <!-- 右カラム：設定条件・通知設定 -->
+    <div class="flex-1 space-y-6">
+      <!-- 設定条件 -->
+      <section class="bg-white/80 rounded-xl shadow p-4">
+        <h2 class="font-semibold text-lg mb-2 text-primary">現在の設定条件</h2>
+        <ul class="space-y-1 pl-2">
+          <li><span class="font-bold">月の予算：</span><%= @budget&.monthly_budget %> 円</li>
+          <li><span class="font-bold">抽選日数：</span><%= @budget&.draw_days %> 日間</li>
+          <li><span class="font-bold">１日の最低金額：</span><%= @budget&.min_amount %> 円</li>
+          <li><span class="font-bold">１日の最高金額：</span><%= @budget&.max_amount %> 円</li>
+        </ul>
+        <% if @budget.nil? %>
+          <p class="text-sm text-gray-400 mt-2">※まだ条件設定がありません</p>
+        <% end %>
+      </section>
+      <!-- 通知設定 -->
+      <section class="bg-white/80 rounded-xl shadow p-4">
+        <h2 class="font-semibold text-lg mb-2 text-primary">通知設定</h2>
+        <div class="flex items-center space-x-3">
+          <span class="font-bold">LINE通知：</span>
+          <span class="px-3 py-1 rounded-full
+            <%= @line_status == "連携済" ? "bg-green-100 text-green-600" : "bg-gray-200 text-gray-500" %>">
+            <%= @line_status %>
+          </span>
+          <span class="text-xs text-gray-400">(近日実装)</span>
+        </div>
+      </section>
+    </div>
+  </div>
+  <!-- 設定変更ボタン -->
+  <div class="mt-8">
+    <%= link_to '設定条件を変更する', edit_budget_path, class: "block w-full py-3 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition-all duration-300 text-center" %>
+  </div>
 </main>
