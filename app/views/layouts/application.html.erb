@@ -24,19 +24,33 @@
     <% end %>
 
     <%# --- フラッシュメッセージ --- %>
-    <% if notice %>
-      <div class="mb-4 bg-green-100 text-green-600 rounded px-4 py-3 max-w-xl mx-auto">
-        <%= notice %>
+    <% if flash[:notice] %>
+      <div id="toast" class="fixed left-1/2 top-20 z-50 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow transition-opacity duration-500 opacity-100">
+        <%= flash[:notice] %>
       </div>
+      <script>
+        setTimeout(function(){
+          const t = document.getElementById('toast');
+          if (t) t.style.opacity = '0';
+        }, 2000); // 2秒で消える
+      </script>
     <% end %>
-    <% if alert %>
-      <div class="mb-4 bg-red-100 text-red-600 rounded px-4 py-3 max-w-xl mx-auto">
-        <%= alert %>
+    <% if flash[:alert] %>
+      <div id="toast-alert" class="fixed left-1/2 top-20 z-50 -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow transition-opacity duration-500 opacity-100">
+        <%= flash[:alert] %>
       </div>
+      <script>
+        setTimeout(function(){
+          const t = document.getElementById('toast-alert');
+          if (t) t.style.opacity = '0';
+        }, 2000); // 2秒で消える
+      </script>
     <% end %>
 
     <%# --- メインコンテンツ --- %>
-    <%= yield %>
+    <main class="transition-all duration-700 ease-out animate-fadein">
+      <%= yield %>
+    </main>
 
     <%# --- フッター --- %>
     <% if logged_in? %>

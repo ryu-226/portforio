@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_13_141625) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_14_232815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "budgets", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "monthly_budget", null: false
-    t.integer "draw_days", null: false
+    t.text "draw_days", null: false
     t.integer "min_amount", null: false
     t.integer "max_amount", null: false
     t.datetime "created_at", null: false
