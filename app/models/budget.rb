@@ -4,7 +4,7 @@ class Budget < ApplicationRecord
   validates :monthly_budget, presence: true, numericality: { greater_than: 0 }
   validates :draw_days, presence: true, numericality: { greater_than: 0 }
   validates :min_amount, presence: true, numericality: { greater_than: 0 }
-  validates :max_amount, presence: true
+  validates :max_amount, presence: true, numericality: { only_integer: true }
 
   validate :max_greater_than_min
   validate :monthly_budget_greater_than_min_and_max

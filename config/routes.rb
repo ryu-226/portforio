@@ -5,13 +5,7 @@ Rails.application.routes.draw do
 
   get 'mypage', to: "mypage#index", as: "mypage"
 
-  get 'budgets/create'
-  get 'budgets/edit'
-  get 'budgets/update'
-
   get 'sessions/new'
-  get 'sessions/create'
-  get 'sessions/destroy'
 
   get 'signup', to: 'users#new', as: 'signup'
   post 'signup', to: 'users#create'

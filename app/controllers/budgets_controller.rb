@@ -1,6 +1,6 @@
 class BudgetsController < ApplicationController
   before_action :require_login
-  before_action :set_budget
+  before_action :set_budget, only: [:edit, :update]
 
   def new
     if current_user.budget
@@ -20,6 +20,10 @@ class BudgetsController < ApplicationController
   end
 
   def edit
+    @budget = current_user.budget
+    unless @budget
+      redirect_to new_budget_path, alert: "まだ条件を設定していません。まずは各種条件を設定してください。"
+    end
   end
 
   def update
