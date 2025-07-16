@@ -6,3 +6,22 @@
   --color-accent: #F88379;
   --font-sans: "M PLUS Rounded 1c", ui-sans-serif, system-ui, sans-serif;
 }
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  appearance: textfield;
+}
+
+@layer utilities {
+  .animate-fadein {
+    animation: fadein 0.8s ease;
+  }
+  @keyframes fadein {
+    0% { opacity: 0; transform: translateY(32px);}
+    100% { opacity: 1; transform: none;}
+  }
+}

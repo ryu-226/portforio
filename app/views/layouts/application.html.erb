@@ -10,22 +10,50 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c&display=swap" rel="stylesheet">
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   </head>
 
   <body class="font-sans">
     <%# --- ヘッダー ---%>
-    <% if defined?(user_signed_in?) && user_signed_in? %>
+    <% if logged_in? %>
       <%= render "layouts/header_logged_in" %>
     <% else %>
       <%= render "layouts/header" %>
     <% end %>
 
+    <%# --- フラッシュメッセージ --- %>
+    <% if flash[:notice] %>
+      <div id="toast" class="fixed left-1/2 top-20 z-50 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow transition-opacity duration-500 opacity-100">
+        <%= flash[:notice] %>
+      </div>
+      <script>
+        setTimeout(function(){
+          const t = document.getElementById('toast');
+          if (t) t.style.opacity = '0';
+        }, 2000); // 2秒で消える
+      </script>
+    <% end %>
+    <% if flash[:alert] %>
+      <div id="toast-alert" class="fixed left-1/2 top-20 z-50 -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow transition-opacity duration-500 opacity-100">
+        <%= flash[:alert] %>
+      </div>
+      <script>
+        setTimeout(function(){
+          const t = document.getElementById('toast-alert');
+          if (t) t.style.opacity = '0';
+        }, 2000); // 2秒で消える
+      </script>
+    <% end %>
+
     <%# --- メインコンテンツ --- %>
-    <%= yield %>
+    <main class="transition-all duration-700 ease-out animate-fadein">
+      <%= yield %>
+    </main>
 
     <%# --- フッター --- %>
-    <% if defined?(user_signed_in?) && user_signed_in? %>
+    <% if logged_in? %>
       <%= render "layouts/footer_logged_in" %>
     <% else %>
       <%= render "layouts/footer" %>

@@ -2,11 +2,7 @@
   <div class="w-full max-w-md p-8 bg-yellow-200 rounded-2xl shadow">
     <!-- タイトル -->
     <h1 class="text-2xl font-bold text-center mb-6">ログインページ</h1>
-    <% if flash.now[:alert] %>
-      <div class="mb-4 bg-red-100 text-red-600 rounded px-4 py-3">
-        <%= flash.now[:alert] %>
-      </div>
-    <% end %>
+
     <!-- 入力ホーム -->
     <%= form_with url: login_path, local: true, scope: :session do |f| %>
       <div class="mb-6">
@@ -21,12 +17,10 @@
     <% end %>
     <!-- パスワードリセット・新規会員登録への導線 -->
     <div class="flex flex-col items-center justify-center mt-6 gap-2">
-      <!--
       <div class="flex items-center">
         <span class="mr-2 text-lg text-primary">▶</span>
-        <a href="/password_resets/new" class="font-semibold text-accent hover:underline">パスワードを忘れた方はこちら</a>
+        <a href="#/password_resets/new" class="font-semibold text-accent hover:underline">パスワードを忘れた方はこちら</a>
       </div>
-      -->
       <div class="flex items-center">
         <span class="mr-2 text-lg text-primary">▶</span>
         <a href="/signup" class="font-semibold text-accent hover:underline">新規会員登録の方はこちら</a>

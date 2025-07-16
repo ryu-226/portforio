@@ -1,1 +1,53 @@
-<header class="...">ログイン中のヘッダー（後でデザイン作り直す）</header>
+<!-- ログイン後ヘッダー -->
+<header class="flex justify-between items-center px-4 md:px-8 py-4 bg-primary">
+  <!-- 左側：ロゴ（装飾用、クリック不可）-->
+  <div class="flex items-center select-none pointer-events-none ">
+    <!-- ロゴだけ白丸背景で囲う -->
+    <div class="bg-white rounded-full shadow mr-2">
+      <%= image_tag "logo.png", alt: "めしガチャ ロゴ", class: "h-16 w-auto" %>
+    </div>
+    <span class="text-white text-lg md:text-xl font-bold tracking-wide">
+      <span class="text-secondary">めし</span><span class="text-white">ガチャ</span>
+    </span>
+  </div>
+  <!-- 右側：マイページアイコン＋ハンバーガーメニュー -->
+  <nav class="flex items-centar space-x-6">
+    <!-- マイページアイコン -->
+    <%= link_to mypage_path, class: "flex flex-col items-center p-2 rounded-xl hover:bg-white/10 transition", title: "マイページ" do %>
+      <i class="fa-solid fa-id-card text-3xl text-white"></i>
+    <% end %>
+    <!-- ハンバーガーメニューアイコン -->
+    <button id="menu-btn" type="button" class="p-2 rounded-xl hover:bg-white/10 transition" aria-label="メニュー">
+      <i class="fa-solid fa-bars text-3xl text-white"></i>
+    </button>
+    <!-- ドロップダウンメニュー本体 -->
+    <div id="menu-dropdown" class="absolute top-16 right-6 z-50 bg-gray-200 shadow-lg rounded-xl py-2 px-4 hidden">
+      <%= button_to "ログアウト", logout_path, method: :delete, form: { data: { turbo: false } }, class: "block w-full text-left py-2 text-red-500 hover:text-red-300 bg-transparent border-none" %>
+      <!-- MVP後link_toに書き換え -->
+      <a href="#" class="block py-2 text-gray-700 hover:text-primary">利用規約</a>
+      <a href="#" class="block py-2 text-gray-700 hover:text-primary">プライバシーポリシー</a>
+      <a href="#" class="block py-2 text-gray-700 hover:text-primary">お問い合わせ</a>
+    </div>
+  </nav>
+</header>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const menuBtn = document.getElementById("menu-btn");
+    const menuDropdown = document.getElementById("menu-dropdown");
+    let isOpen = false;
+
+    menuBtn.addEventListener("click", function(e) {
+      e.stopPropagation();
+      isOpen = !isOpen;
+      menuDropdown.classList.toggle("hidden", !isOpen);
+    });
+
+    // メニュー外クリックで閉じる
+    document.addEventListener("click", function(e) {
+      if (isOpen && !menuDropdown.contains(e.target) && e.target !== menuBtn) {
+        menuDropdown.classList.add("hidden");
+        isOpen = false;
+      }
+    });
+  });
+</script>

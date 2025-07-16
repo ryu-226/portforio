@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_11_231032) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_14_232815) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "budgets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "monthly_budget", null: false
+    t.text "draw_days", null: false
+    t.integer "min_amount", null: false
+    t.integer "max_amount", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_budgets_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", null: false
@@ -25,4 +36,5 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_11_231032) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "budgets", "users"
 end

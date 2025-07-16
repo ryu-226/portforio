@@ -1,0 +1,24 @@
+<main class="max-w-md mx-auto my-8 p-6 pb-24 text-gray-700 bg-yellow-200 rounded-2xl shadow">
+  <!-- サービス説明 -->
+ <section class="mb-6 bg-white/60 p-4 rounded-xl shadow text-base">
+    <h2 class="font-bold text-lg mb-2 text-primary">最初に予算を設定しましょう</h2>
+    <p>
+      「めしガチャ」を使うには、まず<span class="text-primary font-semibold">月の予算</span>や<span class="text-primary font-semibold">抽選日数</span>などを設定します。
+      <br>
+      下記のガイドを参考に入力してください。
+    </p>
+  </section>
+  <!-- 設定ガイド -->
+  <section class="mb-8">
+    <ul class="list-disc pl-6 text-gray-600 text-sm">
+      <li>「月の予算」…1ヶ月のランチ合計額</li>
+      <li>「抽選日数」…ランチ予算を抽選する日数（平日だけ・毎日など自由）</li>
+      <li>「最低/最高金額」…1日のランチ予算の下限と上限</li>
+    </ul>
+    <p class="mt-2 text-xs text-gray-400">※設定はあとからいつでも変更できます</p>
+  </section>
+
+  <!-- 入力フォーム -->
+  <%= render 'form' %>
+
+</main>
