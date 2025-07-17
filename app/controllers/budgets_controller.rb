@@ -20,7 +20,6 @@ class BudgetsController < ApplicationController
   end
 
   def edit
-    @budget = current_user.budget
     unless @budget
       redirect_to new_budget_path, alert: "まだ条件を設定していません。まずは各種条件を設定してください。"
     end

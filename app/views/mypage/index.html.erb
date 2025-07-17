@@ -49,6 +49,10 @@
   </div>
   <!-- 設定変更ボタン -->
   <div class="mt-8">
-    <%= link_to '設定条件を変更する', edit_budget_path, class: "block w-full py-3 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition-all duration-300 text-center" %>
+    <% if @budget.present? %>
+      <%= link_to '設定条件を変更する', edit_budget_path, class: "block w-full py-3 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition-all duration-300 text-center" %>
+    <% else %>
+      <%= link_to '設定条件を登録する', new_budget_path, class: "block w-full py-3 bg-red-500 text-white font-bold rounded-xl shadow hover:bg-red-400 transition-all duration-300 text-center" %>
+    <% end %>
   </div>
 </main>
