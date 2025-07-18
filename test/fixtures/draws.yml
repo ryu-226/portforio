@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  date: 2025-07-17
+  amount: 1
+  used: false
+  carried_over: false
+
+two:
+  user: two
+  date: 2025-07-17
+  amount: 1
+  used: false
+  carried_over: false

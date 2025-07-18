@@ -13,7 +13,11 @@ class BudgetsController < ApplicationController
   def create
     @budget = current_user.build_budget(budget_params)
     if @budget.save
-      redirect_to mypage_path, notice: "条件を設定しました"
+      if params[:from_signup] == "1"
+        redirect_to main_path, notice: "条件を設定しました"
+      else
+        redirect_to mypage_path, notice: "条件を設定しました"
+      end
     else
       render :new, status: :unprocessable_entity
     end

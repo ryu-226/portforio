@@ -32,7 +32,7 @@
         setTimeout(function(){
           const t = document.getElementById('toast');
           if (t) t.style.opacity = '0';
-        }, 2000); // 2秒で消える
+        }, 2000);
       </script>
     <% end %>
     <% if flash[:alert] %>
@@ -43,12 +43,12 @@
         setTimeout(function(){
           const t = document.getElementById('toast-alert');
           if (t) t.style.opacity = '0';
-        }, 2000); // 2秒で消える
+        }, 2000);
       </script>
     <% end %>
 
     <%# --- メインコンテンツ --- %>
-    <main class="transition-all duration-700 ease-out animate-fadein">
+    <main class="<%= @draw ? '' : 'animate-fadein' %>">
       <%= yield %>
     </main>
 

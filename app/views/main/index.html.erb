@@ -1,4 +1,95 @@
-<div>
-  <h1 class="font-bold text-4xl">Main#index</h1>
-  <p>Find me in app/views/main/index.html.erb</p>
-</div>
+<!-- 予算金額の提示 -->
+<main class="flex flex-col items-center justify-center min-h-[70vh] text-gray-700">
+  <h1 class="text-3xl font-bold mb-6">今日の予算</h1>
+  <div id="today-amount" class="text-5xl font-extrabold text-accent mb-8 cursor-pointer hover:underline">
+    <% if @draw %>
+      <%= @draw.amount %> 円
+    <% else %>
+      ーー 円
+    <% end %>
+  </div>
+
+  <!-- ボタンorテキスト -->
+  <% unless @draw %>
+    <%= form_with url: draw_main_path, method: :post, local: true do %>
+      <%= submit_tag "ガチャを回す", class: "py-4 px-12 rounded-xl text-xl bg-primary text-white font-bold shadow hover:bg-primary/80 transition" %>
+    <% end %>
+  <% else %>
+    <div class="text-lg text-primary font-semibold">今日はガチャ済みです！</div>
+  <% end %>
+
+  <!-- モーダル画面 -->
+  <% if @draw %>
+    <div id="draw-modal" class="fixed left-1/2 top-[17%] -translate-x-1/2 bg-white rounded-2xl shadow-lg p-6 md:p-10 text-center z-50 border-4 border-primary w-[90vw] max-w-xl animate-fadein-modal"
+      style="<%= flash[:draw_amount] ? '' : 'display:none;' %>">
+      <div class="text-3xl md:text-4xl font-bold mb-4 text-accent">今日のガチャ結果</div>
+      <div class="text-5xl md:text-6xl font-extrabold mb-8"><%= @draw.amount %> 円</div>
+      <div class="space-y-5 flex flex-col items-center w-full max-w-sm mx-auto">
+        <!-- お店を探す -->
+        <div class="flex items-center justify-center gap-4 w-full">
+          <span class="inline-flex items-center justify-center w-10 h-10 text-primary text-2xl">
+            <i class="fa-solid fa-utensils"></i>
+          </span>
+          <a href="#" class="flex flex-col items-start justify-center">
+            <span class="font-bold text-base hover:text-gray-500">この予算でお店を探す</span>
+            <span class="text-xs text-gray-400">（近日実装）</span>
+          </a>
+        </div>
+        <!-- Xで共有 -->
+        <div class="flex items-center justify-center gap-4 w-full mr-18">
+          <span class="inline-flex items-center justify-center w-10 h-10">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
+            <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
+            </svg>
+          </span>
+          <a href="#" class="flex flex-col items-start justify-center">
+            <span class="font-bold text-X text-base hover:text-[#0F1419]/60">Xで共有する</span>
+            <span class="text-xs text-gray-400">（近日実装）</span>
+          </a>
+        </div>
+        <!-- LINE通知 -->
+        <div class="flex items-center justify-center gap-4 w-full">
+          <span class="inline-flex items-center justify-center w-10 h-10 text-LINE text-2xl">
+            <i class="fa-brands fa-line"></i>
+          </span>
+            <a href="#" class="flex flex-col items-start justify-center">
+            <span class="font-bold text-LINE text-base hover:text-[#00B900]/60 ">LINEで通知を受け取る</span>
+            <span class="text-xs text-gray-400">（近日実装）</span>
+          </a>
+        </div>
+      </div>
+      <div class="mt-8">
+        <button
+          id="close-modal-btn"
+          onclick="document.getElementById('draw-modal').style.display = 'none';"
+          class="text-sm text-gray-400 underline hover:text-primary hover:bg-gray-100 px-4 py-2 rounded transition"
+        >
+          閉じる
+        </button>
+      </div>
+    </div>
+  <% end %>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const amount = document.getElementById('today-amount');
+  const modal = document.getElementById('draw-modal');
+  const closeBtn = document.getElementById('close-modal-btn');
+  // 金額部分を押したらモーダルを表示
+  if(amount && modal){
+    amount.addEventListener('click', function() {
+      // すでに今日のガチャを回している場合だけ有効
+      if (amount.textContent.includes('円') && !amount.textContent.includes('ーー')) {
+        modal.style.display = '';
+      }
+    });
+  }
+  // 閉じるボタンでモーダル非表示
+  if(closeBtn && modal){
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+    });
+  }
+});
+</script>

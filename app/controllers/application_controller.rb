@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
   def require_login
     unless logged_in?
-       edirect_to login_path, alert: "ログインしてください"
+       redirect_to login_path, alert: "ログインしてください"
     end
   end
 end
