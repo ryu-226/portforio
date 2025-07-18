@@ -28,11 +28,10 @@ input[type="number"] {
   }
 
   .animate-fadein-modal {
-    animation: fadein-modal 2s ease;
+    animation: fadein-modal 1.5s ease;
   }
   @keyframes fadein-modal {
     0% { opacity: 0; }
     100% { opacity: 1; }
   }
-
 }
