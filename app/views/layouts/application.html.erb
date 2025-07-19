@@ -48,7 +48,7 @@
     <% end %>
 
     <%# --- メインコンテンツ --- %>
-    <main class="<%= @draw ? '' : 'animate-fadein' %>">
+    <main class="<%= (controller_name == 'main' && action_name == 'index') ? '' : 'animate-fadein' %>">
       <%= yield %>
     </main>
 
