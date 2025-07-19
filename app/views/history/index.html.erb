@@ -1,0 +1,42 @@
+<main class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
+  <h1 class="text-xl font-bold mb-6 text-primary">履歴ページ</h1>
+  <div class="mb-4 flex flex-wrap gap-6">
+    <div>抽選金額合計：<span class="font-bold"><%= @sum_amount %> 円</span></div>
+    <div>実際に使った金額：<span class="font-bold"><%= @sum_actual %> 円</span></div>
+  </div>
+
+  <table class="w-full table-fixed border text-sm">
+    <thead>
+      <tr class="bg-primary/10 text-primary">
+        <th class="w-1/4 py-2">日付</th>
+        <th class="w-1/4 py-2">抽選金額</th>
+        <th class="w-1/4 py-2">実際に使った金額</th>
+        <th class="w-1/4 py-2">入力</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% (@month.beginning_of_month..@month.end_of_month).each do |date| %>
+        <% draw = @draws.find { |d| d.date == date } %>
+        <tr>
+          <td class="text-center"><%= date.strftime("%-m/%-d") %></td>
+          <td class="text-center"><%= draw&.amount ? "#{draw.amount} 円" : '-' %></td>
+          <td class="text-center">
+            <% if draw&.amount %>
+              <%= draw.actual_amount.present? ? "#{draw.actual_amount} 円" : "未入力" %>
+            <% else %>
+              -
+            <% end %>
+          </td>
+          <td class="text-center">
+            <% if draw&.amount %>
+              <%= form_with url: "#", method: :patch, local: true do |f| %>
+                <%= number_field_tag "actual_amount", draw.actual_amount, min: 0, class: "border rounded px-2 py-1 w-20" %>
+                <%= submit_tag "保存", class: "bg-primary text-white px-2 py-1 rounded text-xs" %>
+              <% end %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</main>

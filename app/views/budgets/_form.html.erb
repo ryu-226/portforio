@@ -2,6 +2,7 @@
   <h1 class="text-2xl font-bold mb-6 text-center">各種条件設定</h1>
   <!-- 入力フォーム -->
   <%= form_with model: @budget, url: budget_path, local: true do |f| %>
+    <%= hidden_field_tag :from_signup, params[:from_signup] %>
     <div class="mb-6">
       <%= f.label :monthly_budget, "月の予算", class: "block font-semibold mb-1" %>
       <div class="relative">
@@ -66,5 +67,8 @@
       </div>
     </div>
 
-    <%= f.submit '設定を完了する', class: "w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition" %>
+    <%= f.submit(
+      params[:from_signup] == "1" ? '設定を完了してガチャをまわす' : '設定を完了する',
+      class: "w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition"
+    ) %>
   <% end %>  

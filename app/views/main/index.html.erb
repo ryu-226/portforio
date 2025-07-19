@@ -1,4 +1,140 @@
-<div>
-  <h1 class="font-bold text-4xl">Main#index</h1>
-  <p>Find me in app/views/main/index.html.erb</p>
-</div>
+<!-- 予算金額の提示 -->
+<main class="flex flex-col items-center justify-start min-h-[80vh] p-20 text-gray-700 bg-gradient-to-br from-yellow-200 to-primary/20">
+  <h1 class="text-lg md:text-xl text-center mb-10 font-semibold text-primary/80 tracking-wide">今日はどんなランチになる？🍚</h1>
+  <div class="rounded-[30%] bg-gradient-to-r from-yellow-200 via-pink-100 to-green-100 p-6 mb-18">
+    <h2 class="text-center text-3xl font-bold mb-6">今日の予算</h2>
+    <div id="today-amount" class="whitespace-nowrap text-5xl font-extrabold text-accent mb-8 cursor-pointer hover:text-accent/60">
+      <% if @draw %>
+        <%= @draw.amount %> 円
+      <% else %>
+        ーー 円
+      <% end %>
+    </div>
+  </div>
+  <!-- ボタンorテキスト -->
+  <% unless @draw %>
+    <%= form_with url: draw_main_path, method: :post, local: true do %>
+      <div class="relative flex justify-center items-center">
+        <!-- ボタン本体（SVG＋テキスト） -->
+        <button type="submit"
+          class="py-4 px-12 mt-6 rounded-xl text-xl bg-primary text-white font-bold shadow-xl ring-2 ring-primary/30 hover:bg-primary/80 hover:scale-110 transition duration-200 flex items-center gap-4 group z-10 relative min-w-[220px] min-h-[56px]"
+        >
+          <span class="absolute left-8 top-0.5 w-14 h-14 pointer-events-none group-hover:animate-spin">
+            <!-- ガチャハンドルSVG -->
+            <svg viewBox="0 0 120 120" fill="none" class="w-14 h-14" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="60" cy="60" r="58" stroke="#1766A6" stroke-width="4" fill="white"/>
+              <path d="M105,60
+              a45,45 0 1,0 -32.5,43"
+              fill="none" stroke="#FFE600" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="31" cy="60" r="3.5" fill="#FFE600"/>
+              <circle cx="38" cy="81" r="2.3" fill="#FFE600"/>
+              <circle cx="42" cy="87" r="1.2" fill="#FFE600"/>
+              <polygon points="103,67 116,60 103,53 106,60" fill="#FFE600" />
+              <polygon points="29,50 35,55 29,60" fill="#D93628"/>
+              <ellipse cx="60" cy="60" rx="40" ry="40" fill="#F4F4F4"/>
+              <ellipse cx="60" cy="70" rx="32" ry="12" fill="#ddd" opacity="0.3"/>
+              <rect x="34" y="54" width="52" height="12" rx="5" fill="#FFF" stroke="#D1D1D1" stroke-width="2"/>
+              <rect x="40" y="57" width="40" height="4" rx="2" fill="#fff" opacity="0.7"/>
+            </svg>
+          </span>
+          <span class="pl-16 tracking-wide text-lg md:text-xl">ガチャを回す</span>
+        </button>
+      </div>
+    <% end %>
+  <% else %>
+    <div class="text-lg text-gray-600 font-semibold animate-pulse">今日はガチャ済みです！</div>
+  <% end %>
+
+  <!-- モーダル画面 -->
+  <% if @draw %>
+    <!-- 暗転背景 -->
+    <div id="modal-bg" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-40"
+      style="<%= flash[:draw_amount] ? '' : 'display:none;' %>"></div>
+    <!-- モーダル本体 -->
+    <div id="draw-modal" class="fixed left-1/2 top-[10%] -translate-x-1/2 bg-white rounded-2xl shadow-xl p-6 md:p-10 text-center z-50 border-4 border-primary ring-2 ring-primary/30 w-[90vw] max-w-xl animate-fadein-modal"
+      style="<%= flash[:draw_amount] ? '' : 'display:none;' %>">
+      <div class="flex justify-center items-center text-3xl md:text-4xl font-bold mb-4 gap-2">
+        <span class="animate-bounce">🎉</span>
+        <span>今日のガチャ結果</span>
+        <span class="animate-bounce">🎉</span>
+      </div>
+      <div class="inline-block px-4 py-2 bg-accent text-white rounded-full shadow mb-4 text-5xl tracking-widest animate-pulse">
+        <%= @draw.amount %> 円
+      </div>
+      <!-- ランダムメッセージ -->
+      <% if @draw_message.present? %>
+        <div class="text-base mt-2 text-secondary font-semibold animate-bounce">
+          <%= @draw_message %>
+        </div>
+      <% end %>
+      <!-- 各導線 -->
+      <div class="space-y-5 flex flex-col items-center w-full max-w-sm mx-auto mt-6">
+        <!-- お店を探す -->
+        <div class="flex items-center justify-center gap-4 w-full">
+          <span class="inline-flex items-center justify-center w-10 h-10 text-primary text-2xl">
+            <i class="fa-solid fa-utensils"></i>
+          </span>
+          <a href="#" class="flex flex-col items-start justify-center">
+            <span class="font-bold text-base hover:text-gray-500">この予算でお店を探す</span>
+            <span class="text-xs text-gray-400">（近日実装）</span>
+          </a>
+        </div>
+        <!-- Xで共有 -->
+        <div class="flex items-center justify-center gap-4 w-full mr-6">
+          <span class="inline-flex items-center justify-center w-10 h-10">
+            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
+            <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
+            </svg>
+          </span>
+          <a href="#" class="flex flex-col items-start justify-center">
+            <span class="font-bold text-X text-base hover:text-[#0F1419]/60">結果をXで共有する</span>
+            <span class="text-xs text-gray-400">（近日実装）</span>
+          </a>
+        </div>
+        <!-- LINE通知 -->
+        <div class="flex items-center justify-center gap-4 w-full">
+          <span class="inline-flex items-center justify-center w-10 h-10 text-LINE text-2xl">
+            <i class="fa-brands fa-line"></i>
+          </span>
+            <a href="#" class="flex flex-col items-start justify-center">
+            <span class="font-bold text-LINE text-base hover:text-[#00B900]/60 ">LINEで通知を受け取る</span>
+            <span class="text-xs text-gray-400">（近日実装）</span>
+          </a>
+        </div>
+      </div>
+      <!-- モーダル閉じるボタン -->
+      <div class="mt-6">
+        <button
+          id="close-modal-btn" class="text-sm text-gray-400 underline hover:text-primary hover:bg-gray-100 px-4 py-2 rounded transition">
+          閉じる
+        </button>
+      </div>
+    </div>
+  <% end %>
+</main>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const amount = document.getElementById('today-amount');
+  const modal = document.getElementById('draw-modal');
+  const modalBg = document.getElementById('modal-bg');
+  const closeBtn = document.getElementById('close-modal-btn');
+  // 金額部分を押したらモーダルを表示
+  if(amount && modal && modalBg){
+    amount.addEventListener('click', function() {
+      // すでに今日のガチャを回している場合だけ有効
+      if (amount.textContent.includes('円') && !amount.textContent.includes('ーー')) {
+        modal.style.display = '';
+        modalBg.style.display = '';
+      }
+    });
+  }
+  // 閉じるボタンでモーダル非表示
+  if(closeBtn && modal && modalBg){
+    closeBtn.addEventListener('click', function() {
+      modal.style.display = 'none';
+      modalBg.style.display = 'none';
+    });
+  }
+});
+</script>
