@@ -19,4 +19,9 @@ Rails.application.routes.draw do
 
   resource :budget, only: [:new, :create, :edit, :update]
 
+  resources :draws, only: [] do
+    member do
+      patch :update_actual_amount
+    end
+  end
 end

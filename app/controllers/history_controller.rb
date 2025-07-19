@@ -16,5 +16,7 @@ class HistoryController < ApplicationController
     # 実際使った金額合計（未入力はamountと同額として合算）
     @sum_actual = @draws.sum { |d| d.actual_amount.present? ? d.actual_amount : d.amount }
 
+    all_draws = current_user.draws
+    @diff_total = all_draws.sum { |d| (d.actual_amount || d.amount) - d.amount }
   end
 end
