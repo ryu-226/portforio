@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'history/index'
   root 'home#index'
 
   get 'signup', to: 'users#new', as: 'signup'
@@ -13,6 +14,8 @@ Rails.application.routes.draw do
 
   get 'main', to: "main#index", as: "main"
   post 'main/draw', to: 'main#draw', as: 'draw_main'
+
+  get 'history', to: "history#index", as: "history"
 
   resource :budget, only: [:new, :create, :edit, :update]
 
