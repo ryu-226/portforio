@@ -66,7 +66,7 @@ class MainController < ApplicationController
       return
     end
 
-    # MVP：単純に min_amount〜max_amount で乱数
+    # 現在は単純に min_amount〜max_amount で乱数
     amount = rand(budget.min_amount..budget.max_amount)
 
     @draw = current_user.draws.create!(

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_17_074521) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_19_140541) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -29,10 +29,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_17_074521) do
     t.bigint "user_id", null: false
     t.date "date"
     t.integer "amount"
-    t.boolean "used"
-    t.boolean "carried_over"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "actual_amount"
     t.index ["user_id"], name: "index_draws_on_user_id"
   end
 
