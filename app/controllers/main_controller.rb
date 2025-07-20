@@ -55,7 +55,9 @@ class MainController < ApplicationController
   end
 
   def draw
-    if current_user.draws.exists?(date: Date.current)
+    today = Date.current
+
+    if current_user.draws.exists?(date: today)
       redirect_to main_path, alert: "本日はすでにガチャを回しています"
       return
     end
@@ -66,15 +68,20 @@ class MainController < ApplicationController
       return
     end
 
-    # 現在は単純に min_amount〜max_amount で乱数
-    amount = rand(budget.min_amount..budget.max_amount)
+    month_days = (today.beginning_of_month..today.end_of_month).to_a
+    already_drawn_dates = current_user.draws.where(date: month_days).pluck(:date)
+    undrawn_dates = month_days - already_drawn_dates
 
-    @draw = current_user.draws.create!(
-      date: Date.current,
-      amount: amount
-    )
+    amounts = GachaDrawService.generate(budget.min_amount, budget.max_amount, undrawn_dates.size)
 
-    flash[:draw_amount] = amount
+    undrawn_dates.each_with_index do |date, i|
+      current_user.draws.create!(
+        date: date,
+        amount: amounts[i]
+      )
+    end
+
+    draw_today = current_user.draws.find_by(date: today)
+    flash[:draw_amount] = draw_today.amount
     redirect_to main_path
-  end
 end
