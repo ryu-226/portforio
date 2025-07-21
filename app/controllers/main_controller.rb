@@ -62,7 +62,6 @@ class MainController < ApplicationController
       return
     end
 
-    # 既に今日抽選済みならリダイレクト
     if current_user.draws.exists?(date: today)
       redirect_to main_path, alert: "本日はすでにガチャを回しています"
       return
@@ -81,7 +80,6 @@ class MainController < ApplicationController
       return
     end
 
-    # 残り予算で物理的に抽選可能かチェック
     if (remaining_days * budget.min_amount.to_i) > remaining_budget ||
        (remaining_days * budget.max_amount.to_i) < remaining_budget
       redirect_to edit_budget_path, alert: "残り予算と残り抽選回数に合わない条件です。設定を見直してください。"
@@ -89,13 +87,33 @@ class MainController < ApplicationController
     end
 
     if remaining_days == 1
-      # 最後の抽選日は残り予算をぴったり使い切る
       amount = remaining_budget
     else
       min = [budget.min_amount.to_i, remaining_budget - (budget.max_amount.to_i * (remaining_days - 1))].max
       max = [budget.max_amount.to_i, remaining_budget - (budget.min_amount.to_i * (remaining_days - 1))].min
-      amount = rand(min..max)
-      amount = (amount / 10) * 10 # 10円単位で切り捨て
+
+      interval = ((max - min + 1) / 3.0).ceil
+
+      low_min = min
+      low_max = [min + interval - 1, max].min
+      mid_min = [low_max + 1, max].min
+      mid_max = [mid_min + interval - 1, max].min
+      high_min = [mid_max + 1, max].min
+      high_max = max
+
+      r = rand(3)
+      amount =
+        case r
+        when 0
+          rand(low_min..low_max)
+        when 1
+          rand(mid_min..mid_max)
+        when 2
+          rand(high_min..high_max)
+        end
+
+      amount = (amount / 10) * 10
+      amount = [min, [amount, max].min].max
     end
 
     @draw = current_user.draws.create!(

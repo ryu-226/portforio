@@ -30,7 +30,7 @@ class Budget < ApplicationRecord
 
   def draw_days_cannot_exceed_days_in_month
     max_days = Date.current.end_of_month.day
-    if draw_days.present? && draw_days > max_days
+    if draw_days.present? && draw_days.to_i > max_days
       errors.add(:draw_days, "は今月の日数（#{max_days}日）以下にしてください")
     end
   end
