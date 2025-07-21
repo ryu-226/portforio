@@ -19,4 +19,5 @@ Rails.application.routes.draw do
 
   resource :budget, only: [:new, :create, :edit, :update]
 
+  resources :draws, only: [:update]
 end

@@ -1,24 +1,93 @@
-<main class="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-2xl shadow">
+<main class="max-w-2xl mx-auto mt-10 p-4 pb-28 text-gray-700 bg-white rounded-2xl shadow">
   <h1 class="text-xl font-bold mb-6 text-primary">履歴ページ</h1>
-  <div class="mb-4 flex flex-wrap gap-6">
-    <div>抽選金額合計：<span class="font-bold"><%= @sum_amount %> 円</span></div>
-    <div>実際に使った金額：<span class="font-bold"><%= @sum_actual %> 円</span></div>
+  <div class="flex items-center gap-6 mb-6">
+    <% prev_month = @month.prev_month.strftime("%Y-%m") %>
+    <% next_month = @month.next_month.strftime("%Y-%m") %>
+    <%= link_to "←前の月", history_path(month: prev_month), class: "text-sm text-primary hover:underline" %>
+    <span class="mx-2 text-lg font-bold"><%= @month.strftime("%Y年%-m月") %></span>
+    <%# 来月以降への遷移は不可 %>
+    <% if @month.next_month <= Date.current.beginning_of_month %>
+      <%= link_to "次の月→", history_path(month: next_month), class: "text-sm text-primary hover:underline" %>
+    <% end %>
   </div>
 
-  <table class="w-full table-fixed border text-sm">
+  <div class="flex flex-wrap gap-6 mb-4 font-bold text-base">
+    <div>月抽選合計: <%= @sum_amount %>円</div>
+    <div>月実際合計: <%= @sum_actual %>円</div>
+    <div>
+      月差額:
+      <% month_diff = @sum_amount - @sum_actual %>
+      <span class="<%= month_diff > 0 ? 'text-blue-500' : month_diff < 0 ? 'text-red-500' : '' %>">
+        <%= month_diff == 0 ? '±0円' : "#{month_diff > 0 ? '+' : ''}#{month_diff}円" %>
+      </span>
+    </div>
+    <div class="ml-auto">累計差額: 
+      <% cumulative_diff = @all_draws.sum { |d| d.amount - (d.actual_amount || d.amount) } %>
+      <span class="<%= cumulative_diff > 0 ? 'text-blue-500' : cumulative_diff < 0 ? 'text-red-500' : '' %>">
+        <%= cumulative_diff == 0 ? '±0円' : "#{cumulative_diff > 0 ? '+' : ''}#{cumulative_diff}円" %>
+      </span>
+    </div>
+  </div>
+
+  <!-- スマホ：カード型 -->
+  <div class="block md:hidden">
+    <% today = Date.current %>
+    <% (@month.beginning_of_month..@month.end_of_month).each do |date| %>
+      <% draw = @draws.find { |d| d.date == date } %>
+      <% wday = date.wday %>
+      <% wday_color = wday == 6 ? 'text-blue-700' : wday == 0 ? 'text-red-600' : '' %>
+      <% bg_gray = draw.nil? && date < today ? 'bg-gray-100 text-gray-400' : '' %>
+      <div class="mb-3 border rounded-lg shadow px-3 py-2 <%= bg_gray %>">
+        <div class="flex justify-between items-center">
+          <span class="font-semibold">日付</span>
+          <span class="font-bold <%= wday_color %>"><%= date.strftime("%-m/%-d") %>（<%= %w(日 月 火 水 木 金 土)[wday] %>）</span>
+        </div>
+        <div class="flex justify-between"><span class="font-semibold">抽選金額</span><span><%= draw&.amount ? "#{draw.amount}円" : '-' %></span></div>
+        <div class="flex justify-between"><span class="font-semibold">実際</span><span><%= draw&.actual_amount ? "#{draw.actual_amount}円" : "未入力" %></span></div>
+        <div class="flex justify-between"><span class="font-semibold">差額</span>
+          <span>
+          <% if draw&.amount %>
+            <% diff = draw.amount - (draw.actual_amount || draw.amount) %>
+            <span class="<%= diff > 0 ? 'text-blue-500' : diff < 0 ? 'text-red-500' : '' %>">
+              <%= diff == 0 ? '±0円' : "#{diff > 0 ? '+' : ''}#{diff}円" %>
+            </span>
+          <% else %>-<% end %>
+          </span>
+        </div>
+        <% if draw&.amount %>
+          <div class="flex space-x-2 mt-2">
+            <%= form_with model: draw, url: draw_path(draw), method: :patch, local: true do %>
+              <%= number_field_tag "actual_amount", draw.actual_amount, min: 0, class: "border rounded px-2 py-1 w-20" %>
+              <%= submit_tag "保存", class: "bg-primary text-white px-4 py-1 rounded text-xs" %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- PC：テーブル型 -->
+  <table class="hidden md:table w-full table-fixed border text-sm">
     <thead>
       <tr class="bg-primary/10 text-primary">
-        <th class="w-1/4 py-2">日付</th>
-        <th class="w-1/4 py-2">抽選金額</th>
-        <th class="w-1/4 py-2">実際に使った金額</th>
-        <th class="w-1/4 py-2">入力</th>
+        <th class="w-1/6 py-2">日付</th>
+        <th class="w-1/6 py-2">抽選金額</th>
+        <th class="w-1/6 py-2">実際に使った金額</th>
+        <th class="w-1/6 py-2">差額</th>
+        <th class="w-1/6 py-2">入力</th>
       </tr>
     </thead>
     <tbody>
+      <% today = Date.current %>
       <% (@month.beginning_of_month..@month.end_of_month).each do |date| %>
         <% draw = @draws.find { |d| d.date == date } %>
-        <tr>
-          <td class="text-center"><%= date.strftime("%-m/%-d") %></td>
+        <% wday = date.wday %>
+        <% wday_color = wday == 6 ? 'text-blue-700' : wday == 0 ? 'text-red-600' : '' %>
+        <% bg_gray = draw.nil? && date < today ? 'bg-gray-100 text-gray-400' : '' %>
+        <tr class="<%= bg_gray %>">
+          <td class="text-center font-bold <%= wday_color %>">
+            <%= date.strftime("%-m/%-d") %>（<%= %w(日 月 火 水 木 金 土)[wday] %>）
+          </td>
           <td class="text-center"><%= draw&.amount ? "#{draw.amount} 円" : '-' %></td>
           <td class="text-center">
             <% if draw&.amount %>
@@ -29,7 +98,17 @@
           </td>
           <td class="text-center">
             <% if draw&.amount %>
-              <%= form_with url: "#", method: :patch, local: true do |f| %>
+              <% diff = draw.amount - (draw.actual_amount || draw.amount) %>
+              <span class="<%= diff > 0 ? 'text-blue-500' : diff < 0 ? 'text-red-500' : '' %>">
+                <%= diff == 0 ? '±0円' : "#{diff > 0 ? '+' : ''}#{diff}円" %>
+              </span>
+            <% else %>
+              -
+            <% end %>
+          </td>
+          <td class="text-center">
+            <% if draw&.amount %>
+              <%= form_with model: draw, url: draw_path(draw), method: :patch, local: true do %>
                 <%= number_field_tag "actual_amount", draw.actual_amount, min: 0, class: "border rounded px-2 py-1 w-20" %>
                 <%= submit_tag "保存", class: "bg-primary text-white px-2 py-1 rounded text-xs" %>
               <% end %>

@@ -55,22 +55,69 @@ class MainController < ApplicationController
   end
 
   def draw
-    if current_user.draws.exists?(date: Date.current)
+    today = Date.current
+    budget = current_user.budget
+    unless budget
+      redirect_to new_budget_path, alert: "まずは予算を設定してください"
+      return
+    end
+
+    if current_user.draws.exists?(date: today)
       redirect_to main_path, alert: "本日はすでにガチャを回しています"
       return
     end
 
-    budget = current_user.budget
-    unless budget
-      redirect_to new_budget_path, alert: "まずは予算を設定して下さい"
+    month_range = today.beginning_of_month..today.end_of_month
+    draws_this_month = current_user.draws.where(date: month_range)
+    drawn_count = draws_this_month.count
+    drawn_sum = draws_this_month.sum(:amount)
+
+    remaining_days = budget.draw_days.to_i - drawn_count
+    remaining_budget = budget.monthly_budget.to_i - drawn_sum
+
+    if remaining_days <= 0
+      redirect_to main_path, alert: "今月のガチャ回数が上限に達しました"
       return
     end
 
-    # 現在は単純に min_amount〜max_amount で乱数
-    amount = rand(budget.min_amount..budget.max_amount)
+    if (remaining_days * budget.min_amount.to_i) > remaining_budget ||
+       (remaining_days * budget.max_amount.to_i) < remaining_budget
+      redirect_to edit_budget_path, alert: "残り予算と残り抽選回数に合わない条件です。設定を見直してください。"
+      return
+    end
+
+    if remaining_days == 1
+      amount = remaining_budget
+    else
+      min = [budget.min_amount.to_i, remaining_budget - (budget.max_amount.to_i * (remaining_days - 1))].max
+      max = [budget.max_amount.to_i, remaining_budget - (budget.min_amount.to_i * (remaining_days - 1))].min
+
+      interval = ((max - min + 1) / 3.0).ceil
+
+      low_min = min
+      low_max = [min + interval - 1, max].min
+      mid_min = [low_max + 1, max].min
+      mid_max = [mid_min + interval - 1, max].min
+      high_min = [mid_max + 1, max].min
+      high_max = max
+
+      r = rand(3)
+      amount =
+        case r
+        when 0
+          rand(low_min..low_max)
+        when 1
+          rand(mid_min..mid_max)
+        when 2
+          rand(high_min..high_max)
+        end
+
+      amount = (amount / 10) * 10
+      amount = [min, [amount, max].min].max
+    end
 
     @draw = current_user.draws.create!(
-      date: Date.current,
+      date: today,
       amount: amount
     )
 
