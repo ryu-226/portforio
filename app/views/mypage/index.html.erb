@@ -9,7 +9,7 @@
         <div class="mb-2"><span class="font-bold">ニックネーム：</span><span><%= @user.nickname %></span></div>
         <div class="mb-2"><span class="font-bold">メールアドレス：</span><span><%= @user.email %></span></div>
         <div class="mb-2"><span class="font-bold">登録日：</span><%= @user.created_at.strftime('%Y年%m月%d日') %></div>
-        <div><span class="font-bold">会員歴：</span><%= @member_days %>日</div>
+        <div><span class="font-bold">会員歴：</span><%= @member_days %>日目</div>
       </section>
       <!-- 利用履歴 -->
       <section class="bg-white/80 rounded-xl shadow p-4">
@@ -28,6 +28,12 @@
           <li><span class="font-bold">抽選日数：</span><%= @budget&.draw_days %> 日間</li>
           <li><span class="font-bold">１日の最低金額：</span><%= @budget&.min_amount %> 円</li>
           <li><span class="font-bold">１日の最高金額：</span><%= @budget&.max_amount %> 円</li>
+          <% if @remaining_days && @remaining_budget %>
+            <div class="mb-3 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold text-base">
+              今月の残り抽選日数: <%= @remaining_days %>日 /
+              残り予算: <%= @remaining_budget %>円
+            </div>
+          <% end %>
         </ul>
         <% if @budget.nil? %>
           <p class="text-sm text-gray-400 mt-2">※まだ条件設定がありません</p>

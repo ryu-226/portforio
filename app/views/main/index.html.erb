@@ -11,6 +11,11 @@
       <% end %>
     </div>
   </div>
+  <% if @remaining_days && @remaining_budget %>
+    <div class="mb-3 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold text-base">
+      今月のガチャ残り回数: <%= @remaining_days %>回
+    </div>
+  <% end %>
   <!-- ボタンorテキスト -->
   <% unless @draw %>
     <%= form_with url: draw_main_path, method: :post, local: true do %>

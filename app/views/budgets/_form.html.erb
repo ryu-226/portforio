@@ -1,5 +1,11 @@
   <!-- タイトル -->
   <h1 class="text-2xl font-bold mb-6 text-center">各種条件設定</h1>
+  <% if @remaining_days && @remaining_budget %>
+    <div class="mb-3 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold text-base">
+      今月の残り抽選日数: <%= @remaining_days %>日 /
+      残り予算: <%= @remaining_budget %>円
+    </div>
+  <% end %>
   <!-- 入力フォーム -->
   <%= form_with model: @budget, url: budget_path, local: true do |f| %>
     <%= hidden_field_tag :from_signup, params[:from_signup] %>

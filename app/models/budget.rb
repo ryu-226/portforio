@@ -10,7 +10,7 @@ class Budget < ApplicationRecord
   validate :monthly_budget_greater_than_min_and_max
   validate :draw_days_cannot_exceed_days_in_month
   validate :draw_days_changeable
-  validate :remaining_budget_within_limits, on: :update
+  validate :remaining_budget_within_limits
 
   private
 
