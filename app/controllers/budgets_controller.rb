@@ -26,13 +26,16 @@ class BudgetsController < ApplicationController
   def edit
     unless @budget
       redirect_to new_budget_path, alert: "まだ条件を設定していません。まずは各種条件を設定してください。"
+      return
     end
+    set_remaining_status
   end
 
   def update
     if @budget.update(budget_params)
       redirect_to mypage_path, notice: "条件を更新しました"
     else
+      set_remaining_status
       render :edit, status: :unprocessable_entity
     end
   end
@@ -49,5 +52,17 @@ class BudgetsController < ApplicationController
 
   def require_login
     redirect_to login_path, alert: "ログインしてください" unless logged_in?
+  end
+
+  def set_remaining_status
+    month_range = Date.current.beginning_of_month..Date.current.end_of_month
+    used_count = current_user.draws.where(date: month_range).count
+    used_sum = current_user.draws.where(date: month_range).sum(:amount)
+
+    draw_days = @budget.draw_days
+    monthly_budget = @budget.monthly_budget
+
+    @remaining_days = draw_days.to_i - used_count
+    @remaining_budget = monthly_budget.to_i - used_sum
   end
 end

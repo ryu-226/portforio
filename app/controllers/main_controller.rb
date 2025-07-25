@@ -1,5 +1,6 @@
 class MainController < ApplicationController
   before_action :require_login
+  before_action :set_draw_status, only: [:index]
 
   def index
     @draw = current_user.draws.find_by(date: Date.current)

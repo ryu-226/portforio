@@ -1,16 +1,15 @@
 <main class="max-w-md mx-auto my-8 p-6 pb-24 text-gray-700 bg-yellow-200 rounded-2xl shadow">
   <section class="mb-8 bg-white/60 p-4 rounded-xl shadow text-base">
-    <h2 class="font-bold text-lg mb-2 text-primary">条件の見直し・変更</h2>
+    <h2 class="font-bold text-lg mb-2 text-primary">ランチ予算の見直し・変更</h2>
     <p>
-      今月のランチ予算や抽選日数をもう一度見直したい場合は、こちらからいつでも編集できます。<br>
-      気分や予定に合わせて、最適な設定にアップデートしてみましょう！
+      今月の予算やガチャ回数は、いつでもここから調整できます。<br>
+      気分や予定に合わせて、あなたのスタイルに合った予算にカスタマイズしましょう！
     </p>
-    <p class="mb-2 text-xs text-red-500">
-      ※「抽選日数」は今月分として何回ガチャを回したいかの回数を設定してください。<br>
-      ※設定を変更した場合、すでに抽選済みの分は保持され、残り回数分のみ新しい条件で抽選されます。<br>
-      ※残り予算と抽選日数の兼ね合いにより、設定できない場合があります。<br>
-      ※抽選日数は今月の日数（<%= Date.current.end_of_month.day %>日）以下にしてください。
-    </p>
+    <ul class="list-disc pl-6 text-xs text-red-500 mb-2 mt-3">
+      <li>抽選日数は「今月、ガチャでランチ予算を決めたい回数」を入力してください（本日から月末までの日数以内）</li>
+      <li>設定を変更しても、<b>すでに抽選した分はそのまま</b>残ります。残り回数分だけ新しい条件が適用されます。</li>
+      <li>残り予算と抽選日数・金額の組み合わせによっては、設定できない場合があります。</li>
+    </ul>
   </section>
 
   <!-- 入力フォーム -->
