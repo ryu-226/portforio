@@ -16,15 +16,15 @@ class Budget < ApplicationRecord
 
   def max_greater_than_min
     if max_amount.present? && min_amount.present? && max_amount <= min_amount
-      errors.add(:max_amount, "は最低金額より大きくしてください")
+      errors.add(:max_amount, "は最低金額より大きく設定してください")
     end
   end
 
   def monthly_budget_greater_than_min_and_max
     if monthly_budget.present? && min_amount.present? && monthly_budget < min_amount
-      errors.add(:monthly_budget, "は1日の最低金額以上に設定してください")
+      errors.add(:monthly_budget, "は1日の最低金額以上にしてください")
     elsif monthly_budget.present? && max_amount.present? && monthly_budget <= max_amount
-      errors.add(:monthly_budget, "は1日の最高金額より大きくしてください")
+      errors.add(:monthly_budget, "は1日の最高金額より多く設定してください")
     end
   end
 
@@ -33,7 +33,7 @@ class Budget < ApplicationRecord
     last_day = today.end_of_month
     remaining_days = (last_day - today).to_i + 1
     if draw_days.present? && draw_days.to_i > remaining_days
-      errors.add(:draw_days, "は本日から月末までの残り日数（#{remaining_days}日）以下にしてください")
+      errors.add(:draw_days, "は本日から月末までの残り日数（あと#{remaining_days}日）以内で設定してください")
     end
   end
 
@@ -42,7 +42,7 @@ class Budget < ApplicationRecord
     month_range = Date.current.beginning_of_month..Date.current.end_of_month
     used = user.draws.where(date: month_range).count
     if draw_days.present? && draw_days.to_i < used
-      errors.add(:draw_days, "は、すでにガチャを回した日数（#{used}回）以上にしてください")
+      errors.add(:draw_days, "は、すでにガチャを回した日数（#{used}回）より少なくはできません")
     end
   end
 
@@ -55,10 +55,10 @@ class Budget < ApplicationRecord
 
     if remain_count > 0
       if remain_budget < remain_count * min_amount
-        errors.add(:monthly_budget, "の残りと抽選日数・最低金額の組み合わせが不正です（残り日数×最低金額が残り予算を超えています）")
+        errors.add(:monthly_budget, "や抽選日数の組み合わせに問題があります（残り抽選日数×最低金額が残り予算を超えています）。条件を見直してください）")
       end
       if remain_budget > remain_count * max_amount
-        errors.add(:monthly_budget, "の残りと抽選日数・最高金額の組み合わせが不正です（残り日数×最高金額が残り予算より少ないです）")
+        errors.add(:monthly_budget, "や抽選日数の組み合わせに問題があります（残り抽選日数×最高金額が残り予算より少ないです）。条件を見直してください）")
       end
     end
   end
