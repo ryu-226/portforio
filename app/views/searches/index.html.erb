@@ -1,0 +1,470 @@
+<h1 class="text-xl font-bold m-4 text-gray-700">お店を探す</h1>
+
+<div class="flex flex-col md:flex-row gap-8 text-gray-700">
+
+  <!-- 地図 -->
+  <div class="w-full md:w-2/3 relative">
+    <div id="map" class="h-[60vh] md:h-[80vh] rounded-2xl shadow mb-4"></div>
+    <button id="reload-location" class="absolute right-6 top-6 z-10 px-4 py-2 bg-primary text-white rounded-full shadow hover:bg-primary/80 transition">
+      現在地再取得
+    </button>
+  </div>
+
+  <!-- サイドカラム -->
+  <div class="w-full md:w-1/3 flex flex-col gap-4">
+    <!-- 検索条件フォーム -->
+    <div class="bg-white/80 p-4 rounded-xl shadow">
+      <form id="search-form" class="flex flex-wrap gap-4 items-end">
+        <div>
+          <label class="block font-semibold mb-1">距離</label>
+          <select id="radius" name="radius" class="px-3 py-2 rounded border w-24">
+            <option value="500">500m</option>
+            <option value="1000">1km</option>
+            <option value="2000">2km</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">ジャンル</label>
+          <select id="genre" name="genre" class="px-3 py-2 rounded border w-48">
+            <option value="">指定なし</option>
+            <option value="restaurant">レストラン</option>
+            <option value="cafe">カフェ</option>
+            <option value="bakery">パン屋</option>
+            <option value="meal_takeaway">テイクアウト</option>
+            <option value="meal_delivery">出前/デリバリー</option>
+            <option value="fast_food_restaurant">ファストフード</option>
+            <option value="chinese_restaurant">中華</option>
+            <option value="indian_restaurant">インド料理</option>
+            <option value="supermarket">スーパーマーケット</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">評価</label>
+          <select id="min-rating" name="min-rating" class="px-3 py-2 rounded border w-28 min-w-[96px]">
+            <option value="">指定なし</option>
+            <option value="3.0">★3以上</option>
+            <option value="3.5">★3.5以上</option>
+            <option value="4.0">★4以上</option>
+            <option value="4.5">★4.5以上</option>
+          </select>
+        </div>
+        <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-xl font-bold transition">検索</button>
+      </form>
+    </div>
+
+    <!-- 並び替えセレクト -->
+    <div class="flex items-center gap-3 px-2">
+      <label class="font-bold text-gray-700">並び順</label>
+      <select id="sort-by" class="border rounded px-2 py-1">
+        <option value="distance">距離</option>
+        <option value="rating">評価</option>
+      </select>
+      <select id="sort-order" class="border rounded px-2 py-1">
+        <option value="asc">昇順</option>
+        <option value="desc">降順</option>
+      </select>
+    </div>
+
+    <!-- お気に入り表示切り替え -->
+    <div class="flex items-center gap-2 px-2">
+      <input type="checkbox" id="fav-toggle" class="accent-yellow-400 scale-125">
+      <label for="fav-toggle" class="text-yellow-700 font-bold cursor-pointer select-none">お気に入りのみ表示</label>
+    </div>
+
+    <!-- 検索結果メッセージ -->
+    <div id="search-result-msg" class="text-center text-red-500 font-bold"></div>
+
+    <!-- 検索結果リスト -->
+    <div id="search-result-list" class="flex flex-col gap-3 pb-32 max-h-[60vh] md:max-h-[75vh] overflow-y-auto"></div>
+  </div>
+</div>
+
+<!-- 位置情報取得説明バナー -->
+<div id="location-desc" class="text-center text-blue-600 bg-blue-50 rounded-xl py-2 my-4 relative">
+  この機能は「現在地」周辺のお店を探します。ブラウザの位置情報取得を許可してください。
+  <button id="close-desc" class="absolute right-3 top-1 text-blue-500 text-lg font-bold" aria-label="閉じる">×</button>
+</div>
+
+
+<script>
+  let map, markers = [];
+  let myLocationMarker = null;
+  let openInfoWindow = null;
+  let currentCenter = { lat: 35.681236, lng: 139.767125 };
+  let lastPlaces = [];
+  let showFavOnly = false;
+  let sortBy = "distance";
+  let sortOrder = "asc";
+
+  // お店ごとにユニークなキー（ID）を作る
+  function markerPlaceKey(place) {
+    return String(place.id) + "_" + place.location.latitude + "_" + place.location.longitude;
+  }
+
+  // お気に入り管理
+  function getFavKeys() {
+    return JSON.parse(localStorage.getItem("fav_places") || "[]");
+  }
+  function setFavKeys(keys) {
+    localStorage.setItem("fav_places", JSON.stringify(keys));
+  }
+  function isFav(place) {
+    return getFavKeys().includes(markerPlaceKey(place));
+  }
+  function toggleFav(place) {
+    const key = markerPlaceKey(place);
+    let favs = getFavKeys();
+    if (favs.includes(key)) {
+      favs = favs.filter(id => id !== key);
+    } else {
+      favs.push(key);
+    }
+    setFavKeys(favs);
+    renderResultList(lastPlaces);
+  }
+
+  // 距離計算
+  function getDistance(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI/180;
+    const dLon = (lon2 - lon1) * Math.PI/180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c * 1000;
+  }
+
+  // 並び替え
+  function getSortedPlaces(places) {
+    return places
+      .map(place => {
+        const dist = getDistance(currentCenter.lat, currentCenter.lng, place.location.latitude, place.location.longitude);
+        return { ...place, _dist: dist };
+      })
+      .sort((a, b) => {
+        let cmp = 0;
+        if (sortBy === "distance") {
+          cmp = a._dist - b._dist;
+        } else if (sortBy === "rating") {
+          cmp = (a.rating || 0) - (b.rating || 0);
+        }
+        return sortOrder === "asc" ? cmp : -cmp;
+      });
+  }
+
+  // 検索結果リスト描画
+  function renderResultList(places = []) {
+    const list = document.getElementById("search-result-list");
+    list.innerHTML = "";
+    if (!places.length) return;
+
+    const displayPlaces = showFavOnly ? places.filter(p => isFav(p)) : places;
+    const sortedPlaces = getSortedPlaces(displayPlaces);
+
+    sortedPlaces.forEach((place, idx) => {
+      const dist = place._dist ?? getDistance(currentCenter.lat, currentCenter.lng, place.location.latitude, place.location.longitude);
+      const distLabel = dist < 1000 ? `${Math.round(dist)}m` : `${(dist/1000).toFixed(1)}km`;
+      const icon = place.iconMaskBaseUri
+        ? `<img src="${place.iconMaskBaseUri}.png" class="inline-block w-7 h-7 mr-2 align-middle rounded" style="background:${place.iconBackgroundColor||'#eee'};">`
+        : "";
+
+      const fav = isFav(place);
+      const isGold = (place.rating || 0) >= 4.5;
+      const cardClass = isGold ? "bg-yellow-100 border-2 border-yellow-400" : "bg-white";
+
+      const card = document.createElement("div");
+      card.className = `${cardClass} rounded-xl shadow p-3 flex flex-col gap-1 cursor-pointer hover:bg-gray-50 relative`;
+
+      card.innerHTML = `
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-bold rounded-full bg-gray-200 px-2 mr-1">${idx + 1}</span>
+          ${icon}
+          <span class="font-bold text-lg">${place.displayName.text}</span>
+          <button type="button" class="ml-auto px-1 fav-btn" data-place-key="${markerPlaceKey(place)}">
+            <span class="text-2xl select-none ${fav ? 'text-yellow-400' : 'text-gray-400'} hover:text-yellow-500 transition-colors">★</span>
+          </button>
+        </div>
+        <div class="flex items-center ml-8">
+          <div class="text-xs text-gray-500">${distLabel}</div>
+        </div>
+        <div class="text-gray-700 text-sm ml-8">${place.formattedAddress || ""}</div>
+        <div class="flex items-center text-yellow-500 text-sm ml-8">${place.rating ? "★" + place.rating.toFixed(1) : ""}</div>
+        <div class="ml-8">
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.displayName.text)}" 
+            target="_blank" class="text-primary underline text-xs">Googleマップで見る</a>
+        </div>
+      `;
+
+      // ピン連携
+      card.addEventListener('click', () => {
+        const key = markerPlaceKey(place);
+        const marker = markers.find(m => m._placeKey === key);
+        if (marker) {
+          map.panTo(marker.getPosition());
+          google.maps.event.trigger(marker, 'click');
+        }
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // お気に入りボタン
+      card.querySelector('.fav-btn').addEventListener('click', function(e){
+        e.stopPropagation();
+        toggleFav(place);
+      });
+
+      list.appendChild(card);
+    });
+  }
+
+  // マップ初期化・ピンなど
+  function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+      center: currentCenter,
+      zoom: 15,
+    });
+
+    map.addListener("click", () => {
+      if (openInfoWindow) openInfoWindow.close();
+    });
+
+    if (!navigator.geolocation) {
+      showResultMsg("位置情報取得機能がありません。");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        currentCenter = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        map.setCenter(currentCenter);
+        addMyLocationMarker(currentCenter);
+        doSearch(currentCenter);
+      },
+      (err) => {
+        if (err.code === 1) {
+          showResultMsg("位置情報の取得が許可されませんでした。ブラウザの設定を確認してください。");
+        } else {
+          showResultMsg("位置情報の取得に失敗しました。");
+        }
+        doSearch(currentCenter);
+      }
+    );
+  }
+
+  function addMyLocationMarker(center) {
+    if (myLocationMarker) myLocationMarker.setMap(null);
+    myLocationMarker = new google.maps.Marker({
+      map: map,
+      position: center,
+      title: "現在地",
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        scale: 10,
+        fillColor: "#2196f3",
+        fillOpacity: 1,
+        strokeWeight: 2,
+        strokeColor: "#fff",
+      }
+    });
+  }
+
+  function addMarker(place, idx) {
+    const isGold = (place.rating || 0) >= 4.5;
+    const pinSvg = encodeURIComponent(`
+      <svg width="44" height="44" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="22" cy="22" r="18" fill="${isGold ? '#FFD700' : '#ea4335'}" stroke="#fff" stroke-width="4"/>
+        <text x="22" y="29" text-anchor="middle" font-size="20" fill="#fff" font-family="Arial" font-weight="bold">${idx+1}</text>
+      </svg>
+    `);
+
+    const marker = new google.maps.Marker({
+      map: map,
+      position: {
+        lat: place.location.latitude,
+        lng: place.location.longitude
+      },
+      title: place.displayName.text,
+      icon: {
+        url: `data:image/svg+xml;utf8,${pinSvg}`,
+        scaledSize: new google.maps.Size(44,44)
+      }
+    });
+    marker._placeKey = markerPlaceKey(place);
+
+    let ratingHtml = place.rating ? `評価: ★${place.rating.toFixed(1)}<br>` : '';
+    let phoneHtml = place.nationalPhoneNumber ? `TEL: <a href="tel:${place.nationalPhoneNumber}" class="underline">${place.nationalPhoneNumber}</a><br>` : '';
+    let webHtml = place.websiteUri ? `<a href="${place.websiteUri}" target="_blank" class="text-primary underline text-sm">公式サイト</a><br>` : '';
+    let navHtml = `<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.displayName.text)}" target="_blank" class="text-primary underline text-sm">ナビ開始</a>`;
+
+    const infowindow = new google.maps.InfoWindow({
+      content: `
+        <div class="p-2 min-w-[220px] relative">
+          <b>${place.displayName.text}</b><br>
+          ${place.formattedAddress || ''}<br>
+          ${ratingHtml}
+          ${phoneHtml}
+          ${webHtml}
+          <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.displayName.text)}"
+             target="_blank" class="text-primary underline text-sm">
+             Googleマップで見る
+          </a><br>
+          ${navHtml}
+        </div>
+      `
+    });
+
+    marker.addListener("click", () => {
+      if (openInfoWindow) openInfoWindow.close();
+      infowindow.open(map, marker);
+      openInfoWindow = infowindow;
+      window.openInfoWindow = infowindow;
+    });
+    markers.push(marker);
+  }
+
+  function clearMarkers() {
+    markers.forEach(marker => marker.setMap(null));
+    markers = [];
+    if (openInfoWindow) openInfoWindow.close();
+    openInfoWindow = null;
+  }
+
+  async function doSearch(center) {
+    clearMarkers();
+
+    const radius = Number(document.getElementById('radius')?.value) || 1000;
+    let genre = document.getElementById('genre')?.value;
+    const minRating = parseFloat(document.getElementById('min-rating')?.value) || 0;
+
+    if (!genre) genre = "restaurant";
+
+    let body = {
+      includedTypes: [genre],
+      languageCode: "ja",
+      locationRestriction: {
+        circle: {
+          center: { latitude: center.lat, longitude: center.lng },
+          radius: radius
+        }
+      }
+    };
+
+    try {
+      const res = await fetch('/places/search', {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      if (!res.ok) throw new Error("APIエラー");
+
+      const data = await res.json();
+
+      let filtered = (data.places || []).filter(p => (minRating ? (p.rating || 0) >= minRating : true));
+
+      lastPlaces = filtered;
+
+      if (!filtered.length) {
+        showResultMsg("条件に合うお店が見つかりませんでした");
+        renderResultList([]);
+        return;
+      } else {
+        showResultMsg("");
+        renderResultList(filtered);
+      }
+
+      getSortedPlaces(filtered).forEach((place, idx) => addMarker(place, idx));
+    } catch (e) {
+      showResultMsg("お店情報の取得に失敗しました。しばらくして再度お試しください");
+      renderResultList([]);
+    }
+  }
+
+  function showResultMsg(msg) {
+    document.getElementById("search-result-msg").innerText = msg;
+  }
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("search-form").addEventListener("submit", function(e) {
+      e.preventDefault();
+      if (!navigator.geolocation) {
+        showResultMsg("位置情報取得機能がありません。");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          let center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          map.setCenter(center);
+          addMyLocationMarker(center);
+          doSearch(center);
+        },
+        (err) => {
+          if (err.code === 1) {
+            showResultMsg("位置情報の取得が許可されませんでした。ブラウザの設定を確認してください。");
+          } else {
+            showResultMsg("位置情報の取得に失敗しました。");
+          }
+          doSearch(currentCenter);
+        }
+      );
+    });
+
+    document.getElementById("fav-toggle").addEventListener("change", function(e) {
+      showFavOnly = !!e.target.checked;
+      renderResultList(lastPlaces);
+    });
+
+    document.getElementById("reload-location").addEventListener("click", function() {
+      if (!navigator.geolocation) {
+        showResultMsg("位置情報取得機能がありません。");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          let center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          currentCenter = center;
+          map.setCenter(center);
+          addMyLocationMarker(center);
+          doSearch(center);
+        },
+        (err) => {
+          showResultMsg("現在地の取得に失敗しました");
+        }
+      );
+    });
+
+    // 並び替えイベント
+    document.getElementById("sort-by").addEventListener("change", function(e){
+      sortBy = e.target.value;
+      renderResultList(lastPlaces);
+    });
+    document.getElementById("sort-order").addEventListener("change", function(e){
+      sortOrder = e.target.value;
+      renderResultList(lastPlaces);
+    });
+
+    // 説明バナー
+    const desc = document.getElementById("location-desc");
+    const closeBtn = document.getElementById("close-desc");
+    if (localStorage.getItem("location_desc_shown")) {
+      desc.style.display = "none";
+    } else {
+      desc.style.display = "";
+      closeBtn.addEventListener("click", function() {
+        desc.style.display = "none";
+        localStorage.setItem("location_desc_shown", "1");
+      });
+    }
+  });
+
+  window.initMap = initMap;
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFt9dm0NrthjpjYL2ame3ta2_0lqpeKlg&callback=initMap"></script>
