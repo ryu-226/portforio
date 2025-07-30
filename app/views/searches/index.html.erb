@@ -48,7 +48,13 @@
             <option value="4.5">★4.5以上</option>
           </select>
         </div>
-        <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-xl font-bold transition">検索</button>
+        <!-- 検索ボタン + 件数表示 -->
+        <div class="flex items-center gap-2">
+          <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-xl font-bold transition">
+            検索
+          </button>
+          <span id="hit-count" class="ml-4 text-base text-gray-700 font-semibold"></span>
+        </div>
       </form>
     </div>
 
@@ -161,6 +167,11 @@
 
     const displayPlaces = showFavOnly ? places.filter(p => isFav(p)) : places;
     const sortedPlaces = getSortedPlaces(displayPlaces);
+    const hitCountElement = document.getElementById("hit-count");
+    if (hitCountElement) {
+      hitCountElement.innerHTML = `検索結果 <span class="text-red-500 font-bold">${displayPlaces.length}</span> 件`;
+    }
+    if (!sortedPlaces.length) return;
 
     sortedPlaces.forEach((place, idx) => {
       const dist = place._dist ?? getDistance(currentCenter.lat, currentCenter.lng, place.location.latitude, place.location.longitude);
@@ -368,6 +379,7 @@
 
       if (!filtered.length) {
         showResultMsg("条件に合うお店が見つかりませんでした");
+        document.getElementById("hit-count").textContent = "検索結果 0 件";
         renderResultList([]);
         return;
       } else {
@@ -378,6 +390,7 @@
       getSortedPlaces(filtered).forEach((place, idx) => addMarker(place, idx));
     } catch (e) {
       showResultMsg("お店情報の取得に失敗しました。しばらくして再度お試しください");
+      document.getElementById("hit-count").textContent = "";
       renderResultList([]);
     }
   }
