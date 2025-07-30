@@ -29,11 +29,9 @@ class Budget < ApplicationRecord
   end
 
   def draw_days_cannot_exceed_days_in_month
-    today = Date.current
-    last_day = today.end_of_month
-    remaining_days = (last_day - today).to_i + 1
-    if draw_days.present? && draw_days.to_i > remaining_days
-      errors.add(:draw_days, "は本日から月末までの残り日数（あと#{remaining_days}日）以内で設定してください")
+    total_days_in_month = Date.current.end_of_month.day
+    if draw_days.present? && draw_days.to_i > total_days_in_month
+      errors.add(:draw_days, "は今月の日数（#{total_days_in_month}日）以内で設定してください")
     end
   end
 

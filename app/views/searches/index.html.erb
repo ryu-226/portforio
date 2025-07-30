@@ -1,0 +1,95 @@
+<h1 class="text-xl font-bold m-4 text-gray-700">お店を探す</h1>
+
+<div class="flex flex-col md:flex-row gap-8 text-gray-700">
+
+  <!-- 地図 -->
+  <div class="w-full md:w-2/3 relative">
+    <div id="map" class="h-[60vh] md:h-[80vh] rounded-2xl shadow mb-4"></div>
+    <button id="reload-location" class="absolute right-6 top-6 z-10 px-4 py-2 bg-primary text-white rounded-full shadow hover:bg-primary/80 transition">
+      現在地再取得
+    </button>
+  </div>
+
+  <!-- サイドカラム -->
+  <div class="w-full md:w-1/3 flex flex-col gap-4">
+    <!-- 検索条件フォーム -->
+    <div class="bg-white/80 p-4 rounded-xl shadow">
+      <form id="search-form" class="flex flex-wrap gap-4 items-end">
+        <div>
+          <label class="block font-semibold mb-1">距離</label>
+          <select id="radius" name="radius" class="px-3 py-2 rounded border w-24">
+            <option value="500">500m</option>
+            <option value="1000">1km</option>
+            <option value="2000">2km</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">ジャンル</label>
+          <select id="genre" name="genre" class="px-3 py-2 rounded border w-48">
+            <option value="">指定なし</option>
+            <option value="restaurant">レストラン</option>
+            <option value="cafe">カフェ</option>
+            <option value="bakery">パン屋</option>
+            <option value="meal_takeaway">テイクアウト</option>
+            <option value="meal_delivery">出前/デリバリー</option>
+            <option value="fast_food_restaurant">ファストフード</option>
+            <option value="chinese_restaurant">中華</option>
+            <option value="indian_restaurant">インド料理</option>
+            <option value="supermarket">スーパーマーケット</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold mb-1">評価</label>
+          <select id="min-rating" name="min-rating" class="px-3 py-2 rounded border w-28 min-w-[96px]">
+            <option value="">指定なし</option>
+            <option value="3.0">★3以上</option>
+            <option value="3.5">★3.5以上</option>
+            <option value="4.0">★4以上</option>
+            <option value="4.5">★4.5以上</option>
+          </select>
+        </div>
+        <!-- 検索ボタン + 件数表示 -->
+        <div class="flex items-center gap-2">
+          <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-xl font-bold transition">
+            検索
+          </button>
+          <span id="hit-count" class="ml-4 text-base text-gray-700 font-semibold"></span>
+        </div>
+      </form>
+    </div>
+
+    <!-- 並び替えセレクト -->
+    <div class="flex items-center gap-3 px-2">
+      <label class="font-bold text-gray-700">並び順</label>
+      <select id="sort-by" class="border rounded px-2 py-1">
+        <option value="distance">距離</option>
+        <option value="rating">評価</option>
+      </select>
+      <select id="sort-order" class="border rounded px-2 py-1">
+        <option value="asc">昇順</option>
+        <option value="desc">降順</option>
+      </select>
+    </div>
+
+    <!-- お気に入り表示切り替え -->
+    <div class="flex items-center gap-2 px-2">
+      <input type="checkbox" id="fav-toggle" class="accent-yellow-400 scale-125">
+      <label for="fav-toggle" class="text-yellow-700 font-bold cursor-pointer select-none">お気に入りのみ表示</label>
+    </div>
+
+    <!-- 検索結果メッセージ -->
+    <div id="search-result-msg" class="text-center text-red-500 font-bold"></div>
+
+    <!-- 検索結果リスト -->
+    <div id="search-result-list" class="flex flex-col gap-3 pb-32 max-h-[60vh] md:max-h-[75vh] overflow-y-auto"></div>
+  </div>
+</div>
+
+<!-- 位置情報取得説明バナー -->
+<div id="location-desc" class="text-center text-blue-600 bg-blue-50 rounded-xl py-2 my-4 pr-10 relative">
+  この機能は「現在地」周辺のお店を探します。ブラウザの位置情報取得を許可してください。
+  <button id="close-desc" class="absolute right-3 top-1 text-blue-500 text-lg font-bold" aria-label="閉じる">×</button>
+</div>
+
+<%= javascript_include_tag "places", "data-turbo-track": "reload" %>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDFt9dm0NrthjpjYL2ame3ta2_0lqpeKlg&callback=initMap"></script>
