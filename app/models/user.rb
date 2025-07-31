@@ -8,6 +8,10 @@ class User < ApplicationRecord
 
   validate :password_complexity
 
+  def budget_for(year_month)
+    Budget.find_by(user_id: id, year_month: year_month)
+  end
+
   private
 
   def password_complexity

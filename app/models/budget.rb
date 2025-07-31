@@ -5,14 +5,22 @@ class Budget < ApplicationRecord
   validates :draw_days, presence: true, numericality: { greater_than: 0 }
   validates :min_amount, presence: true, numericality: { greater_than: 0 }
   validates :max_amount, presence: true, numericality: { only_integer: true }
+  validates :year_month, presence: true, uniqueness: { scope: :user_id }
 
   validate :max_greater_than_min
   validate :monthly_budget_greater_than_min_and_max
   validate :draw_days_cannot_exceed_days_in_month
   validate :draw_days_changeable
+  validate :draw_days_within_used_plus_remaining_days
   validate :remaining_budget_within_limits
 
+  before_validation :set_year_month, on: [:create]
+
   private
+
+  def set_year_month
+    self.year_month ||= Date.current.strftime('%Y-%m')
+  end
 
   def max_greater_than_min
     if max_amount.present? && min_amount.present? && max_amount <= min_amount
@@ -29,8 +37,9 @@ class Budget < ApplicationRecord
   end
 
   def draw_days_cannot_exceed_days_in_month
+    return if draw_days.blank?
     total_days_in_month = Date.current.end_of_month.day
-    if draw_days.present? && draw_days.to_i > total_days_in_month
+    if draw_days.to_i > total_days_in_month
       errors.add(:draw_days, "は今月の日数（#{total_days_in_month}日）以内で設定してください")
     end
   end
@@ -41,6 +50,20 @@ class Budget < ApplicationRecord
     used = user.draws.where(date: month_range).count
     if draw_days.present? && draw_days.to_i < used
       errors.add(:draw_days, "は、すでにガチャを回した日数（#{used}回）より少なくはできません")
+    end
+  end
+
+  def draw_days_within_used_plus_remaining_days
+    return if draw_days.blank?
+
+    today = Date.current
+    month_range = today.beginning_of_month..today.end_of_month
+    used = user.draws.where(date: month_range).count
+    remaining_days = (today..today.end_of_month).count
+    max_possible = used + remaining_days
+
+    if draw_days.to_i > max_possible
+      errors.add(:draw_days, "は今月すでに抽選済みの#{used}回と、今日から月末までの残り#{remaining_days}日を合わせた#{max_possible}回以内で設定してください")
     end
   end
 

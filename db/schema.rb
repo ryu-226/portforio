@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_31_033605) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_31_123516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,6 +22,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_31_033605) do
     t.integer "max_amount", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "year_month", null: false
+    t.index ["user_id", "year_month"], name: "index_budgets_on_user_id_and_year_month", unique: true
     t.index ["user_id"], name: "index_budgets_on_user_id"
   end
 
@@ -32,6 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_31_033605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "actual_amount"
+    t.string "year_month"
     t.index ["user_id"], name: "index_draws_on_user_id"
   end
 

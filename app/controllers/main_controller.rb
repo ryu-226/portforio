@@ -3,13 +3,24 @@ class MainController < ApplicationController
   before_action :set_draw_status, only: [:index]
 
   def index
+    @budget = current_user.budget_for(Date.current.strftime('%Y-%m'))
     @draw = current_user.draws.find_by(date: Date.current)
-    @budget = current_user.budget
-    unless @budget
-      redirect_to new_budget_path, alert: "まずは予算を設定してください"
+    @show_budget_alert = @budget.nil? && Date.current.day == 1
+
+    if @budget.blank?
+      @remaining_days = nil
+      @remaining_budget = nil
+      @draw_message = nil
       return
     end
 
+    month_range = Date.current.beginning_of_month..Date.current.end_of_month
+    drawn_count = current_user.draws.where(date: month_range).count
+    drawn_sum = current_user.draws.where(date: month_range).sum(:amount)
+    @remaining_days = @budget.draw_days.to_i - drawn_count
+    @remaining_budget = @budget.monthly_budget.to_i - drawn_sum
+
+    # メッセージ設定
     @low_messages = [
       "セーブデー！賢く使おう",
       "節約ランチでお得気分♪",
@@ -31,10 +42,9 @@ class MainController < ApplicationController
       "ランチ仲間とプチ贅沢しよう！",
       "美味しいもの食べて午後も頑張ろう！"
     ]
-
     @draw_message = nil
 
-    if @draw && @budget
+    if @draw
       min = @budget.min_amount
       max = @budget.max_amount
       range = max - min
@@ -57,7 +67,9 @@ class MainController < ApplicationController
 
   def draw
     today = Date.current
-    budget = current_user.budget
+    current_year_month = today.strftime('%Y-%m')
+    budget = current_user.budget_for(current_year_month)
+    
     unless budget
       redirect_to new_budget_path, alert: "まずは予算を設定してください"
       return
@@ -68,8 +80,8 @@ class MainController < ApplicationController
       return
     end
 
-    month_range = today.beginning_of_month..today.end_of_month
-    draws_this_month = current_user.draws.where(date: month_range)
+    current_year_month = Date.current.strftime('%Y-%m')
+    draws_this_month = current_user.draws.where(year_month: current_year_month)
     drawn_count = draws_this_month.count
     drawn_sum = draws_this_month.sum(:amount)
 
