@@ -1,21 +1,5 @@
 class ApplicationController < ActionController::Base
-  helper_method :current_user, :logged_in?
-
-  def current_user
-    @current_user ||= User.find_by(id: session[:user_id])
-  end
-
-  def logged_in?
-    current_user.present?
-  end
-
-  private
-
-  def require_login
-    unless logged_in?
-       redirect_to login_path, alert: "ログインしてください"
-    end
-  end
+  before_action :configure_permitted_parameters, if: :devise_controller?
 
   def set_draw_status
     budget = current_user&.budget
@@ -26,5 +10,12 @@ class ApplicationController < ActionController::Base
     @drawn_sum = draws_this_month.sum(:amount)
     @remaining_days = budget&.draw_days.to_i - @drawn_count
     @remaining_budget = budget&.monthly_budget.to_i - @drawn_sum
+  end
+
+  protected
+
+  def configure_permitted_parameters
+    devise_parameter_sanitizer.permit(:sign_up, keys: [:nickname])
+    devise_parameter_sanitizer.permit(:account_update, keys: [:nickname])
   end
 end

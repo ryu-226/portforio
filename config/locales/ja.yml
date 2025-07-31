@@ -1,6 +1,16 @@
 ---
 ja:
+  i18n:
+    plural:
+      keys:
+        - zero
+        - one
+        - other
   activerecord:
+    models:
+      user:
+        one: "ユーザー"
+        other: "ユーザー"
     attributes:
       user:
         email: メールアドレス

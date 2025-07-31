@@ -1,5 +1,5 @@
 class BudgetsController < ApplicationController
-  before_action :require_login
+  before_action :authenticate_user!
   before_action :set_budget, only: [:edit, :update]
 
   def new
@@ -48,10 +48,6 @@ class BudgetsController < ApplicationController
 
   def budget_params
     params.require(:budget).permit(:monthly_budget, :draw_days, :min_amount, :max_amount)
-  end
-
-  def require_login
-    redirect_to login_path, alert: "ログインしてください" unless logged_in?
   end
 
   def set_remaining_status

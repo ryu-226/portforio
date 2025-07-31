@@ -70,4 +70,6 @@ Rails.application.configure do
   config.assets.compile = true
   config.assets.debug = false
   config.assets.digest = false
+
+  config.action_mailer.default_url_options
 end

@@ -1,5 +1,5 @@
 class MainController < ApplicationController
-  before_action :require_login
+  before_action :authenticate_user!
   before_action :set_draw_status, only: [:index]
 
   def index

@@ -17,7 +17,7 @@
 
   <body class="font-sans">
     <%# --- ヘッダー ---%>
-    <% if logged_in? %>
+    <% if user_signed_in? %>
       <%= render "layouts/header_logged_in" %>
     <% else %>
       <%= render "layouts/header" %>
@@ -53,7 +53,7 @@
     </main>
 
     <%# --- フッター --- %>
-    <% if logged_in? %>
+    <% if user_signed_in? %>
       <%= render "layouts/footer_logged_in" %>
     <% else %>
       <%= render "layouts/footer" %>
