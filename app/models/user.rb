@@ -1,15 +1,15 @@
 class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
-  has_one :budget
   has_many :draws, dependent: :destroy
+  has_many :budgets
 
   validates :nickname, presence: true
 
   validate :password_complexity
 
   def budget_for(year_month)
-    Budget.find_by(user_id: id, year_month: year_month)
+    budgets.find_by(year_month: year_month)
   end
 
   private

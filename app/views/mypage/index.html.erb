@@ -40,18 +40,6 @@
           <p class="text-sm text-gray-400 mt-2">※まだ条件設定がありません</p>
         <% end %>
       </section>
-      <!-- 通知設定 -->
-      <section class="bg-white/80 rounded-xl shadow p-4">
-        <h2 class="font-semibold text-lg mb-2 text-primary">通知設定</h2>
-        <div class="flex items-center space-x-3">
-          <span class="font-bold">LINE通知：</span>
-          <span class="px-3 py-1 rounded-full
-            <%= @line_status == "連携済" ? "bg-green-100 text-green-600" : "bg-gray-200 text-gray-500" %>">
-            <%= @line_status %>
-          </span>
-          <span class="text-xs text-gray-400">(近日実装)</span>
-        </div>
-      </section>
     </div>
   </div>
   <!-- 設定変更ボタン -->
