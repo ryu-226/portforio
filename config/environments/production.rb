@@ -101,8 +101,8 @@ Rails.application.configure do
     port: 587,
     address: "smtp.mailgun.org",
     domain: "mg.meshigacha.com",
-    user_name: ENV['ryu@mg.meshigacha.com'],
-    password: ENV['dfdd3d9c14106b59e29280040980be0d-03fd4b1a-f2928ad1'],
+    user_name: ENV['MAILGUN_SMTP_LOGIN'],
+    password: ENV['MAILGUN_SMTP_PASSWORD'],
     authentication: :plain,
     enable_starttls_auto: true,
   }
