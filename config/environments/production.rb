@@ -92,6 +92,22 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-config.hosts << "meshigacha-aebe80dfe177.herokuapp.com"
+  config.hosts << "www.meshigacha.com"
+  config.force_ssl = true
 
+  config.action_mailer.delivery_method = :smtp
+  
+  config.action_mailer.smtp_settings = {
+    port: 587,
+    address: "smtp.mailgun.org",
+    domain: "mg.meshigacha.com",
+    user_name: ENV['ryu@mg.meshigacha.com'],
+    password: ENV['dfdd3d9c14106b59e29280040980be0d-03fd4b1a-f2928ad1'],
+    authentication: :plain,
+    enable_starttls_auto: true,
+  }
+
+  config.action_mailer.raise_delivery_errors = true
+
+  config.action_mailer.default_url_options = { host: 'www.meshigacha.com', protocol: 'https' }
 end
