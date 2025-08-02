@@ -17,4 +17,8 @@ Rails.application.routes.draw do
   resource :budget, only: [:new, :create, :edit, :update]
 
   resources :draws, only: [:update]
+
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
 end

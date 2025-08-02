@@ -10,7 +10,8 @@
         <div class="mb-2"><span class="font-bold">メールアドレス：</span><span><%= @user.email %></span></div>
         <div class="mb-2"><span class="font-bold">登録日：</span><%= @user.created_at.strftime('%Y年%m月%d日') %></div>
         <div><span class="font-bold">会員歴：</span><%= @member_days %>日目</div>
-        <%= button_to "ログアウトはこちら", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "mt-2 text-red-500 hover:text-red-300 bg-transparent font-bold transition" %>
+        <%= link_to "メールアドレス・パスワードを変更する", edit_user_registration_path, class: "block my-2 text-red-500 hover:text-red-300 bg-transparent font-bold transition" %>
+        <%= button_to "ログアウトはこちら", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block my-2 text-red-500 hover:text-red-300 bg-transparent font-bold transition" %>
       </section>
       <!-- 利用履歴 -->
       <section class="bg-white/80 rounded-xl shadow p-4">
