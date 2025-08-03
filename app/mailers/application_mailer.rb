@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "ryu@mg.meshigacha.com"
+  default from: "postmaster@mg.meshigacha.com"
   layout "mailer"
 end
