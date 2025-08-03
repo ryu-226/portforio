@@ -1,17 +1,22 @@
 class BudgetsController < ApplicationController
-  before_action :require_login
+  before_action :authenticate_user!
   before_action :set_budget, only: [:edit, :update]
 
   def new
-    if current_user.budget
-      redirect_to edit_budget_path
+    year_month = Date.current.strftime("%Y-%m")
+    existing_budget = current_user.budget_for(year_month)
+
+    if existing_budget
+      redirect_to edit_budget_path(existing_budget)
     else
-      @budget = current_user.build_budget
+      @budget = Budget.new(user: current_user, year_month: year_month)
     end
   end
 
   def create
-    @budget = current_user.build_budget(budget_params)
+    year_month = Date.current.strftime("%Y-%m")
+    @budget = Budget.new(budget_params.merge(user: current_user, year_month: year_month))
+
     if @budget.save
       if params[:from_signup] == "1"
         redirect_to main_path, notice: "条件を設定しました"
@@ -43,15 +48,11 @@ class BudgetsController < ApplicationController
   private
 
   def set_budget
-    @budget = current_user.budget
+    @budget = current_user.budget_for(Date.current.strftime("%Y-%m"))
   end
 
   def budget_params
     params.require(:budget).permit(:monthly_budget, :draw_days, :min_amount, :max_amount)
-  end
-
-  def require_login
-    redirect_to login_path, alert: "ログインしてください" unless logged_in?
   end
 
   def set_remaining_status

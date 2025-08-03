@@ -8,12 +8,12 @@
   </div>
   <!-- 右側：新規登録・ログイン -->
   <nav class="space-x-6">
-    <a href="/login" class="hidden sm:inline-block px-4 py-2 text-primary rounded-xl hover:bg-gray-300 transition font-semibold">ログイン</a>
-    <a href="/signup" class="hidden sm:inline-block px-4 py-2 text-primary rounded-xl hover:bg-gray-300 transition font-semibold">新規登録</a>
+    <%= link_to "ログイン", new_user_session_path, class: "hidden sm:inline-block px-4 py-2 text-primary rounded-xl hover:bg-gray-300 transition font-semibold" %>
+    <%= link_to "新規登録", new_user_registration_path, class: "hidden sm:inline-block px-4 py-2 text-primary rounded-xl hover:bg-gray-300 transition font-semibold" %>
     <!-- スマホ表示ボタン -->
     <div class="sm:hidden flex flex-row space-x-3">
-      <a href="/login" class="sm:inline-block px-4 py-2 text-white rounded-xl bg-primary font-semibold">ログイン</a>
-      <a href="/signup" class="sm:inline-block px-4 py-2 text-white rounded-xl bg-primary font-semibold">新規登録</a>
+      <%= link_to "ログイン", new_user_session_path, class: "sm:inline-block px-4 py-2 text-white rounded-xl bg-primary font-semibold" %>
+      <%= link_to "新規登録", new_user_registration_path, class: "sm:inline-block px-4 py-2 text-white rounded-xl bg-primary font-semibold" %>
     </div>
   </nav>
 </header>

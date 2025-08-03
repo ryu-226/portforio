@@ -1,28 +1,24 @@
 class User < ApplicationRecord
-  has_secure_password
-  has_one :budget
-  has_many :draws, dependent: :destroy
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable
 
-  validates :email, presence: true, uniqueness: true, format: { with: /\A[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+\z/, message: "は有効なメールアドレスを入力してください" }
+  has_many :draws, dependent: :destroy
+  has_many :budgets
+
   validates :nickname, presence: true
-  validates :password, length: { minimum: 8 }, allow_nil: true
-  validate :password_must_include_alphabet_and_number, if: -> { password.present? }
-  validate :email_must_be_alphanumeric, if: -> { email.present? }
+
+  validate :password_complexity
+
+  def budget_for(year_month)
+    budgets.find_by(year_month: year_month)
+  end
 
   private
 
-  def password_must_include_alphabet_and_number
-    unless password =~ /[a-zA-Z]/ && password =~ /\d/
-      errors.add(:password, "は英字と数字を両方含めてください")
-    end
-    unless password =~ /\A[a-zA-Z0-9]+\z/
-      errors.add(:password, "は半角英数字のみ使用できます")
-    end
-  end
+  def password_complexity
+    return if password.blank?
 
-  def email_must_be_alphanumeric
-    unless email =~ /\A[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+\z/
-      errors.add(:email, "は半角英数字で正しく入力してください")
+    unless password =~ /[a-zA-Z]/ && password =~ /\d/
+      errors.add :password, "は英字と数字の両方を含めてください"
     end
   end
 end

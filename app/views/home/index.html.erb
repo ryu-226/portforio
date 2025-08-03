@@ -17,8 +17,8 @@
       さあ、あなたも「今日のランチ、いくらかな？」のワクワクを体験しませんか？
     </p>
     <div class="flex flex-col md:flex-row gap-4 mt-2 items-center md:items-start w-full md:w-auto">
-      <a href="/signup" class="px-8 py-3 rounded-xl bg-primary text-white text-lg font-semibold shadow hover:bg-primary/80 transition">はじめてみる</a>
-      <a href="/login" class="px-8 py-3 rounded-xl bg-gray-700 text-white text-lg font-semibold shadow hover:bg-gray-600 transition">ログイン</a>
+      <%= link_to "はじめてみる", new_user_registration_path, class: "px-8 py-3 rounded-xl bg-primary text-white text-lg font-semibold shadow hover:bg-primary/80 transition" %>
+      <%= link_to "ログイン", new_user_session_path, class: "px-8 py-3 rounded-xl bg-gray-700 text-white text-lg font-semibold shadow hover:bg-gray-600 transition" %>
     </div>
   </div>
 </main>

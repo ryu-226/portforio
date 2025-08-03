@@ -1,5 +1,18 @@
 <!-- 予算金額の提示 -->
 <main class="flex flex-col items-center justify-start min-h-[80vh] p-20 text-gray-700 bg-gradient-to-br from-yellow-200 to-primary/20">
+  <!-- 未設定アラート -->
+  <% if @budget.blank? %>
+    <% if @show_budget_alert %>
+      <div class="mb-4 px-4 py-3 bg-red-100 border border-red-300 text-red-700 text-sm rounded-lg shadow text-center">
+        今月の予算がまだ設定されていません！<br>
+        <%= link_to "こちらから設定しましょう", new_budget_path, class: "underline text-primary font-bold" %>
+      </div>
+    <% else %>
+      <div class="mb-4 px-4 py-2 bg-yellow-50 border border-yellow-200 text-yellow-800 text-sm rounded text-center">
+        今月の予算がまだ設定されていません。<%= link_to "こちらから設定しましょう！", new_budget_path, class: "underline hover:text-yellow-900 font-semibold" %>
+      </div>
+    <% end %>
+  <% end %>
   <h1 class="text-lg md:text-xl text-center mb-10 font-semibold text-primary/80 tracking-wide">今日はどんなランチになる？🍚</h1>
   <div class="rounded-[30%] bg-gradient-to-r from-yellow-200 via-pink-100 to-green-100 p-6 mb-18">
     <h2 class="text-center text-3xl font-bold mb-6">今日の予算</h2>

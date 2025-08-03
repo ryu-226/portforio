@@ -1,5 +1,5 @@
 class DrawsController < ApplicationController
-  before_action :require_login
+  before_action :authenticate_user!
 
   def update
     draw = current_user.draws.find(params[:id])
