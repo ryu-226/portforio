@@ -2,3 +2,5 @@
 //= link_directory ../stylesheets .css
 //= link_tree ../builds
 //= link places.js
+//= link toggle_password.js
+//= link application.js
