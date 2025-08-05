@@ -25,10 +25,10 @@
     <!-- ドロップダウンメニュー本体 -->
     <div id="menu-dropdown" class="absolute top-16 right-6 z-60 bg-gray-200 shadow-lg rounded-xl py-2 px-4 hidden">
       <%= button_to "ログアウト", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block w-full  font-bold text-left py-2 text-red-500 hover:text-red-300 bg-transparent border-none" %>
-      <!-- MVP後link_toに書き換え -->
-      <a href="#" class="block py-2 text-gray-700 hover:text-primary">利用規約</a>
-      <a href="#" class="block py-2 text-gray-700 hover:text-primary">プライバシーポリシー</a>
-      <a href="#" class="block py-2 text-gray-700 hover:text-primary">お問い合わせ</a>
+      <%= link_to "利用規約", terms_path, class: "block py-2 text-gray-700 hover:text-primary" %>
+      <%= link_to "プライバシーポリシー", privacy_path, class: "block py-2 text-gray-700 hover:text-primary" %>
+      <%= link_to "お問い合わせ", "#", class: "block py-2 text-gray-700 hover:text-primary" %>
+    </div>
     </div>
   </nav>
 </header>

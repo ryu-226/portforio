@@ -18,6 +18,9 @@ Rails.application.routes.draw do
 
   resources :draws, only: [:update]
 
+  get "/terms", to: "static#terms", as: :terms
+  get "/privacy", to: "static#privacy", as: :privacy
+
   if Rails.env.development?
     mount LetterOpenerWeb::Engine, at: "/letter_opener"
   end
