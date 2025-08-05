@@ -16,6 +16,8 @@ Rails.application.routes.draw do
 
   resource :budget, only: [:new, :create, :edit, :update]
 
+  resource :contact, only: [:new, :create]
+
   resources :draws, only: [:update]
 
   get "/terms", to: "static#terms", as: :terms

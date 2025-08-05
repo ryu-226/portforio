@@ -5,7 +5,7 @@
     <nav class="flex flex-col md:flex-row gap-3 md:gap-20 text-sm items-center mx-auto md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
       <%= link_to "利用規約", terms_path,   class: "hover:text-white transition" %>
       <%= link_to "プライバシーポリシー", privacy_path, class: "hover:text-white transition" %>
-      <%= link_to "お問い合わせ", "#", class: "hover:text-white transition" %>
+      <%= link_to "お問い合わせ", new_contact_path, class: "hover:text-white transition" %>
     </nav>
     <!-- コピーライト -->
     <div class="text-xs mt-6 md:mt-0 md:mr-10 md:self-end md:ml-auto">&copy; <%= Time.current.year %>めしガチャ</div>
