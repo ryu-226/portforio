@@ -1,4 +1,4 @@
-<h1 class="text-xl font-bold m-4 text-gray-700">お店を探す</h1>
+<h1 class="text-xl font-bold m-4 text-secondary">お店を探す</h1>
 <!-- 位置情報取得説明バナー -->
 <div id="location-desc" class="text-center text-blue-600 bg-blue-50 rounded-xl py-2 mb-4 pr-10 relative">
   この機能は「現在地」周辺のお店を探します。ブラウザの位置情報取得を許可してください。
@@ -9,19 +9,19 @@
 
   <!-- 地図 -->
   <div class="w-full md:w-2/3 relative">
-    <div id="map" class="h-[60vh] md:h-[80vh] rounded-2xl shadow mb-4"></div>
-    <button id="reload-location" class="absolute right-6 top-6 z-10 px-4 py-2 bg-primary text-white rounded-full shadow hover:bg-primary/80 transition">
+    <div id="map" class="h-[60vh] md:h-[80vh] rounded-2xl shadow"></div>
+    <button id="reload-location" class="absolute right-6 top-6 z-10 px-4 py-2 bg-secondary text-white rounded-full shadow hover:bg-secondary/80 transition">
       現在地再取得
     </button>
   </div>
 
   <!-- サイドカラム -->
-  <div class="w-full md:w-1/3 flex flex-col gap-4">
+  <div class="w-full md:w-1/3 flex flex-col gap-4 px-2">
     <!-- 検索条件フォーム -->
-    <div class="bg-white/80 p-4 rounded-xl shadow">
+    <div class="bg-white border-1 border-primary p-4 rounded-xl shadow">
       <form id="search-form" class="flex flex-wrap gap-4 items-end">
         <div>
-          <label class="block font-semibold mb-1">距離</label>
+          <label class="block font-semibold mb-1 text-secondary">距離</label>
           <select id="radius" name="radius" class="px-3 py-2 rounded border w-24">
             <option value="500">500m</option>
             <option value="1000">1km</option>
@@ -29,7 +29,7 @@
           </select>
         </div>
         <div>
-          <label class="block font-semibold mb-1">ジャンル</label>
+          <label class="block font-semibold mb-1 text-secondary">ジャンル</label>
           <select id="genre" name="genre" class="px-3 py-2 rounded border w-48">
             <option value="">指定なし</option>
             <option value="restaurant">レストラン</option>
@@ -44,7 +44,7 @@
           </select>
         </div>
         <div>
-          <label class="block font-semibold mb-1">評価</label>
+          <label class="block font-semibold mb-1 text-secondary">評価</label>
           <select id="min-rating" name="min-rating" class="px-3 py-2 rounded border w-28 min-w-[96px]">
             <option value="">指定なし</option>
             <option value="3.0">★3以上</option>
@@ -55,7 +55,7 @@
         </div>
         <!-- 検索ボタン + 件数表示 -->
         <div class="flex items-center gap-2">
-          <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/80 text-white rounded-xl font-bold transition">
+          <button type="submit" class="px-4 py-2 bg-secondary hover:bg-secondary/80 text-white rounded-xl font-bold transition">
             検索
           </button>
           <span id="hit-count" class="ml-4 text-base text-gray-700 font-semibold"></span>
@@ -65,21 +65,21 @@
 
     <!-- 並び替えセレクト -->
     <div class="flex items-center gap-3 px-2">
-      <label class="font-bold text-gray-700">並び順</label>
+      <label class="font-bold text-secondary">並び順</label>
       <select id="sort-by" class="border rounded px-2 py-1">
         <option value="distance">距離</option>
         <option value="rating">評価</option>
       </select>
       <select id="sort-order" class="border rounded px-2 py-1">
-        <option value="asc">昇順</option>
-        <option value="desc">降順</option>
+        <option value="asc">小さい順</option>
+        <option value="desc">大きい順</option>
       </select>
     </div>
 
     <!-- お気に入り表示切り替え -->
     <div class="flex items-center gap-2 px-2">
       <input type="checkbox" id="fav-toggle" class="accent-yellow-400 scale-125">
-      <label for="fav-toggle" class="text-yellow-700 font-bold cursor-pointer select-none">お気に入りのみ表示</label>
+      <label for="fav-toggle" class="text-primary font-bold cursor-pointer select-none">お気に入りのみ表示</label>
     </div>
 
     <!-- 検索結果メッセージ -->

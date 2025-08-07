@@ -16,7 +16,7 @@
 
   <div class="mb-18">
     <h2 class="text-center text-3xl text-secondary font-bold mb-6">今日の予算</h2>
-    <div id="today-amount" class="whitespace-nowrap py-4 px-8 mx-auto bg-primary rounded-full shadow-md text-5xl font-extrabold text-white mb-8 cursor-pointer hover:bg-primary/80 transition">
+    <div id="today-amount" class="whitespace-nowrap py-4 px-8 mx-auto bg-primary rounded-full shadow-md text-5xl font-extrabold text-white mb-8 cursor-pointer hover:bg-primary/80 transition animate-breath">
       <% if @draw %>
         <%= @draw.amount %> 円
       <% else %>
@@ -79,7 +79,7 @@
       <% else %>
         <%= form_with model: @draw, url: draw_path(@draw), method: :patch, local: true, class: "w-full" do %>
           <div class="flex flex-col items-center gap-3">
-            <label for="actual_amount" class="font-semibold">実際に使った金額を入力しよう！</label>
+            <label for="actual_amount" class="font-semibold text-secondary">実際に使った金額を入力しよう！</label>
             <%= number_field_tag "actual_amount", nil, min: 0, required: true,
               class: "border rounded px-3 py-2 text-center w-32 text-lg" %>
             <%= submit_tag "保存", class: "mt-1 bg-secondary text-white px-5 py-2 rounded font-bold hover:bg-secondary/80 transition" %>
@@ -160,98 +160,4 @@
   <% end %>
 </main>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const amount    = document.getElementById('today-amount');
-  const modal     = document.getElementById('draw-modal');
-  const modalBg   = document.getElementById('modal-bg');
-  const closeBtn  = document.getElementById('close-modal-btn');
-  const card      = document.getElementById('amount-card');
-  const realEl    = document.getElementById('real-amount');
-  const container = document.getElementById('capsule-container');
-
-  function playFullAnimation(finalAmount) {
-    // 1) カードめくり
-    setTimeout(() => {
-      card.classList.add('animate-flip');
-      setTimeout(() => {
-        realEl.innerHTML = `<span id="real-number" class="mr-1">0</span><span>円</span>`;
-        card.style.transform = '';
-      }, 800);
-    }, 1600);
-
-    // 2) カウントアップ + ポップ + 花吹雪
-    setTimeout(() => {
-      let count = 0;
-      const step = Math.max(1, Math.floor(800 / finalAmount));
-      const numEl = document.getElementById('real-number');
-      const timer = setInterval(() => {
-        count++;
-        numEl.textContent = count;
-        if (count >= finalAmount) {
-          clearInterval(timer);
-          numEl.parentElement.classList.add('animate-pop');
-          for (let i = 0; i < 20; i++) {
-            const p = document.createElement('div');
-            p.className = 'confetti-piece';
-            p.style.left           = `${50 + (Math.random() * 80 - 40)}%`;
-            p.style.background     = `hsl(${Math.random() * 360},70%,60%)`;
-            p.style.animationDelay = `${Math.random() * 0.5}s`;
-            container.appendChild(p);
-            setTimeout(() => p.remove(), 1500);
-          }
-          const msg = document.getElementById('draw-message');
-          msg.classList.remove('opacity-0');
-          msg.classList.add('opacity-100');
-        }
-      }, step);
-      realEl.classList.add('animate-fade-in-scale');
-    }, 2500);
-  }
-
-  // モーダル周りの要素がそろっている場合だけ、閉じる系の処理を登録
-  if (modal && modalBg && closeBtn) {
-
-    // モーダル表示 ＋ アニメーション開始の共通処理
-    function openModalAndAnimate() {
-      modal.style.display   = '';
-      modalBg.style.display = '';
-
-      const msg = document.getElementById('draw-message');
-      msg.classList.remove('opacity-100');
-      msg.classList.add('opacity-0');
-
-      const text = amount.textContent || "";
-      const num  = parseInt(text.replace(/\D+/g, ""), 10) || 0;
-
-      setTimeout(() => playFullAnimation(num), 300);
-    }
-
-    // 金額クリック時
-    amount.addEventListener('click', () => {
-      if (!/\d+/.test(amount.textContent)) return;
-      openModalAndAnimate();
-    });
-
-    // 自動オープン
-    if (modal.style.display !== 'none') {
-      openModalAndAnimate();
-    }
-
-    // モーダル内部クリックは外側閉じ処理を阻止
-    modal.addEventListener('click', e => e.stopPropagation());
-
-    // バックドロップクリックで閉じる
-    modalBg.addEventListener('click', () => {
-      modal.style.display   = 'none';
-      modalBg.style.display = 'none';
-    });
-
-    // 閉じるボタン
-    closeBtn.addEventListener('click', () => {
-      modal.style.display   = 'none';
-      modalBg.style.display = 'none';
-    });
-  }
-});
-</script>
+<%= javascript_include_tag "main", "data-turbo-track": "reload" %>

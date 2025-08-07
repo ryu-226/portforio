@@ -1,49 +1,49 @@
 <!-- ログイン後ヘッダー -->
-<header class="flex justify-between items-center px-2 md:px-8 py-2 bg-gray-100 border-b border-gray-300">
+<header class="relative flex justify-between items-center px-4 md:px-8 py-2 bg-gray-100 border-b-1 border-secondary z-50">
   <!-- 左側：ロゴ -->
   <div class="flex items-center">
     <%= link_to main_path do %>
       <%= image_tag "logo.png", alt: "めしガチャ ロゴ", class: "h-12 w-auto" %>
     <% end %>
   </div>
-  <!-- 右側：マイページアイコン＋ハンバーガーメニュー -->
-  <nav class="flex items-centar space-x-6">
-    <!-- マイページアイコン -->
-    <%= link_to mypage_path, class: "flex flex-col items-center p-2 rounded-xl hover:bg-gray-200 transition", title: "マイページ" do %>
+
+  <!-- 右側：マイページ + ハンバーガー -->
+  <nav class="flex items-center space-x-4">
+    <!-- マイページ -->
+    <%= link_to mypage_path, class: "flex items-center p-2 rounded-xl hover:bg-gray-200 transition", title: "マイページ" do %>
       <i class="fa-solid fa-id-card text-3xl text-primary"></i>
     <% end %>
-    <!-- ハンバーガーメニューアイコン -->
-    <button id="menu-btn" type="button" class="p-2 rounded-xl hover:bg-gray-200 transition" aria-label="メニュー">
-      <i class="fa-solid fa-bars text-3xl text-primary"></i>
+
+    <!-- ハンバーガーボタン -->
+    <button id="menu-btn" aria-expanded="false" aria-label="メニューを開く" class="p-2 rounded-xl hover:bg-gray-200 transition focus:outline-none">
+      <svg width="35" height="35" viewBox="0 0 100 100" class="block">
+        <path class="line top"    d="M 20,29 H 80" />
+        <path class="line middle" d="M 20,50 H 80" />
+        <path class="line bottom" d="M 20,71 H 80" />
+      </svg>
     </button>
-    <!-- ドロップダウンメニュー本体 -->
-    <div id="menu-dropdown" class="absolute top-16 right-6 z-60 bg-gray-200 shadow-lg rounded-xl py-2 px-4 hidden">
-      <%= button_to "ログアウト", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block w-full  font-bold text-left py-2 text-red-500 hover:text-red-300 bg-transparent border-none" %>
-      <%= link_to "利用規約", terms_path, class: "block py-2 text-gray-700 hover:text-primary" %>
-      <%= link_to "プライバシーポリシー", privacy_path, class: "block py-2 text-gray-700 hover:text-primary" %>
-      <%= link_to "お問い合わせ", new_contact_path, class: "block py-2 text-gray-700 hover:text-primary" %>
-    </div>
-    </div>
   </nav>
+
+  <!-- バックドロップ -->
+  <div id="menu-backdrop" class="fixed inset-0 bg-black/20 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity"></div>
+
+  <!-- オフキャンバスメニュー（右から出るように） -->
+  <aside id="menu-drawer" class="fixed top-0 right-0 h-70 w-52 md:h-76 md:w-60 max-w-xs bg-white shadow-xl rounded-none rounded-bl-xl border-l-3 border-b-3 border-secondary transform translate-x-full transition-transform">
+    <ul class="mt-16 space-y-6 px-6 font-semibold">
+      <li class="opacity-0 transform translate-x-4 transition-all delay-100">
+        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block text-accent hover:text-accent/50" %>
+      </li>
+      <li class="opacity-0 transform translate-x-4 transition-all delay-200">
+        <%= link_to "利用規約", terms_path, class: "block text-secondary hover:text-secondary/50" %>
+      </li>
+      <li class="opacity-0 transform translate-x-4 transition-all delay-300">
+        <%= link_to "プライバシー", privacy_path, class: "block text-secondary hover:text-secondary/50" %>
+      </li>
+      <li class="opacity-0 transform translate-x-4 transition-all delay-400">
+        <%= link_to "お問い合わせ", new_contact_path, class: "block text-secondary hover:text-secondary/50" %>
+      </li>
+    </ul>
+  </aside>
 </header>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const menuBtn = document.getElementById("menu-btn");
-    const menuDropdown = document.getElementById("menu-dropdown");
-    let isOpen = false;
 
-    menuBtn.addEventListener("click", function(e) {
-      e.stopPropagation();
-      isOpen = !isOpen;
-      menuDropdown.classList.toggle("hidden", !isOpen);
-    });
-
-    // メニュー外クリックで閉じる
-    document.addEventListener("click", function(e) {
-      if (isOpen && !menuDropdown.contains(e.target) && e.target !== menuBtn) {
-        menuDropdown.classList.add("hidden");
-        isOpen = false;
-      }
-    });
-  });
-</script>
+<%= javascript_include_tag "hamburger", "data-turbo-track": "reload" %>

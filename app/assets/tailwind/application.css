@@ -85,4 +85,20 @@ input[type="number"] {
     background: var(--color-accent);
     animation: confetti 1.5s ease-out forwards;
   }
+
+  .line {
+    stroke: var(--color-secondary);
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: transform 0.4s ease, opacity 0.4s ease;
+  }
+  button[aria-expanded="true"] .line.top {
+    transform: translateY(21px) rotate(45deg);
+  }
+  button[aria-expanded="true"] .line.middle {
+    opacity: 0;
+  }
+  button[aria-expanded="true"] .line.bottom {
+    transform: translateY(-21px) rotate(-45deg);
+  }
 }
