@@ -4,7 +4,6 @@ class MainController < ApplicationController
   def index
     @budget = current_user.budget_for(Date.current.strftime('%Y-%m'))
     @draw = current_user.draws.find_by(date: Date.current)
-    @show_budget_alert = @budget.nil? && Date.current.day == 1
 
     if @budget.blank?
       @remaining_days = nil
@@ -28,7 +27,7 @@ class MainController < ApplicationController
       "コスパ最強ランチを狙おう！"
     ]
     @middle_messages = [
-      "ランチタイムも楽しくガチャ！",
+      "ランチタイムでひと休み♪",
       "ランチ仲間とシェアするのもおすすめ！",
       "迷ったら定番メニュー！",
       "おいしいランチでリフレッシュ！",
