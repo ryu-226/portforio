@@ -6,6 +6,10 @@ class BudgetsController < ApplicationController
     year_month = Date.current.strftime("%Y-%m")
     existing_budget = current_user.budget_for(year_month)
 
+    if existing_budget.nil? && params[:from_signup] != '1'
+     return redirect_to new_budget_path(from_signup: '1')
+    end
+
     if existing_budget
       redirect_to edit_budget_path(existing_budget)
     else
