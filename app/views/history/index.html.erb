@@ -1,121 +1,221 @@
-<main class="max-w-2xl mx-auto mt-10 p-4 pb-28 text-gray-700 bg-white rounded-2xl shadow">
-  <h1 class="text-xl font-bold mb-6 text-primary">履歴ページ</h1>
-  <div class="flex items-center gap-6 mb-6">
-    <% prev_month = @month.prev_month.strftime("%Y-%m") %>
-    <% next_month = @month.next_month.strftime("%Y-%m") %>
-    <%= link_to "←前の月", history_path(month: prev_month), class: "text-sm text-primary hover:underline" %>
-    <span class="mx-2 text-lg font-bold"><%= @month.strftime("%Y年%-m月") %></span>
-    <%# 来月以降への遷移は不可 %>
-    <% if @month.next_month <= Date.current.beginning_of_month %>
-      <%= link_to "次の月→", history_path(month: next_month), class: "text-sm text-primary hover:underline" %>
-    <% end %>
+<h1 class="text-xl font-bold m-4 text-secondary">ガチャ履歴</h1>
+<main class="mx-auto w-full max-w-6xl px-4 mb-28 md:mb-22 text-gray-700">
+
+  <!-- 月ナビとサマリ（カレンダーの上） -->
+  <div class="flex items-center justify-between gap-4 mb-4 md:mb-6">
+    <div class="flex items-center gap-3">
+      <% prev_month = @month.prev_month.strftime("%Y-%m") %>
+      <% next_month = @month.next_month.strftime("%Y-%m") %>
+      <%= link_to "← 前の月", history_path(month: prev_month), class: "text-sm md:text-base text-primary hover:underline" %>
+    </div>
+
+    <h1 class="text-xl md:text-2xl font-extrabold text-primary"><%= @month.strftime("%Y年%-m月") %></h1>
+
+    <div class="flex items-center gap-3">
+      <% if @month.next_month <= Date.current.beginning_of_month %>
+        <%= link_to "次の月 →", history_path(month: next_month), class: "text-sm md:text-base text-primary hover:underline" %>
+      <% else %>
+        <span class="text-gray-300 text-sm md:text-base">次の月 →</span>
+      <% end %>
+    </div>
   </div>
 
-  <div class="flex flex-wrap gap-6 mb-4 font-bold text-base">
-    <div>月抽選合計: <%= @sum_amount %>円</div>
-    <div>月実際合計: <%= @sum_actual %>円</div>
-    <div>
-      月差額:
-      <% month_diff = @sum_amount - @sum_actual %>
-      <span class="<%= month_diff > 0 ? 'text-blue-500' : month_diff < 0 ? 'text-red-500' : '' %>">
+  <% month_diff = @sum_amount - @sum_actual %>
+  <% cumulative_diff = @all_draws.sum { |d| d.amount - (d.actual_amount || d.amount) } %>
+
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
+    <div class="rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
+      <div class="text-xs font-bold text-secondary">今月の予算合計</div>
+      <div class="text-lg md:text-xl font-bold"><%= @sum_amount %>円</div>
+    </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-3 shadow-sm">
+      <div class="text-xs font-bold text-secondary">今月使ったお金</div>
+      <div class="text-lg md:text-xl font-bold"><%= @sum_actual %>円</div>
+    </div>
+    <div class="rounded-xl border border-gray-200 bg-white p-3 mb-2 md:mb-0 shadow-sm">
+      <div class="text-xs font-bold text-secondary">今月の差額合計</div>
+      <div class="text-lg md:text-xl font-bold <%= month_diff > 0 ? 'text-green-400' : month_diff < 0 ? 'text-accent' : '' %>">
         <%= month_diff == 0 ? '±0円' : "#{month_diff > 0 ? '+' : ''}#{month_diff}円" %>
-      </span>
+      </div>
     </div>
-    <div class="ml-auto">累計差額: 
-      <% cumulative_diff = @all_draws.sum { |d| d.amount - (d.actual_amount || d.amount) } %>
-      <span class="<%= cumulative_diff > 0 ? 'text-blue-500' : cumulative_diff < 0 ? 'text-red-500' : '' %>">
+    <div class="text-center rounded-full border-6 border-primary bg-white p-3 shadow-sm">
+      <div class="text-xs font-bold">トータル差額合計</div>
+      <div class="text-lg md:text-xl font-bold <%= cumulative_diff > 0 ? 'text-green-400' : cumulative_diff < 0 ? 'text-accent' : '' %>">
         <%= cumulative_diff == 0 ? '±0円' : "#{cumulative_diff > 0 ? '+' : ''}#{cumulative_diff}円" %>
-      </span>
+      </div>
     </div>
   </div>
 
-  <!-- スマホ：カード型 -->
-  <div class="block md:hidden">
-    <% today = Date.current %>
-    <% (@month.beginning_of_month..@month.end_of_month).each do |date| %>
-      <% draw = @draws.find { |d| d.date == date } %>
-      <% wday = date.wday %>
-      <% wday_color = wday == 6 ? 'text-blue-700' : wday == 0 ? 'text-red-600' : '' %>
-      <% bg_gray = draw.nil? && date < today ? 'bg-gray-100 text-gray-400' : '' %>
-      <div class="mb-3 border rounded-lg shadow px-3 py-2 <%= bg_gray %>">
-        <div class="flex justify-between items-center">
-          <span class="font-semibold">日付</span>
-          <span class="font-bold <%= wday_color %>"><%= date.strftime("%-m/%-d") %>（<%= %w(日 月 火 水 木 金 土)[wday] %>）</span>
-        </div>
-        <div class="flex justify-between"><span class="font-semibold">抽選金額</span><span><%= draw&.amount ? "#{draw.amount}円" : '-' %></span></div>
-        <div class="flex justify-between"><span class="font-semibold">実際</span><span><%= draw&.actual_amount ? "#{draw.actual_amount}円" : "未入力" %></span></div>
-        <div class="flex justify-between"><span class="font-semibold">差額</span>
-          <span>
-          <% if draw&.amount %>
-            <% diff = draw.amount - (draw.actual_amount || draw.amount) %>
-            <span class="<%= diff > 0 ? 'text-blue-500' : diff < 0 ? 'text-red-500' : '' %>">
-              <%= diff == 0 ? '±0円' : "#{diff > 0 ? '+' : ''}#{diff}円" %>
-            </span>
-          <% else %>-<% end %>
-          </span>
-        </div>
-        <% if draw&.amount %>
-          <div class="flex space-x-2 mt-2">
-            <%= form_with model: draw, url: draw_path(draw), method: :patch, local: true do %>
-              <%= number_field_tag "actual_amount", draw.actual_amount, min: 0, class: "border rounded px-2 py-1 w-20" %>
-              <%= submit_tag "保存", class: "bg-primary text-white px-4 py-1 rounded text-xs" %>
-            <% end %>
-          </div>
+  <!-- カレンダー用の日付配列 -->
+  <% start_date = @month.beginning_of_month.beginning_of_week(:sunday) %>
+  <% end_date   = @month.end_of_month.end_of_week(:sunday) %>
+  <% days = (start_date..end_date).to_a %>
+  <% draws_by_date = @draws.index_by(&:date) %>
+
+  <!-- 横スクロール対応ラッパー（スマホ） -->
+  <div class="-mx-4 px-4 overflow-x-auto md:overflow-visible md:mx-0 md:px-0">
+    <div class="min-w-[700px] md:min-w-0">
+
+      <!-- 曜日ヘッダ -->
+      <div class="grid grid-cols-7 gap-2 md:gap-3 text-center text-[10px] sm:text-xs md:text-sm font-bold mb-2 md:mb-3">
+        <% %w(日 月 火 水 木 金 土).each_with_index do |w, i| %>
+          <div class="<%= i == 0 ? 'text-red-500' : i == 6 ? 'text-blue-600' : '' %>"><%= w %></div>
         <% end %>
+      </div>
+
+      <!-- 日付グリッド -->
+      <div class="grid grid-cols-7 gap-2 md:gap-3">
+        <% days.each do |date| %>
+          <% draw     = draws_by_date[date] %>
+          <% undrawn  = draw.nil? %>
+          <% in_month = (date.month == @month.month) %>
+          <% is_today = (date == Date.current) %>
+          <% wday     = date.wday %>
+          <% diff     = draw ? (draw.amount - (draw.actual_amount || draw.amount)) : 0 %>
+
+          <button
+            type="button"
+            class="
+              group relative w-full min-w-[96px] rounded-xl border p-2 md:p-3 text-left
+              <%= undrawn ? 'bg-gray-100' : 'bg-white' %> shadow-sm hover:shadow transition
+              <%= in_month ? '' : 'opacity-30' %>
+              <%= is_today ? 'ring-3 ring-primary/60' : '' %>
+            "
+            data-date="<%= date.strftime('%Y-%m-%d') %>"
+            data-draw-id="<%= draw&.id %>"
+            data-draw-amount="<%= draw&.amount %>"
+            data-actual-amount="<%= draw&.actual_amount %>"
+            title="<%= date.strftime('%-m/%-d') %>"
+            onclick="window.handleDaySelect && window.handleDaySelect(this)"
+          >
+            <!-- 日付 -->
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-[10px] sm:text-xs font-bold <%= wday == 0 ? 'text-red-500' : wday == 6 ? 'text-blue-600' : 'text-gray-600' %>">
+                <span class="whitespace-nowrap"><%= date.strftime("%-m/%-d") %></span>
+              </div>
+              <% if is_today %>
+                <span class="text-[10px] sm:text-xs px-1.5 rounded bg-primary/10 text-primary">今日</span>
+              <% end %>
+            </div>
+
+            <!-- 金額3種（スマホはラベル省略＆行間詰め） -->
+            <div class="space-y-0.5 md:space-y-1 text-[11px] sm:text-xs md:text-sm leading-tight">
+              <div class="flex justify-between items-baseline">
+                <span class="text-gray-500">予算</span>
+                <span class="font-semibold tabular-nums whitespace-nowrap"><%= draw&.amount ? "#{draw.amount}円" : '-' %></span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <span class="text-gray-500">使用</span>
+                <span class="font-semibold tabular-nums whitespace-nowrap">
+                  <% if undrawn %>
+                    -
+                  <% elsif draw.actual_amount.present? %>
+                    <%= "#{draw.actual_amount}円" %>
+                  <% else %>
+                    未入力
+                  <% end %>    
+                </span>
+              </div>
+              <div class="flex justify-between items-baseline">
+                <span class="text-gray-500">差額</span>
+                <% if draw %>
+                  <span class="font-bold tabular-nums whitespace-nowrap <%= diff > 0 ? 'text-green-400' : diff < 0 ? 'text-accent' : 'text-gray-700' %>">
+                    <%= diff == 0 ? '±0円' : "#{diff > 0 ? '+' : ''}#{diff}円" %>
+                  </span>
+                <% else %>
+                  <span class="font-semibold">-</span>
+                <% end %>
+              </div>
+            </div>
+
+            <!-- セル選択のビジュアル -->
+            <span class="pointer-events-none absolute inset-0 rounded-xl ring-0 group-[.is-selected]:ring-2 group-[.is-selected]:ring-secondary transition"></span>
+          </button>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 編集フォーム（カレンダー下） -->
+  <div class="mt-6 md:mt-8 rounded-2xl border border-gray-200 bg-white p-4 md:p-5 shadow">
+    <div class="mb-3 md:mb-4">
+      <div class="text-base font-bold text-secondary">使用金額の編集</div>
+      <div class="text-xs text-gray-400">※カレンダーで日付を選択して入力してください</div>
+    </div>
+
+    <%= form_with url: '#',
+                  method: :post,
+                  local: true,
+                  html: { id: "edit-actual-form",
+                          class: "grid grid-cols-1 sm:grid-cols-3 gap-3 items-end" },
+                  data: { update_base: '/draws' } do %>
+
+      <%= hidden_field_tag :_method, 'patch' %>
+      <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+      <%= hidden_field_tag :id, nil, id: "edit-draw-id" %>
+
+      <div>
+        <label class="block text-sm font-bold mb-1">対象日</label>
+        <input id="edit-date-display" type="text"
+               class="w-full rounded-lg border px-3 py-2 bg-gray-50" value="未選択" disabled>
+      </div>
+
+      <div>
+        <label for="actual_amount" class="block text-sm font-bold mb-1">使用金額（円）</label>
+        <%= number_field_tag :actual_amount, nil, min: 0,
+              class: "w-full rounded-lg border px-3 py-2", id: "actual_amount" %>
+      </div>
+
+      <div>
+        <button type="submit"
+                class="w-full rounded-lg bg-secondary text-white font-bold px-4 py-2 hover:bg-secondary/80 transition disabled:opacity-50"
+                id="save-btn" disabled>保存</button>
       </div>
     <% end %>
   </div>
-
-  <!-- PC：テーブル型 -->
-  <table class="hidden md:table w-full table-fixed border text-sm">
-    <thead>
-      <tr class="bg-primary/10 text-primary">
-        <th class="w-1/6 py-2">日付</th>
-        <th class="w-1/6 py-2">抽選金額</th>
-        <th class="w-1/6 py-2">実際に使った金額</th>
-        <th class="w-1/6 py-2">差額</th>
-        <th class="w-1/6 py-2">入力</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% today = Date.current %>
-      <% (@month.beginning_of_month..@month.end_of_month).each do |date| %>
-        <% draw = @draws.find { |d| d.date == date } %>
-        <% wday = date.wday %>
-        <% wday_color = wday == 6 ? 'text-blue-700' : wday == 0 ? 'text-red-600' : '' %>
-        <% bg_gray = draw.nil? && date < today ? 'bg-gray-100 text-gray-400' : '' %>
-        <tr class="<%= bg_gray %>">
-          <td class="text-center font-bold <%= wday_color %>">
-            <%= date.strftime("%-m/%-d") %>（<%= %w(日 月 火 水 木 金 土)[wday] %>）
-          </td>
-          <td class="text-center"><%= draw&.amount ? "#{draw.amount} 円" : '-' %></td>
-          <td class="text-center">
-            <% if draw&.amount %>
-              <%= draw.actual_amount.present? ? "#{draw.actual_amount} 円" : "未入力" %>
-            <% else %>
-              -
-            <% end %>
-          </td>
-          <td class="text-center">
-            <% if draw&.amount %>
-              <% diff = draw.amount - (draw.actual_amount || draw.amount) %>
-              <span class="<%= diff > 0 ? 'text-blue-500' : diff < 0 ? 'text-red-500' : '' %>">
-                <%= diff == 0 ? '±0円' : "#{diff > 0 ? '+' : ''}#{diff}円" %>
-              </span>
-            <% else %>
-              -
-            <% end %>
-          </td>
-          <td class="text-center">
-            <% if draw&.amount %>
-              <%= form_with model: draw, url: draw_path(draw), method: :patch, local: true do %>
-                <%= number_field_tag "actual_amount", draw.actual_amount, min: 0, class: "border rounded px-2 py-1 w-20" %>
-                <%= submit_tag "保存", class: "bg-primary text-white px-2 py-1 rounded text-xs" %>
-              <% end %>
-            <% end %>
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
 </main>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('edit-actual-form');
+  const csrfMetaToken = document.querySelector('meta[name="csrf-token"]')?.content;
+
+  // 日付セル→下部フォームへ反映
+  window.handleDaySelect = (el) => {
+    const container = el.parentElement;
+
+    // 既存の選択解除
+    container.querySelectorAll('button.group.is-selected')
+      .forEach(b => b.classList.remove('is-selected'));
+    el.classList.add('is-selected');
+
+    const base    = form.dataset.updateBase;
+    const dateStr = el.dataset.date;
+    const drawId  = el.dataset.drawId;
+    const actual  = el.dataset.actualAmount;
+
+    // UI反映
+    document.getElementById('edit-date-display').value =
+      dateStr + (drawId ? '' : '（抽選なし）');
+    document.getElementById('actual_amount').value = actual || '';
+    document.getElementById('edit-draw-id').value  = drawId || '';
+    document.getElementById('save-btn').disabled   = !drawId;
+
+    // /draws/:id を直接組み立て
+    form.action = drawId ? `${base}/${drawId}` : '#';
+
+    // per-form CSRF 対応：hidden のトークンも更新
+    const tokenInput = form.querySelector('input[name="authenticity_token"]');
+    if (csrfMetaToken && tokenInput) tokenInput.value = csrfMetaToken;
+  };
+
+  // 送信前チェック（保険）
+  form.addEventListener('submit', (e) => {
+    if (!/\/draws\/\d+$/.test(form.action)) {
+      e.preventDefault();
+      alert('日付セル（抽選がある日）を選択してください。');
+    }
+  });
+});
+</script>
