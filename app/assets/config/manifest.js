@@ -6,3 +6,4 @@
 //= link application.js
 //= link main.js
 //= link hamburger.js
+//= link history.js

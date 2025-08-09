@@ -58,8 +58,12 @@
       <% end %>
     </div>
 
+    <% signup = (params[:from_signup] == '1') %>
     <%= f.submit(
-      params[:from_signup] == "1" ? '設定を完了してガチャをまわす' : '設定を完了する',
-      class: "w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition"
+      signup ? '設定を完了してガチャをまわす' : '設定を完了する',
+      class: class_names(
+        "w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition",
+        "animate-breath": signup
+      )
     ) %>
   <% end %>  

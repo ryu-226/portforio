@@ -17,5 +17,9 @@ class MypageController < ApplicationController
       @remaining_days = @budget.draw_days.to_i - used_count
       @remaining_budget = @budget.monthly_budget.to_i - used_sum
     end
+
+    rel = current_user.draws.where.not(actual_amount: nil)
+    @save_days = rel.where("actual_amount < amount").count
+    @over_days = rel.where("actual_amount > amount").count
   end
 end
