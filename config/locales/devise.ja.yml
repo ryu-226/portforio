@@ -1,0 +1,5 @@
+ja:
+  devise:
+    registrations:
+      signed_up_but_unconfirmed: "確認メールを送信しました。メール内のリンクを開きアカウントを有効化してください。"
+      update_needs_confirmation: "確認メールを送信しました。メール内のリンクを開きメールアドレスの確認を完了してください。"

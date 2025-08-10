@@ -1,7 +1,7 @@
 <main class="flex justify-center items-center px-4 mt-10">
   <div class="w-full max-w-md p-8 rounded-xl border border-gray-200 shadow-sm">
     <!-- タイトル -->
-    <h1 class="text-3xl font-bold text-primary text-center mb-10">ログインページ</h1>
+    <h1 class="text-3xl font-bold text-secondary text-center mb-10">ログインページ</h1>
 
     <!-- エラー表示 -->
     <% if flash[:alert] %>
@@ -28,7 +28,7 @@
           <i class="fa-solid fa-eye absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer toggle-password text-gray-400"></i>
         </div>
       </div>
-      <%= f.submit 'ログイン', class: "w-full py-3 mt-6 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition" %>
+      <%= f.submit 'ログイン', class: "w-full py-3 mt-6 bg-secondary text-white font-bold rounded-xl shadow hover:bg-secondary/80 transition" %>
     <% end %>
 
     <!-- パスワードリセット・新規会員登録への導線 -->

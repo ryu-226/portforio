@@ -1,20 +1,7 @@
-<main class="max-w-md mx-auto my-8 p-6 pb-24 text-gray-700 bg-yellow-200 rounded-2xl shadow">
-  <section class="mb-8 bg-white/60 p-4 rounded-xl shadow text-base">
-    <h2 class="font-bold text-lg mb-2 text-primary">ランチ予算の見直し・変更</h2>
-    <p>
-      今月の予算やガチャ回数は、いつでもここから調整できます。<br>
-      気分や予定に合わせて、あなたのスタイルに合った予算にカスタマイズしましょう！
-    </p>
-    <ul class="list-disc pl-6 text-xs text-red-500 mb-2 mt-3">
-      <li>抽選日数は「<strong>今月、ガチャでランチ予算を決めたい合計回数</strong>」を入力してください。</li>
-      <li><strong>今月すでに抽選した回数</strong>と、<strong>本日から月末までの残り日数</strong>を合わせた回数が上限になります。</li>
-      <li>たとえば本日が7月10日ですでに3回抽選済みなら、設定できる最大回数は「3 + 残り22日 = 25回」です。</li>
-      <li>設定を変更しても、<strong>すでに抽選した分はそのまま</strong>残ります。残り回数分だけ新しい条件が適用されます。</li>
-      <li>残り予算と抽選日数・金額の組み合わせによっては、設定できない場合があります。</li>
-    </ul>
-  </section>
-
-  <!-- 入力フォーム -->
-  <%= render 'form' %>
-
+<main class="mx-auto max-w-xl px-4 pt-10 pb-20">
+  <div class="w-full rounded-xl border border-gray-200 shadow-sm p-6">
+  <h1 class="text-3xl font-bold text-center text-secondary mb-8">設定変更</h1>
+    <%= render "intro", mode: :edit %>
+    <%= render "form" %>
+  </div>
 </main>

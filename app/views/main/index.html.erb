@@ -3,16 +3,16 @@
   <!-- 未設定アラート -->
   <% if @budget.blank? %>
       <div class="mb-20 px-4 py-2 bg-yellow-50 border border-secondary text-secondary text-sm rounded text-center">
-        今月の予算がまだ設定されていません。<%= link_to "こちらから設定しましょう！", new_budget_path, class: "text-accent underline hover:text-accent/60 font-semibold" %>
+        今月の予算がまだ設定されていません。<br>
+        <%= link_to "こちらから設定しましょう！", new_budget_path, class: "text-accent underline hover:text-accent/60 font-semibold" %>
       </div>
   <% end %>
 
     <% if @remaining_days && @remaining_budget %>
       <div class="mb-10 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold text-base">
-        今月のガチャ残り回数: <%= @remaining_days %>回
+        今月ガチャできる日数: <%= @remaining_days %>日
       </div>
     <% end %>
-
 
   <div class="mb-18">
     <h2 class="text-center text-3xl text-secondary font-bold mb-6">今日の予算</h2>
@@ -24,7 +24,6 @@
       <% end %>
     </div>
   </div>
-
 
   <!-- ボタンorテキスト -->
   <% unless @draw %>
@@ -109,10 +108,12 @@
         <span class="animate-bounce">🎉</span>
       </div>
 
-      <div id="amount-card" class="relative w-70 h-24 mx-auto perspective-600 mb-4 overflow-visible bg-primary rounded-full shadow-md">
+      <div id="amount-card" class="relative w-70 h-24 mx-auto mb-4 overflow-visible bg-primary rounded-full shadow-md">
+        <!-- 裏面の背景（文字なし） -->
+        <div class="back-surface absolute inset-0 rounded-full bg-primary" aria-hidden="true"></div>
         <!-- 実際の金額 -->
         <div id="real-amount"
-            class="absolute inset-0 flex items-center justify-center backface-hidden rotateY-180
+            class="absolute inset-0 flex items-center justify-center backface-hidden
                     text-6xl text-white font-extrabold drop-shadow-lg leading-none gap-x-1 whitespace-nowrap">
           <!-- JS で 0 → 金額 をカウントアップしてセットします -->
           <span id="real-number" class="mr-1">0</span><span>円</span>

@@ -25,29 +25,32 @@
     <% end %>
 
     <%# --- フラッシュメッセージ --- %>
-    <% if flash[:notice] %>
-      <div id="toast" class="fixed left-1/2 top-20 z-50 -translate-x-1/2 bg-green-500 text-white px-6 py-3 rounded-lg shadow transition-opacity duration-500 opacity-100">
-        <%= flash[:notice] %>
-      </div>
-      <script>
-        setTimeout(function(){
-          const t = document.getElementById('toast');
-          if (t) t.style.opacity = '0';
-        }, 3000);
-      </script>
-    <% end %>
-    <% if flash[:alert] %>
-      <div id="toast-alert" class="fixed left-1/2 top-20 z-50 -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-lg shadow transition-opacity duration-500 opacity-100">
-        <%= flash[:alert] %>
-      </div>
-      <script>
-        setTimeout(function(){
-          const t = document.getElementById('toast-alert');
-          if (t) t.style.opacity = '0';
-        }, 3000);
-      </script>
-    <% end %>
-
+    <div id="toasts" class="fixed z-50 top-20 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 space-y-2">
+      <% flash.each do |type, message| %>
+        <% color =
+          case type.to_s
+          when "notice" then "bg-green-600"
+          when "alert", "error" then "bg-red-600"
+          else "bg-gray-700"
+          end %>
+        <div class="toast pointer-events-auto
+                    rounded-lg px-4 py-3 text-white shadow-lg ring-1 ring-black/5
+                    text-sm sm:text-base break-words max-w-full sm:max-w-md
+                    transition-all duration-300 opacity-100"
+            role="<%= %w[alert error].include?(type.to_s) ? 'alert' : 'status' %>"
+            aria-live="polite"
+            data-timeout="3000"
+            style=""
+            >
+          <div class="<%= color %> rounded-lg px-3 py-2">
+            <div class="flex items-start gap-3">
+              <span class="flex-1"><%= message %></span>
+              <button type="button" class="toast-close shrink-0 opacity-80 hover:opacity-100" aria-label="閉じる">×</button>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
     <%# --- メインコンテンツ --- %>
     <main class="<%= (controller_name == 'main' && action_name == 'index') ? '' : 'animate-fadein' %>">
       <%= yield %>

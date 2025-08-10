@@ -69,5 +69,13 @@ class BudgetsController < ApplicationController
 
     @remaining_days = draw_days.to_i - used_count
     @remaining_budget = monthly_budget.to_i - used_sum
+
+    today = Date.current
+    @used_count = used_count
+    @drawn_today = current_user.draws.exists?(date: today)
+
+    @remaining_calendar_days = (today..today.end_of_month).count
+    @available_days = @remaining_calendar_days - (@drawn_today ? 1 : 0)
+    @days_in_month = today.end_of_month.day
   end
 end
