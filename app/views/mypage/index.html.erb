@@ -1,54 +1,75 @@
-<main class="max-w-4xl mx-auto my-8 p-6 pb-24 text-gray-700 bg-yellow-200 rounded-2xl shadow">
-  <h1 class="text-2xl font-bold mb-6 text-center">マイページ</h1>
+<main class="max-w-4xl mx-auto my-4 p-6 pb-24 text-gray-700">
+  <h1 class="text-3xl font-bold mb-10 text-center text-secondary">マイページ</h1>
+
   <div class="flex flex-col md:flex-row gap-6">
     <!-- 左カラム：ユーザー情報・利用履歴 -->
     <div class="flex-1 space-y-6">
       <!-- ユーザー情報 -->
-      <section class="bg-white/80 rounded-xl shadow p-4">
-        <h2 class="font-semibold text-lg mb-2 text-primary">ユーザー情報</h2>
-        <div class="mb-2"><span class="font-bold">ニックネーム：</span><span><%= @user.nickname %></span></div>
-        <div class="mb-2"><span class="font-bold">メールアドレス：</span><span><%= @user.email %></span></div>
-        <div class="mb-2"><span class="font-bold">登録日：</span><%= @user.created_at.strftime('%Y年%m月%d日') %></div>
-        <div><span class="font-bold">会員歴：</span><%= @member_days %>日目</div>
-        <%= link_to "メールアドレス・パスワードを変更する", edit_user_registration_path, class: "block my-2 text-red-500 hover:text-red-300 bg-transparent font-bold transition" %>
-        <%= button_to "ログアウトはこちら", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block my-2 text-red-500 hover:text-red-300 bg-transparent font-bold transition" %>
+      <section id="card-user" class="card-3d-wrapper" data-anim-order="1">
+        <!-- ★ 初期は裏向き -->
+        <div class="card-3d is-back">
+          <div class="card-face card-front font-bold rounded-xl border border-gray-200 shadow-sm p-6 bg-white">
+            <h2 class="text-xl mb-4 text-primary">ユーザー情報</h2>
+            <div class="mb-2"><span class="text-secondary">ニックネーム：</span><span><%= @user.nickname %></span></div>
+            <div class="mb-2"><span class="text-secondary">メールアドレス：</span><span><%= @user.email %></span></div>
+            <div class="mb-2"><span class="text-secondary">登録日：</span><%= @user.created_at.strftime('%Y年%m月%d日') %></div>
+            <div><span class="text-secondary">会員歴：</span><%= @member_days %>日目</div>
+            <%= link_to "メールアドレス・パスワードを変更する", edit_user_registration_path, class: "block mb-2 mt-6 text-sm md:text-base text-accent hover:text-accent/50 transition" %>
+            <%= button_to "ログアウトはこちら", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block my-2 text-sm md:text-base text-accent hover:text-accent/50 transition" %>
+          </div>
+          <div class="card-face card-back" style="--wm:url('<%= asset_path('logo.png') %>')"></div>
+        </div>
       </section>
+
       <!-- 利用履歴 -->
-      <section class="bg-white/80 rounded-xl shadow p-4">
-        <h2 class="font-semibold text-lg mb-2 text-primary">利用履歴</h2>
-        <div class="mb-2"><span class="font-bold">ガチャを回した回数：</span><%= @gacha_count %>回</div>
+      <section id="card-history" class="card-3d-wrapper" data-anim-order="3">
+        <div class="card-3d is-back">
+          <div class="card-face card-front font-bold rounded-xl border border-gray-200 shadow-sm p-6 bg-white">
+            <h2 class="text-xl mb-4 text-primary">利用履歴</h2>
+            <div class="mb-2"><span class="text-secondary">ガチャを回した回数：</span><%= @gacha_count %>回</div>
+            <div class="mb-2"><span class="text-secondary">予算よりセーブできた日：</span><%= @save_days %>日</div>
+            <div class="mb-2"><span class="text-secondary">予算をオーバーした日：</span><%= @over_days %>日</div>
+          </div>
+          <div class="card-face card-back" style="--wm:url('<%= asset_path('logo.png') %>')"></div>
+        </div>
       </section>
     </div>
 
     <!-- 右カラム：設定条件・通知設定 -->
     <div class="flex-1 space-y-6">
       <!-- 設定条件 -->
-      <section class="bg-white/80 rounded-xl shadow p-4">
-        <h2 class="font-semibold text-lg mb-2 text-primary">現在の設定条件</h2>
-        <ul class="space-y-1 pl-2">
-          <li><span class="font-bold">月の予算：</span><%= @budget&.monthly_budget %> 円</li>
-          <li><span class="font-bold">抽選日数：</span><%= @budget&.draw_days %> 日間</li>
-          <li><span class="font-bold">１日の最低金額：</span><%= @budget&.min_amount %> 円</li>
-          <li><span class="font-bold">１日の最高金額：</span><%= @budget&.max_amount %> 円</li>
-          <% if @remaining_days && @remaining_budget %>
-            <div class="mb-3 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold text-base">
-              今月の残り抽選日数: <%= @remaining_days %>日 /
-              残り予算: <%= @remaining_budget %>円
-            </div>
-          <% end %>
-        </ul>
-        <% if @budget.nil? %>
-          <p class="text-sm text-gray-400 mt-2">※まだ条件設定がありません</p>
-        <% end %>
+      <section id="card-settings" class="card-3d-wrapper" data-anim-order="2">
+        <div class="card-3d is-back">
+          <div class="card-face card-front font-bold rounded-xl border border-gray-200 shadow-sm p-6 bg-white">
+            <h2 class="text-xl mb-4 text-primary">現在の設定</h2>
+            <div class="mb-2"><span class="text-secondary">今月の予算：</span><%= @budget&.monthly_budget %> 円</div>
+            <div class="mb-2"><span class="text-secondary">ガチャする日数：</span><%= @budget&.draw_days %> 日間</div>
+            <div class="mb-2"><span class="text-secondary">１日の最低予算：</span><%= @budget&.min_amount %> 円</div>
+            <div class="mb-6"><span class="text-secondary">１日の最高予算：</span><%= @budget&.max_amount %> 円</div>
+            <% if @remaining_days && @remaining_budget %>
+              <div class="mb-2 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold">
+                残り予算：<%= @remaining_budget %>円 <br>
+                残りガチャ日数：<%= @remaining_days %>日
+              </div>
+            <% end %>
+            <% if @budget.nil? %>
+              <p class="text-sm text-gray-400 mt-2">※まだ設定がありません</p>
+            <% end %>
+          </div>
+          <div class="card-face card-back" style="--wm:url('<%= asset_path('logo.png') %>')"></div>
+        </div>
       </section>
     </div>
   </div>
+
   <!-- 設定変更ボタン -->
-  <div class="mt-8">
+  <div class="mt-12">
     <% if @budget.present? %>
-      <%= link_to '設定条件を変更する', edit_budget_path, class: "block w-full py-3 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition-all duration-300 text-center" %>
+      <%= link_to '現在の設定を変更する', edit_budget_path, class: "block w-full py-3 bg-secondary text-white font-bold rounded-xl shadow hover:bg-secondary/80 transition-all duration-300 text-center" %>
     <% else %>
-      <%= link_to '設定条件を登録する', new_budget_path, class: "block w-full py-3 bg-red-500 text-white font-bold rounded-xl shadow hover:bg-red-400 transition-all duration-300 text-center" %>
+      <%= link_to '設定を登録しよう', new_budget_path, class: "block w-full py-3 bg-accent text-white font-bold rounded-xl shadow hover:bg-accent/70 transition-all duration-300 text-center" %>
     <% end %>
   </div>
 </main>
+
+<%= javascript_include_tag "mypage", "data-turbo-track": "reload", defer: true %>

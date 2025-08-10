@@ -24,15 +24,15 @@ class Budget < ApplicationRecord
 
   def max_greater_than_min
     if max_amount.present? && min_amount.present? && max_amount <= min_amount
-      errors.add(:max_amount, "は最低金額より大きく設定してください")
+      errors.add(:max_amount, "は最低予算より大きく設定してください")
     end
   end
 
   def monthly_budget_greater_than_min_and_max
     if monthly_budget.present? && min_amount.present? && monthly_budget < min_amount
-      errors.add(:monthly_budget, "は1日の最低金額以上にしてください")
+      errors.add(:monthly_budget, "は1日の最低予算以上にしてください")
     elsif monthly_budget.present? && max_amount.present? && monthly_budget <= max_amount
-      errors.add(:monthly_budget, "は1日の最高金額より多く設定してください")
+      errors.add(:monthly_budget, "は1日の最高予算より多く設定してください")
     end
   end
 
@@ -48,18 +48,24 @@ class Budget < ApplicationRecord
     return unless persisted? && user.present?
     used = draws_this_month_count
     if draw_days.present? && draw_days.to_i < used
-      errors.add(:draw_days, "は、すでにガチャを回した日数（#{used}回）より少なくはできません")
+      errors.add(:draw_days, "は、すでにガチャ済みの日数（#{used}回）より少なくはできません")
     end
   end
 
   def draw_days_within_used_plus_remaining_days
     return unless draw_days.present? && user.present?
+
     used = draws_this_month_count
-    remaining_days = (Date.current..Date.current.end_of_month).count
-    max_possible = used + remaining_days
+    today = Date.current
+    
+    remaining_calendar_days = (today..today.end_of_month).count
+    drawn_today = user.draws.exists?(date: today)
+    available_days = remaining_calendar_days - (drawn_today ? 1 : 0)
+    max_possible = used + available_days
 
     if draw_days.to_i > max_possible
-      errors.add(:draw_days, "は今月すでに抽選済みの#{used}回と、今日から月末までの残り#{remaining_days}日を合わせた#{max_possible}回以内で設定してください")
+      suffix = drawn_today ? "（今日分はガチャ済）" : ""
+      errors.add(:draw_days, "は今月すでにガチャ済みの#{used}回と、今日から月末まで#{suffix}の残り#{available_days}日を合わせた#{max_possible}日以内で設定してください")
     end
   end
 
@@ -75,11 +81,11 @@ class Budget < ApplicationRecord
     return if remain_count <= 0
 
     if remain_budget < remain_count * min_amount
-      errors.add(:monthly_budget, "や抽選日数の組み合わせに問題があります（残り抽選日数×最低金額が残り予算を超えています）。条件を見直してください）")
+      errors.add(:monthly_budget, "やガチャする日数の組み合わせに問題があります（残りガチャ日数×最低予算が残り予算を超えています）。条件を見直してください）")
     end
 
     if remain_budget > remain_count * max_amount
-      errors.add(:monthly_budget, "や抽選日数の組み合わせに問題があります（残り抽選日数×最高金額が残り予算より少ないです）。条件を見直してください）")
+      errors.add(:monthly_budget, "やガチャする日数の組み合わせに問題があります（残りガチャ日数×最高予算が残り予算より少ないです）。条件を見直してください）")
     end
   end
 

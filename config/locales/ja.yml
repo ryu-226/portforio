@@ -18,10 +18,10 @@ ja:
         password_confirmation: 確認用パスワード
         nickname: ニックネーム
       budget:
-        monthly_budget: 月の予算
-        draw_days: 抽選日数
-        min_amount: 1日の最低金額
-        max_amount: 1日の最高金額
+        monthly_budget: 今月の予算
+        draw_days: ガチャする日数
+        min_amount: 1日の最低予算
+        max_amount: 1日の最高予算
     errors:
       messages:
         record_invalid: 'バリデーションに失敗しました: %{errors}'

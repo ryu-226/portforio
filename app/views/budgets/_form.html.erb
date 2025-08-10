@@ -1,18 +1,10 @@
-  <!-- タイトル -->
-  <h1 class="text-2xl font-bold mb-6 text-center">各種条件設定</h1>
-  <% if @remaining_days && @remaining_budget %>
-    <div class="mb-3 px-4 py-2 bg-primary/10 rounded-lg text-primary font-bold text-base">
-      今月の残り抽選日数: <%= @remaining_days %>日 /
-      残り予算: <%= @remaining_budget %>円
-    </div>
-  <% end %>
   <!-- 入力フォーム -->
   <%= form_with model: @budget, url: budget_path, local: true do |f| %>
     <%= hidden_field_tag :from_signup, params[:from_signup] %>
     <div class="mb-6">
-      <%= f.label :monthly_budget, "月の予算", class: "block font-semibold mb-1" %>
+      <%= f.label :monthly_budget, "今月の予算", class: "block font-bold mb-1 text-secondary" %>
       <div class="relative">
-        <%= f.number_field :monthly_budget, min: 1, class: "w-full px-4 py-2 rounded border bg-white", autofocus: true %>
+        <%= f.number_field :monthly_budget, min: 1, class: "w-full px-4 py-2 rounded border", autofocus: true %>
         <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">円</span>
       </div>
       <% if @budget.errors[:monthly_budget].any? %>
@@ -22,9 +14,9 @@
       <% end %>
     </div>
     <div class="mb-6">
-      <%= f.label :draw_days, "抽選日数", class: "block font-semibold mb-1" %>
+      <%= f.label :draw_days, "ガチャする日数", class: "block font-bold mb-1 text-secondary" %>
       <div class="relative">
-        <%= f.number_field :draw_days, min: 1, class: "w-full px-4 py-2 rounded border bg-white" %>
+        <%= f.number_field :draw_days, min: 1, class: "w-full px-4 py-2 rounded border" %>
         <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">日間</span>
       </div>
       <% if @budget.errors[:draw_days].any? %>
@@ -34,9 +26,9 @@
       <% end %>
     </div>
     <div class="mb-6">
-      <%= f.label :min_amount, "１日の最低金額", class: "block font-semibold mb-1" %>
+      <%= f.label :min_amount, "１日の最低予算", class: "block font-bold mb-1 text-secondary" %>
       <div class="relative">
-        <%= f.number_field :min_amount, min: 1, class: "w-full px-4 py-2 rounded border bg-white" %>
+        <%= f.number_field :min_amount, min: 1, class: "w-full px-4 py-2 rounded border" %>
         <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">円</span>
       </div>
       <% if @budget.errors[:min_amount].any? %>
@@ -46,9 +38,9 @@
       <% end %>
     </div>
     <div class="mb-6">
-      <%= f.label :max_amount, "１日の最高金額", class: "block font-semibold mb-1" %>
+      <%= f.label :max_amount, "１日の最高予算", class: "block font-bold mb-1 text-secondary" %>
       <div class="relative">
-        <%= f.number_field :max_amount, min: 1, class: "w-full px-4 py-2 rounded border bg-white" %>
+        <%= f.number_field :max_amount, min: 1, class: "w-full px-4 py-2 rounded border" %>
         <span class="absolute inset-y-0 right-3 flex items-center text-gray-500 pointer-events-none">円</span>
       </div>
       <% if @budget.errors[:max_amount].any? %>
@@ -58,8 +50,12 @@
       <% end %>
     </div>
 
+    <% signup = (params[:from_signup] == '1') %>
     <%= f.submit(
-      params[:from_signup] == "1" ? '設定を完了してガチャをまわす' : '設定を完了する',
-      class: "w-full py-3 mt-2 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition"
+      signup ? '設定を完了してガチャをまわす' : '設定を完了する',
+      class: class_names(
+        "w-full py-3 mt-6 text-white font-bold rounded-xl shadow transition",
+        signup ? "bg-primary hover:bg-primary/80 animate-breath" : "bg-secondary hover:bg-secondary/80"
+      )
     ) %>
   <% end %>  

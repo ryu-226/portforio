@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const closeBtn  = document.getElementById('close-modal-btn');
   const card      = document.getElementById('amount-card');
   const realEl    = document.getElementById('real-amount');
-  const container = document.getElementById('capsule-container');
+  const effectsLayer = document.getElementById('effects-layer');
 
   function playFullAnimation(finalAmount) {
     // 1) カードめくり
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
             p.style.left           = `${50 + (Math.random() * 80 - 40)}%`;
             p.style.background     = `hsl(${Math.random() * 360},70%,60%)`;
             p.style.animationDelay = `${Math.random() * 0.5}s`;
-            container.appendChild(p);
+            effectsLayer?.appendChild(p);
             setTimeout(() => p.remove(), 1500);
           }
           const msg = document.getElementById('draw-message');
@@ -88,6 +88,24 @@ document.addEventListener("DOMContentLoaded", () => {
     closeBtn.addEventListener('click', () => {
       modal.style.display   = 'none';
       modalBg.style.display = 'none';
+    });
+  }
+
+  // 送信前にボタンを小刻みに揺らしてから submit
+  const gachaForm = document.getElementById('gacha-form');
+  const gachaBtn  = document.getElementById('gacha-button');
+
+  if (gachaForm && gachaBtn) {
+    gachaForm.addEventListener('submit', (e) => {
+      // まだ揺れてない時だけ横取り
+      if (!gachaForm.dataset.shaking) {
+        e.preventDefault();
+        gachaForm.dataset.shaking = '1';
+        gachaBtn.classList.add('animate-jiggle');
+
+        // 揺れが終わったら本送信（0.35s と CSS に合わせてある）
+        setTimeout(() => gachaForm.submit(), 960);
+      }
     });
   }
 });

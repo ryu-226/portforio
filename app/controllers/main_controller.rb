@@ -64,9 +64,8 @@ class MainController < ApplicationController
   end
 
   def draw
-    today = Date.current
-    current_year_month = today.strftime('%Y-%m')
-    budget = current_user.budget_for(current_year_month)
+    today = Time.zone.today
+    budget = current_user.budget_for(today.strftime('%Y-%m'))
     
     unless budget
       redirect_to new_budget_path, alert: "まずは予算を設定してください"
@@ -78,22 +77,22 @@ class MainController < ApplicationController
       return
     end
 
-    current_year_month = Date.current.strftime('%Y-%m')
-    draws_this_month = current_user.draws.where(year_month: current_year_month)
-    drawn_count = draws_this_month.count
-    drawn_sum = draws_this_month.sum(:amount)
+    month_range = today.beginning_of_month..today.end_of_month
+    month_draws = current_user.draws.where(date: month_range)
+    drawn_count = month_draws.count
+    drawn_sum = month_draws.sum(:amount)
 
     remaining_days = budget.draw_days.to_i - drawn_count
     remaining_budget = budget.monthly_budget.to_i - drawn_sum
 
     if remaining_days <= 0
-      redirect_to main_path, alert: "今月のガチャ回数が上限に達しました"
+      redirect_to main_path, alert: "今月のガチャできる日数が上限に達しました。設定を見直してください。"
       return
     end
 
     if (remaining_days * budget.min_amount.to_i) > remaining_budget ||
        (remaining_days * budget.max_amount.to_i) < remaining_budget
-      redirect_to edit_budget_path, alert: "残り予算と残り抽選回数に合わない条件です。設定を見直してください。"
+      redirect_to edit_budget_path, alert: "残り予算と残りガチャ日数に合わない条件です。設定を見直してください。"
       return
     end
 
@@ -131,7 +130,7 @@ class MainController < ApplicationController
       date: today,
       amount: amount
     )
-
+    
     flash[:draw_amount] = amount
     redirect_to main_path
   end
