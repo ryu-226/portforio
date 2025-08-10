@@ -27,21 +27,16 @@
     <%# --- フラッシュメッセージ --- %>
     <div id="toasts" class="fixed z-50 top-20 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 space-y-2">
       <% flash.each do |type, message| %>
+        <% next if type.to_s == "draw_amount" %>
         <% color =
           case type.to_s
           when "notice" then "bg-green-600"
           when "alert", "error" then "bg-red-600"
           else "bg-gray-700"
           end %>
-        <div class="toast pointer-events-auto
-                    rounded-lg px-4 py-3 text-white shadow-lg ring-1 ring-black/5
-                    text-sm sm:text-base break-words max-w-full sm:max-w-md
-                    transition-all duration-300 opacity-100"
+        <div class="toast pointer-events-auto rounded-lg px-4 py-3 text-white shadow-lg ring-1 ring-black/5 text-sm sm:text-base break-words max-w-full sm:max-w-md transition-all duration-300 opacity-100"
             role="<%= %w[alert error].include?(type.to_s) ? 'alert' : 'status' %>"
-            aria-live="polite"
-            data-timeout="3000"
-            style=""
-            >
+            aria-live="polite" data-timeout="3000">
           <div class="<%= color %> rounded-lg px-3 py-2">
             <div class="flex items-start gap-3">
               <span class="flex-1"><%= message %></span>

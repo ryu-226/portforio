@@ -7,7 +7,7 @@
 
   <p class="text-[15px] leading-relaxed font-bold my-2 text-secondary">
     <%= is_new ?
-      "めしガチャは、月の合計予算とガチャを回す回数などから、毎日のランチ代をランダムに抽選します。まず今月の条件を決めましょう！（条件はあとから変更できます）" :
+      "めしガチャは、月の合計予算とガチャを回す日数などから、毎日のランチ代をランダムに抽選します。まず今月の条件を決めましょう！（条件はあとから変更できます）" :
       "条件はいつでも変更できます。すでにガチャした分はそのまま。残りの期間に新しい条件が適用されます。" %>
   </p>
 
@@ -29,8 +29,8 @@
     <% if is_new %>
       <!-- new 用（初めての人むけの基本ルール） -->
       <ul class="mt-2 list-disc pl-5 space-y-1">
-        <li>ガチャする日数は<strong>今月の日数（<%= Date.current.end_of_month.day %>日）以内</strong>に。</li>
-        <li>最低予算は<strong>0より大きく</strong>、最高予算は<strong>最低予算より大きく</strong>なるように。</li>
+        <li>ガチャする日数は<strong>今日から月末までの日数 <%= (Time.zone.today..Time.zone.today.end_of_month).count %>日以内</strong>に。</li>
+        <li>最低予算は<strong> 0より大きく</strong>、最高予算は<strong>最低予算より大きく</strong>なるように。</li>
         <li>今月の予算は<strong>1日の最高予算より大きい金額</strong>にしてください。</li>
       </ul>
     <% else %>
@@ -45,9 +45,9 @@
         </li>
         <li>
           残り予算と残りガチャ日数の関係：<br>
-          <code>残り予算（<%= @remaining_budget %>円）</code> が
-          <strong>残りガチャ日数×最低予算（<%= @remaining_days %>×min）以上</strong>、かつ
-          <strong>残りガチャ日数×最高予算（<%= @remaining_days %>×max）以下</strong>になるように調整
+          残り予算（<%= @remaining_budget %>円） が
+          <strong>残りガチャ日数×最低予算（<%= @remaining_days %>×Min）以上</strong>、かつ
+          <strong>残りガチャ日数×最高予算（<%= @remaining_days %>×Max）以下</strong>になるように調整
         </li>
         <li>今月の日数は <%= @days_in_month %> 日。これを超える設定はできません</li>
       </ul>

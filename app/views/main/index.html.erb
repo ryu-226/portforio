@@ -26,36 +26,35 @@
   </div>
 
   <!-- ボタンorテキスト -->
-  <% unless @draw %>
+  <% if @budget.present? && @remaining_days.to_i <= 0 %>
+    <!-- 残り回数 0：ボタンを出さずに案内だけ -->
+    <div class="mt-4 px-4 py-2 bg-yellow-50 border border-secondary text-secondary text-sm rounded text-center">
+      今月のガチャできる日数が上限に達しました。<br>
+      <%= link_to "設定を変更する", edit_budget_path, class: "text-accent underline hover:text-accent/60 font-semibold" %>
+    </div>
+  <% elsif !@draw %>
+    <!-- まだ今日のガチャを回していない：ボタン表示 -->
     <%= form_with url: draw_main_path, method: :post, local: true do %>
       <div class="relative flex justify-center items-center">
-        <!-- ボタン本体（SVG＋テキスト） -->
+        <!-- ボタン本体 -->
         <button type="submit" class="py-4 px-12 mt-6 rounded-xl text-xl bg-secondary text-white font-bold shadow-xl ring-2 ring-secondary/30 hover:bg-secondary/80 hover:scale-110 transition duration-200 flex items-center gap-4 group z-10 relative min-w-[220px] min-h-[56px] animate-breath">
           <span class="absolute left-8 top-0.5 w-14 h-14 pointer-events-none animate-spin">
             <!-- ガチャハンドルSVG -->
             <svg viewBox="0 0 120 120" class="w-14 h-14" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <!-- 矢印ヘッド定義（開始点に逆向き） -->
                 <marker id="arrowhead" markerUnits="strokeWidth" markerWidth="3" markerHeight="3" refX="0" refY="1.5" orient="auto-start-reverse">
                   <path d="M0,0 L0,3 L3,1.5 Z" fill="#FFE600"/>
                 </marker>
-                <!-- マスク：内側の白い円(r=40)部分をくり抜く -->
                 <mask id="cut-inner">
-                  <!-- 全体を表示 -->
                   <rect width="120" height="120" fill="white"/>
-                  <!-- 内側円を黒でくり抜き -->
                   <circle cx="60" cy="60" r="40" fill="black"/>
                 </mask>
               </defs>
-              <!-- 1. ベースの太い青い円 -->
               <circle cx="60" cy="60" r="58" fill="#1766A6"/>
-              <!-- 2. 細い黄色アーチ（マスク適用で白円部分をカット） -->
               <g mask="url(#cut-inner)">
                 <path d="M105,60 a45,45 0 1,0 -32.5,43" fill="none" stroke="#FFE600" stroke-width="6" stroke-linecap="round" marker-start="url(#arrowhead)"/>
               </g>
-              <!-- 3. 赤い二等辺三角形マーク -->
               <polygon points="0,-6 0,6 -8,0" fill="#D93628" transform="translate(97.6,88.2) rotate(90)"/>
-              <!-- 4. 内側ハンドル本体 -->
               <circle cx="60" cy="60" r="40" fill="#F4F4F4"/>
               <ellipse cx="60" cy="70" rx="32" ry="12" fill="#DDD" opacity="0.3"/>
               <rect x="34" y="54" width="52" height="12" rx="6" fill="#FFF" stroke="#D1D1D1" stroke-width="2"/>
@@ -67,8 +66,8 @@
       </div>
     <% end %>
   <% else %>
+    <!-- 今日ぶんは既に回している：既存表示をそのまま -->
     <div class="text-lg text-gray-600 font-semibold animate-pulse">ガチャ済みです</div>
-
     <!-- 実際に使った金額 入力フォーム or 入力済み表示 -->
     <div class="mt-6 flex flex-col items-center w-full max-w-xs mx-auto">
       <% if @draw.actual_amount.present? %>
