@@ -1,4 +1,3 @@
-
   let map, markers = [];
   let myLocationMarker = null;
   let openInfoWindow = null;
@@ -82,22 +81,19 @@
     sortedPlaces.forEach((place, idx) => {
       const dist = place._dist ?? getDistance(currentCenter.lat, currentCenter.lng, place.location.latitude, place.location.longitude);
       const distLabel = dist < 1000 ? `${Math.round(dist)}m` : `${(dist/1000).toFixed(1)}km`;
-      const icon = place.iconMaskBaseUri
-        ? `<img src="${place.iconMaskBaseUri}.png" class="inline-block w-7 h-7 mr-2 align-middle rounded" style="background:${place.iconBackgroundColor||'#eee'};">`
-        : "";
-
       const fav = isFav(place);
       const isGold = (place.rating || 0) >= 4.5;
       const cardClass = isGold ? "bg-yellow-100 border-2 border-yellow-400" : "bg-white";
-
       const card = document.createElement("div");
-      card.className = `${cardClass} rounded-xl shadow p-3 flex flex-col gap-1 cursor-pointer hover:bg-gray-50 relative`;
 
+      card.className = `${cardClass} rounded-xl shadow p-3 flex flex-col gap-1 cursor-pointer hover:bg-gray-50 relative`;
+      const priceHtml = place.priceLevel ? 
+        `<span class="ml-2 text-xs text-gray-600">${priceLevelToLabel(place.priceLevel)}</span>` : '';
       card.innerHTML = `
         <div class="flex items-center gap-2">
           <span class="text-xs font-bold rounded-full bg-gray-200 px-2 mr-1">${idx + 1}</span>
-          ${icon}
           <span class="font-bold text-lg">${place.displayName.text}</span>
+          ${priceHtml}
           <button type="button" class="ml-auto px-1 fav-btn" data-place-key="${markerPlaceKey(place)}">
             <span class="text-2xl select-none ${fav ? 'text-yellow-400' : 'text-gray-400'} hover:text-yellow-500 transition-colors">★</span>
           </button>
@@ -214,6 +210,7 @@
     let phoneHtml = place.nationalPhoneNumber ? `TEL: <a href="tel:${place.nationalPhoneNumber}" class="underline">${place.nationalPhoneNumber}</a><br>` : '';
     let webHtml = place.websiteUri ? `<a href="${place.websiteUri}" target="_blank" class="text-primary underline text-sm">公式サイト</a><br>` : '';
     let navHtml = `<a href="https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(place.displayName.text)}" target="_blank" class="text-primary underline text-sm">ナビ開始</a>`;
+    let priceInfo = place.priceLevel ? `価格レベル: ${priceLevelToLabel(place.priceLevel)}<br>` : '';
 
     const infowindow = new google.maps.InfoWindow({
       content: `
@@ -221,6 +218,7 @@
           <b>${place.displayName.text}</b><br>
           ${place.formattedAddress || ''}<br>
           ${ratingHtml}
+          ${priceInfo}
           ${phoneHtml}
           ${webHtml}
           <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place.displayName.text)}"
@@ -254,6 +252,7 @@
     const radius = Number(document.getElementById('radius')?.value) || 1000;
     let genre = document.getElementById('genre')?.value;
     const minRating = parseFloat(document.getElementById('min-rating')?.value) || 0;
+    const priceLvls = selectedPriceLevels(); // チェックボックス/セレクトから配列で返す
 
     if (!genre) genre = "restaurant";
 
@@ -280,6 +279,11 @@
       const data = await res.json();
 
       let filtered = (data.places || []).filter(p => (minRating ? (p.rating || 0) >= minRating : true));
+
+      const priceLvls = selectedPriceLevels();
+      if (priceLvls.length) {
+        filtered = filtered.filter(p => p.priceLevel && priceLvls.includes(p.priceLevel));
+      }
 
       lastPlaces = filtered;
 
@@ -383,5 +387,23 @@
       });
     }
   });
+
+  // 価格帯 → 表示用「¥」文字列
+  function priceLevelToLabel(level) {
+    switch (level) {
+      case 'PRICE_LEVEL_FREE': return '無料';
+      case 'PRICE_LEVEL_INEXPENSIVE': return '低';
+      case 'PRICE_LEVEL_MODERATE': return '中';
+      case 'PRICE_LEVEL_EXPENSIVE': return '高';
+      case 'PRICE_LEVEL_VERY_EXPENSIVE': return '高級';
+      default: return '';
+    }
+  }
+
+  // チェック済みの価格帯を列挙体に変換
+  function selectedPriceLevels() {
+    return Array.from(document.querySelectorAll('#price-levels input[type="checkbox"]:checked'))
+      .map(cb => `PRICE_LEVEL_${cb.value}`); // 例: "INEXPENSIVE" -> "PRICE_LEVEL_INEXPENSIVE"
+  }
 
   window.initMap = initMap;
