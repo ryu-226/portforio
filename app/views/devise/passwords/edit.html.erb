@@ -1,3 +1,6 @@
+<% min_len = resource_class.password_length.min %>
+<% max_len = resource_class.password_length.max %>
+
 <main class="flex justify-center items-center px-4 mt-10">
   <div class="w-full max-w-md p-8 rounded-xl border border-gray-200 shadow-sm">
     <!-- タイトル -->
@@ -18,13 +21,13 @@
     <% end %>
 
     <!-- パスワード再設定フォーム -->
-    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+    <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: { id: "password-reset-form", method: :put, novalidate: true }) do |f| %>
       <%= f.hidden_field :reset_password_token %>
 
       <div class="mb-6">
         <%= f.label :password, "新しいパスワード", class: "block mb-1 font-bold text-secondary" %>
         <div class="relative">
-          <%= f.password_field :password, autofocus: true, id: "password_password", class: "w-full px-4 py-2 pr-10 rounded border password-field", autocomplete: "new-password" %>
+          <%= f.password_field :password, id: "password_password", required: true, minlength: min_len, maxlength: max_len, data: { minlen: min_len }, class: "w-full px-4 py-2 pr-10 rounded border password-field", autocomplete: "new-password", autofocus: true %>
           <i class="fa-solid fa-eye absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer toggle-password text-gray-400"></i>
         </div>
       </div>
@@ -32,12 +35,12 @@
       <div class="mb-6">
         <%= f.label :password_confirmation, "新しいパスワード（確認）", class: "block mb-1 font-bold text-secondary" %>
         <div class="relative">
-          <%= f.password_field :password_confirmation, id: "password_password_confirmation", class: "w-full px-4 py-2 pr-10 rounded border password-field", autocomplete: "new-password" %>
+          <%= f.password_field :password_confirmation, id: "password_password_confirmation", required: true, class: "w-full px-4 py-2 pr-10 rounded border password-field", autocomplete: "new-password" %>
           <i class="fa-solid fa-eye absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer toggle-password text-gray-400"></i>
         </div>
       </div>
 
-      <%= f.submit 'パスワードを変更する', class: "w-full py-3 mt-6 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition" %>
+      <%= f.submit 'パスワードを変更する', id: "password-reset-submit", disabled: true, class: "w-full py-3 mt-6 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition disabled:opacity-50 disabled:cursor-not-allowed" %>
     <% end %>
 
     <!-- ログイン・新規登録リンク -->
