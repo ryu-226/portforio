@@ -2,7 +2,7 @@
 <header class="relative flex justify-between items-center px-4 md:px-8 py-2 bg-gray-100 border-b-1 border-secondary z-50">
   <!-- 左側：ロゴ -->
   <div class="flex items-center">
-    <%= link_to main_path do %>
+    <%= link_to root_path do %>
       <%= image_tag "logo.png", alt: "めしガチャ ロゴ", class: "h-12 w-auto" %>
     <% end %>
   </div>
@@ -28,20 +28,27 @@
   <div id="menu-backdrop" class="fixed inset-0 bg-black/20 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity"></div>
 
   <!-- オフキャンバスメニュー（右から出るように） -->
-  <aside id="menu-drawer" class="fixed top-0 right-0 h-70 w-52 md:h-76 md:w-60 max-w-xs bg-white shadow-xl rounded-none rounded-bl-xl border-l-3 border-b-3 border-secondary transform translate-x-full transition-transform">
+  <aside id="menu-drawer" class="fixed top-0 right-0 h-90 w-52 md:h-90 md:w-60 max-w-xs bg-white shadow-xl rounded-none rounded-bl-xl border-l-3 border-b-3 border-secondary transform translate-x-full transition-transform">
     <ul class="mt-16 space-y-6 px-6 font-semibold">
       <li class="opacity-0 transform translate-x-4 transition-all delay-100">
-        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block text-accent hover:text-accent/50" %>
+        <%= link_to "使い方（3ステップ）", root_path(anchor: "how-it-works"), class: "block text-secondary hover:text-secondary/50" %>
       </li>
       <li class="opacity-0 transform translate-x-4 transition-all delay-200">
-        <%= link_to "利用規約", terms_path, class: "block text-secondary hover:text-secondary/50" %>
+        <%= link_to "よくある質問", root_path(anchor: "faq"), class: "block text-secondary hover:text-secondary/50" %>
       </li>
       <li class="opacity-0 transform translate-x-4 transition-all delay-300">
-        <%= link_to "プライバシー", privacy_path, class: "block text-secondary hover:text-secondary/50" %>
+        <%= link_to "利用規約", terms_path, class: "block text-secondary hover:text-secondary/50" %>
       </li>
       <li class="opacity-0 transform translate-x-4 transition-all delay-400">
+        <%= link_to "プライバシー", privacy_path, class: "block text-secondary hover:text-secondary/50" %>
+      </li>
+      <li class="opacity-0 transform translate-x-4 transition-all delay-500">
         <%= link_to "お問い合わせ", new_contact_path, class: "block text-secondary hover:text-secondary/50" %>
       </li>
+      <li class="opacity-0 transform translate-x-4 transition-all delay-600">
+        <%= button_to "ログアウト", destroy_user_session_path, method: :delete, form: { data: { turbo: false } }, class: "block text-accent hover:text-accent/50" %>
+      </li>
+
     </ul>
   </aside>
 </header>
