@@ -29,6 +29,21 @@
           </select>
         </div>
         <div>
+          <label class="block font-semibold mb-1 text-secondary">価格レベル</label>
+          <div id="price-levels" class="flex flex-wrap gap-2 max-w-[240px]">
+            <label class="inline-flex items-center gap-1 text-primary font-semibold">
+              <input type="checkbox" value="INEXPENSIVE" class="accent-primary"> 低
+            </label>
+            <label class="inline-flex items-center gap-1 text-primary font-semibold">
+              <input type="checkbox" value="MODERATE" class="accent-primary"> 中
+            </label>
+            <label class="inline-flex items-center gap-1 text-primary font-semibold">
+              <input type="checkbox" value="EXPENSIVE" class="accent-primary"> 高
+            </label>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">※ 指定すると価格帯情報の無い店舗は除外されます</p>
+        </div>
+        <div>
           <label class="block font-semibold mb-1 text-secondary">ジャンル</label>
           <select id="genre" name="genre" class="px-3 py-2 rounded border w-48">
             <option value="">指定なし</option>

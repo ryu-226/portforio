@@ -7,3 +7,4 @@
 //= link hamburger.js
 //= link history.js
 //= link mypage.js
+//= link landing.js

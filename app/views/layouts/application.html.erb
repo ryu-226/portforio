@@ -47,7 +47,7 @@
       <% end %>
     </div>
     <%# --- メインコンテンツ --- %>
-    <main class="<%= (controller_name == 'main' && action_name == 'index') ? '' : 'animate-fadein' %>">
+    <main class="<%= (controller_name.in?(%w[main home]) && action_name == 'index') ? '' : 'animate-fadein' %>">
       <%= yield %>
     </main>
 
