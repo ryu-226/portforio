@@ -8,19 +8,19 @@
     <div class="mb-4 p-3 bg-green-100 text-green-700 rounded"><%= notice %></div>
   <% end %>
 
-  <%= form_with url: contact_path, local: true do |f| %>
+  <%= form_with url: contact_path, local: true, html: { id: "contact-form", novalidate: true } do |f| %>
     <div class="mb-4">
       <%= label_tag :name, "お名前", class: "block font-bold mb-1" %>
-      <%= text_field_tag :name, params[:name], class: "w-full border rounded px-3 py-2" %>
+      <%= text_field_tag :name, params[:name], required: true, class: "w-full border rounded px-3 py-2" %>
     </div>
     <div class="mb-4">
       <%= label_tag :email, "メールアドレス", class: "block font-bold mb-1" %>
-      <%= email_field_tag :email, params[:email], class: "w-full border rounded px-3 py-2" %>
+      <%= email_field_tag :email, params[:email], required: true, class: "w-full border rounded px-3 py-2" %>
     </div>
     <div class="mb-4">
       <%= label_tag :message, "お問い合わせ内容", class: "block font-bold mb-1" %>
-      <%= text_area_tag :message, params[:message], rows: 6, class: "w-full border rounded px-3 py-2" %>
+      <%= text_area_tag :message, params[:message], rows: 6, required: true, minlength: 5, class: "w-full border rounded px-3 py-2" %>
     </div>
-    <%= submit_tag "送信する", class: "w-full bg-secondary text-white py-2 rounded hover:bg-secondary/80" %>
+    <%= submit_tag "送信する", id: "contact-submit", disabled: true, class: "w-full bg-secondary text-white py-2 rounded hover:bg-secondary/80 disabled:opacity-50 disabled:cursor-not-allowed" %>
   <% end %>
 </div>
