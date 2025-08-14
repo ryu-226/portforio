@@ -128,6 +128,8 @@
     const pw2   = document.getElementById("account_new_password_confirmation");
     const cur   = document.getElementById("account_current_password");
 
+    const requireCurrent = String(form.dataset.requireCurrent) === "true";
+
     function pwOK(s){ return /[A-Za-z]/.test(s) && /\d/.test(s) && s.length >= 6; }
     function emailChanged() {
       if (!email) return false;
@@ -142,9 +144,13 @@
     }
 
     function applyCustomValidity() {
-      // 何か変更するなら current_password 必須
+      // 現在のパスワード必須は「requireCurrent=true のときだけ」
       if (cur) {
-        cur.setCustomValidity(somethingWillChange() && !cur.value ? "現在のパスワードを入力してください" : "");
+        if (requireCurrent) {
+          cur.setCustomValidity(somethingWillChange() && !cur.value ? "現在のパスワードを入力してください" : "");
+        } else {
+          cur.setCustomValidity(""); // SSO未設定ユーザーは不要（そもそも欄が無い想定）
+        }
       }
       // パスワードを変えるなら複雑性＆一致
       if (wantsPwChange()) {

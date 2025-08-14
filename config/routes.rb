@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   root 'home#index'
 
-  devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions' }
+  devise_for :users, controllers: { registrations: 'users/registrations', sessions: 'users/sessions', omniauth_callbacks: "users/omniauth_callbacks" }
 
   get 'mypage', to: "mypage#index", as: "mypage"
 
