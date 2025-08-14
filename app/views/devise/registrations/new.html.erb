@@ -54,6 +54,16 @@
       <%= f.submit '新規登録', id: "signup-submit", disabled: true, class: "w-full py-3 mt-6 bg-primary text-white font-bold rounded-xl shadow hover:bg-primary/80 transition animate-breath disabled:opacity-50 disabled:cursor-not-allowed" %>
     <% end %>
 
+    <!-- Google ログイン（別<form>になるため外に置く） -->
+    <div class="mt-4">
+      <%= button_to user_google_oauth2_omniauth_authorize_path,
+            method: :post, data: { turbo: false },
+            class: "w-full py-3 bg-white text-gray-700 font-bold rounded-xl shadow border flex items-center justify-center gap-2 hover:bg-gray-100" do %>
+        <%= image_tag "google.svg", class: "w-5 h-5", alt: "" %>
+        <span>Googleでログイン</span>
+      <% end %>
+    </div>
+
     <!-- 会員登録済みの方の導線 -->
     <div class="flex items-center justify-center mt-6">
       <span class="mr-2 text-lg text-secondary">▶</span>

@@ -27,4 +27,22 @@ class ApplicationController < ActionController::Base
     devise_parameter_sanitizer.permit(:sign_up, keys: [:nickname])
     devise_parameter_sanitizer.permit(:account_update, keys: [:nickname])
   end
+
+  private
+
+  def post_login_path_for(user, created_now: false)
+    # Devise既定：元いた保護ページがあれば優先
+    if (loc = stored_location_for(user)).present?
+      return loc
+    end
+
+    ym = Date.current.strftime("%Y-%m")
+    needs_budget_setup = user.budget_for(ym).blank?
+
+    if created_now || needs_budget_setup
+      return new_budget_path(from_signup: "1")
+    end
+
+    main_path
+  end
 end
