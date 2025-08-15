@@ -1,4 +1,6 @@
 class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  include Devise::Controllers::Rememberable
+  
   def google_oauth2
     auth  = request.env["omniauth.auth"]
     email = auth&.info&.email
@@ -8,6 +10,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     if @user&.persisted?
       sign_in(@user)
+      remember_me(@user)
       redirect_to post_login_path_for(@user, created_now: created_now)
     else
       redirect_to new_user_session_path, alert: "Googleログインに失敗しました"

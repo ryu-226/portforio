@@ -10,10 +10,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # サニタイザに「必ず」password系を含める
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:nickname])
-    devise_parameter_sanitizer.permit(
-      :account_update,
-      keys: [:nickname, :email, :password, :password_confirmation, :current_password]
-    )
+    devise_parameter_sanitizer.permit(:account_update, keys: [:nickname, :email, :password, :password_confirmation, :current_password])
   end
 
   # Devise の更新ロジックを条件付きで変更
@@ -23,7 +20,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
       attrs = params.except(:current_password, "current_password")
 
       if attrs[:password].present?
-        # 初回のパスワード設定は「update」を使う（← これが重要）
+        # 初回のパスワード設定は「update」を使う
         resource.update(attrs)
       else
         # パスワード未入力＝メール等だけ変更したい場合は今まで通り
