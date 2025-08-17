@@ -17,19 +17,17 @@
     // PC は最初に少し待つ（お好みで）
     const baseDelay = isMobile ? 0 : 500;
 
-    // ★ 順番の決定：PC は明示／スマホは DOM 並び
+    // ★ 順番の決定：PC は明示／スマホは DOM 並び（既存のまま）
     if (!isMobile) {
       const pcOrder = [
         '#card-user .card-3d',     // 1. ユーザー情報
         '#card-settings .card-3d', // 2. 現在の設定
         '#card-history .card-3d',  // 3. 利用履歴
       ];
-      // 指定順に stagger を振る
       pcOrder.forEach((sel, i) => {
         const node = document.querySelector(sel);
         if (node) node.dataset.stagger = String(i);
       });
-      // 上記以外がもしあれば、後ろに回す（保険）
       let next = pcOrder.length;
       cores.forEach(c => {
         if (c.dataset.stagger == null) c.dataset.stagger = String(next++);
@@ -39,45 +37,61 @@
       cores.forEach((c, i) => c.dataset.stagger = String(i));
     }
 
-    // 表示監視＆めくり
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!armed || !entry.isIntersecting) return;
-
-        const core = entry.target;
-        if (core.dataset.revealed === '1') return;
-        core.dataset.revealed = '1';
-
-        const idx = Number(core.dataset.stagger || 0);
-        const delay = baseDelay + idx * step;
-
-        setTimeout(() => {
-          core.classList.add('animate-flip-reveal-front');
-          core.classList.remove('start-back');
-          core.addEventListener('animationend', () => {
-            core.classList.remove('animate-flip-reveal-front');
-          }, { once: true });
-        }, delay);
-
-        io.unobserve(core);
-      });
-    }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
-
-    cores.forEach(c => io.observe(c));
-
-    // スマホは“触られるまで”armed にしない
-    const arm = () => {
-      if (armed) return;
-      armed = true;
-      requestAnimationFrame(() => {
-        cores.forEach(c => { io.unobserve(c); io.observe(c); });
-      });
-      window.removeEventListener('scroll', arm, { passive: true });
-      window.removeEventListener('touchmove', arm, { passive: true });
+    // ① 追加：1回だけめくる共通関数
+    const revealOnce = (core, delay = 0) => {
+      if (core.dataset.revealed === '1') return;
+      core.dataset.revealed = '1';
+      setTimeout(() => {
+        core.classList.add('animate-flip-reveal-front');
+        core.classList.remove('start-back', 'is-back');
+        core.addEventListener('animationend', () => {
+          core.classList.remove('animate-flip-reveal-front');
+        }, { once: true });
+      }, delay);
     };
-    if (!armed) {
-      window.addEventListener('scroll', arm, { passive: true });
-      window.addEventListener('touchmove', arm, { passive: true });
+
+    // ② 差し替え：表示監視＆めくり
+    if (isMobile) {
+      // ===== スマホ：従来通り「見えたら発火」 =====
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!armed || !entry.isIntersecting) return;
+          const core = entry.target;
+          const idx = Number(core.dataset.stagger || 0);
+          const delay = baseDelay + idx * step;
+          revealOnce(core, delay);
+          io.unobserve(core);
+        });
+      }, { threshold: 0.35, rootMargin: '0px 0px -10% 0px' });
+
+      cores.forEach(c => io.observe(c));
+
+      // スマホは“触られるまで”armed にしない（既存仕様維持）
+      const arm = () => {
+        if (armed) return;
+        armed = true;
+        requestAnimationFrame(() => {
+          cores.forEach(c => { io.unobserve(c); io.observe(c); });
+        });
+        window.removeEventListener('scroll', arm, { passive: true });
+        window.removeEventListener('touchmove', arm, { passive: true });
+      };
+      if (!armed) {
+        window.addEventListener('scroll', arm, { passive: true });
+        window.addEventListener('touchmove', arm, { passive: true });
+      }
+
+    } else {
+      // ===== PC：IO不使用。ロード時に順番で一括スケジュール =====
+      const ordered = Array.from(cores).sort(
+        (a, b) => Number(a.dataset.stagger || 0) - Number(b.dataset.stagger || 0)
+      );
+      requestAnimationFrame(() => {
+        ordered.forEach((core, idx) => {
+          const delay = baseDelay + idx * step;
+          revealOnce(core, delay);
+        });
+      });
     }
   };
 
