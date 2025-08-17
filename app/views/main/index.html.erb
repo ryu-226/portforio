@@ -136,19 +136,30 @@
             <span class="font-bold text-base hover:text-gray-500">近くのお店を探す</span>
           <% end %>
         </div>
-        <!-- Xで共有 -->
+
+        <%# --- 共有リンク（X） ---------------------------------------------- %>
+        <% share_text = "今日のめしガチャ結果をシェア 🍚" %>
+        <% share_tags = %w[めしガチャ] %>
+        <% share_url = draw_url(@draw) %>
+
         <div class="flex items-center justify-center gap-4 w-full ml-2">
-          <span class="inline-flex items-center justify-center w-10 h-10">
-            <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
-            <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
+          <span class="inline-flex items-center justify-center w-10 h-10" aria-hidden="true">
+            <!-- Xアイコン(SVG) -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 50 50">
+              <path d="M 11 4 C 7.134 4 4 7.134 4 11 L 4 39 C 4 42.866 7.134 46 11 46 L 39 46 C 42.866 46 46 42.866 46 39 L 46 11 C 46 7.134 42.866 4 39 4 L 11 4 z M 13.085938 13 L 21.023438 13 L 26.660156 21.009766 L 33.5 13 L 36 13 L 27.789062 22.613281 L 37.914062 37 L 29.978516 37 L 23.4375 27.707031 L 15.5 37 L 13 37 L 22.308594 26.103516 L 13.085938 13 z M 16.914062 15 L 31.021484 35 L 34.085938 35 L 19.978516 15 L 16.914062 15 z"></path>
             </svg>
           </span>
-          <a href="#" class="flex flex-col items-start justify-center">
+
+          <%= link_to x_share_url(text: share_text, url: share_url, hashtags: share_tags),
+                      target: "_blank", rel: "noopener",
+                      data: { turbo: false },
+                      class: "flex flex-col items-start justify-center" do %>
             <span class="font-bold text-base hover:text-gray-500">結果をXで共有する</span>
-            <span class="text-xs text-gray-400">（近日実装）</span>
-          </a>
+            <span class="text-xs text-gray-400">（ハッシュタグが付きます）</span>
+          <% end %>
         </div>
       </div>
+
       <!-- モーダル閉じるボタン -->
       <div class="mt-6">
         <button

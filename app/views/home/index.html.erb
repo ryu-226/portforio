@@ -225,10 +225,15 @@
   <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" data-stagger-group>
     <!-- カード1：履歴カレンダー -->
     <article class="feature-card opacity-0 translate-y-3 transition rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" data-stagger>
-      <div class="aspect-video bg-gray-50 flex items-center justify-center">
-        <%# 画像が用意できたら差し替え（例: feature-calendar.png） %>
-        <%#= image_tag "feature-calendar.png", alt: "カレンダー履歴のスクリーンショット", class: "w-full h-full object-cover" %>
-        <div class="text-gray-400 text-sm">（画像を入れる）</div>
+      <div class="aspect-video bg-gray-50 overflow-hidden">
+        <%= video_tag "feature-calendar.mp4",
+            autoplay: true, muted: true, loop: true, playsinline: true,
+            preload: "metadata",
+            poster: asset_path("feature-calendar-poster.jpg"),
+            class: "w-full h-full object-cover object-center" do %>
+          <source src="<%= asset_path('feature-calendar.webm') %>" type="video/webm">
+          <source src="<%= asset_path('feature-calendar.mp4')  %>" type="video/mp4">
+        <% end %>
       </div>
       <div class="p-5">
         <div class="flex items-center gap-2">
@@ -244,9 +249,15 @@
 
     <!-- カード2：近くのお店検索 -->
     <article class="feature-card opacity-0 translate-y-3 transition rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" data-stagger>
-      <div class="aspect-video bg-gray-50 flex items-center justify-center">
-        <%#= image_tag "feature-search.png", alt: "近くのお店検索のスクリーンショット", class: "w-full h-full object-cover" %>
-        <div class="text-gray-400 text-sm">（画像を入れる）</div>
+      <div class="aspect-video bg-gray-50 overflow-hidden">
+        <%= video_tag "feature-search.mp4",
+            autoplay: true, muted: true, loop: true, playsinline: true,
+            preload: "metadata",
+            poster: asset_path("feature-search-poster.jpg"),
+            class: "w-full h-full object-cover object-center" do %>
+          <source src="<%= asset_path('feature-search.webm') %>" type="video/webm">
+          <source src="<%= asset_path('feature-search.mp4')  %>" type="video/mp4">
+        <% end %>
       </div>
       <div class="p-5">
         <div class="flex items-center gap-2">
@@ -262,9 +273,15 @@
 
     <!-- カード3：X共有 -->
     <article class="feature-card opacity-0 translate-y-3 transition rounded-2xl border border-gray-200 bg-white shadow-sm overflow-hidden" data-stagger>
-      <div class="aspect-video bg-gray-50 flex items-center justify-center">
-        <%#= image_tag "feature-share.png", alt: "X共有のスクリーンショット", class: "w-full h-full object-cover" %>
-        <div class="text-gray-400 text-sm">（画像を入れる）</div>
+      <div class="aspect-video bg-gray-50 overflow-hidden">
+        <%= video_tag "feature-share.mp4",
+            autoplay: true, muted: true, loop: true, playsinline: true,
+            preload: "metadata",
+            poster: asset_path("feature-share-poster.jpg"),
+            class: "w-full h-full object-cover object-center" do %>
+          <source src="<%= asset_path('feature-share.webm') %>" type="video/webm">
+          <source src="<%= asset_path('feature-share.mp4')  %>" type="video/mp4">
+        <% end %>
       </div>
       <div class="p-5">
         <div class="flex items-center gap-2">
@@ -282,7 +299,7 @@
   <!-- CTA -->
   <div class="mt-10 text-center">
     <div class="flex items-center justify-center gap-3">
-      <%= link_to "新規登録", new_user_registration_path, class: "inline-flex items-center justify-center px-6 py-3 rounded-xl bg-primary text-white font-bold shadow hover:bg-primary/80 transition" %>
+      <%= link_to "新規登録", new_user_registration_path, class: "inline-flex items-center justify-center px-6 py-3 rounded-xl bg-primary text-white font-bold shadow hover:bg-primary/80 transition animate-breath" %>
       <%= link_to "ログイン", new_user_session_path, class: "inline-flex items-center justify-center px-6 py-3 rounded-xl border border-gray-300 bg-secondary text-white font-bold hover:bg-secondary/80 transition" %>
     </div>
   </div>
