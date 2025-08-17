@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>めしガチャ</title>
+    <title>
+      <%= (content_for?(:title) ? "#{yield(:title)} | " : "") + "めしガチャ" %>
+    </title>
     <%= yield :meta %>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
