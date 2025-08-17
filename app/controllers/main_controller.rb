@@ -121,8 +121,8 @@ class MainController < ApplicationController
       amount = floor10.call(remaining_budget).clamp(min_feasible, max_feasible)
     else
       # 帯の“幅”は Mid 広め（25%/50%/25%）、出やすさは Low/High 厚め（40%/20%/40%）
-      width_low, width_mid, width_high = 0.30, 0.40, 0.30
-      w_low,   w_mid,   w_high         = 0.35, 0.30, 0.35
+      width_low, width_mid, width_high = 0.35, 0.30, 0.35
+      w_low,   w_mid,   w_high         = 0.30, 0.40, 0.30
 
       if min10 > max10
         # 10円グリッドに乗らないほど狭い → 近い10円に丸めてクランプ

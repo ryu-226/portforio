@@ -111,3 +111,6 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'www.meshigacha.com', protocol: 'https' }
 end
+
+Rails.application.routes.default_url_options[:host] = ENV.fetch("APP_HOST", "www.meshigacha.com")
+Rails.application.routes.default_url_options[:protocol] = ENV.fetch("APP_PROTOCOL", "https")

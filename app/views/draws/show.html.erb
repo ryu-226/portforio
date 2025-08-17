@@ -1,0 +1,12 @@
+<%# --- OGP/Twitterカードを積む --- %>
+<% set_meta_tags_for(title: @og_title, description: @og_desc, image_url: @og_image, url: @og_url) %>
+
+<main class="max-w-2xl mx-auto min-h-[calc(100svh-8rem)] flex items-start justify-center pt-[16svh] px-6 text-center">
+  <section class="w-full space-y-6">
+    <h1 class="text-3xl sm:text-4xl font-extrabold text-secondary tracking-tight">めしガチャ結果</h1>
+    <p class="mt-4 text-lg sm:text-2xl font-semibold text-gray-700">
+      予算 <%= @draw.amount.to_i %>円
+    </p>
+    <%= link_to "アプリで開く", root_path, class: "inline-flex items-center justify-center px-6 py-3 mt-8 text-lg sm:text-xl bg-primary hover:bg-primary/90 text-white rounded-2xl shadow-lg transition animate-breath" %>
+  </section>
+</main>

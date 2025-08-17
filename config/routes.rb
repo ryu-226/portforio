@@ -18,7 +18,10 @@ Rails.application.routes.draw do
 
   resource :contact, only: [:new, :create]
 
-  resources :draws, only: [:update]
+  resources :draws, only: [:show]
+  authenticate :user do
+    resources :draws, only: [:update]
+  end
 
   get "/terms", to: "static#terms", as: :terms
   get "/privacy", to: "static#privacy", as: :privacy
