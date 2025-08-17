@@ -4,7 +4,13 @@
     <title>
       <%= (content_for?(:title) ? "#{yield(:title)} | " : "") + "めしガチャ" %>
     </title>
+
+    <%= favicon_link_tag 'favicon-16x16.png', rel: 'icon', type: 'image/png', sizes: '16x16' %>
+    <%= favicon_link_tag 'favicon-32x32.png', rel: 'icon', type: 'image/png', sizes: '32x32' %>
+    <link rel="apple-touch-icon" sizes="180x180" href="<%= asset_path 'apple-touch-icon.png' %>">
+
     <%= yield :meta %>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
