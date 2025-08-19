@@ -1,15 +1,6 @@
 class DrawsController < ApplicationController
   before_action :authenticate_user!, except: :show
 
-  def update
-    draw = current_user.draws.find(params[:id])
-    if draw.update(actual_amount: params[:actual_amount])
-      redirect_back fallback_location: history_path, notice: "金額を保存しました"
-    else
-      redirect_back fallback_location: history_path, alert: "保存に失敗しました"
-    end
-  end
-
   def show
     @draw = Draw.find(params[:id])
 
@@ -21,5 +12,14 @@ class DrawsController < ApplicationController
     render :show
   rescue ActiveRecord::RecordNotFound
     render file: Rails.public_path.join("404.html"), status: :not_found, layout: false
+  end
+
+  def update
+    draw = current_user.draws.find(params[:id])
+    if draw.update(actual_amount: params[:actual_amount])
+      redirect_back fallback_location: history_path, notice: "金額を保存しました"
+    else
+      redirect_back fallback_location: history_path, alert: "保存に失敗しました"
+    end
   end
 end

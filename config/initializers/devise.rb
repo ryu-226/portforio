@@ -315,8 +315,8 @@ Devise.setup do |config|
   # config.sign_in_after_change_password = true
   if ENV["GOOGLE_CLIENT_ID"].present? && ENV["GOOGLE_CLIENT_SECRET"].present?
     config.omniauth :google_oauth2,
-      ENV["GOOGLE_CLIENT_ID"],
-      ENV["GOOGLE_CLIENT_SECRET"],
+      ENV.fetch("GOOGLE_CLIENT_ID", nil),
+      ENV.fetch("GOOGLE_CLIENT_SECRET", nil),
       scope: "email,profile",
       prompt: "select_account",
       access_type: "offline"

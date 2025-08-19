@@ -4,12 +4,12 @@ class HistoryController < ApplicationController
   def index
     # 今月を取得
     @month = params[:month].present? ? Date.parse(params[:month] + "-01") : Date.current.beginning_of_month
-    month_range = @month.beginning_of_month..@month.end_of_month
+    month_range = @month.all_month
 
     # 今月分の抽選
     @draws = current_user.draws.where(date: month_range).order(:date)
     @sum_amount = @draws.sum(:amount)
-    @sum_actual = @draws.sum { |d| d.actual_amount.present? ? d.actual_amount : d.amount }
+    @sum_actual = @draws.sum { |d| d.actual_amount.presence || d.amount }
     @month_diff_total = @draws.sum { |d| (d.actual_amount || d.amount) - d.amount }
 
     # 全期間分（累計差額用）

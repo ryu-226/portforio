@@ -12,7 +12,7 @@ class MainController < ApplicationController
       return
     end
 
-    month_range = Date.current.beginning_of_month..Date.current.end_of_month
+    month_range = Date.current.all_month
     drawn_count = current_user.draws.where(date: month_range).count
     drawn_sum = current_user.draws.where(date: month_range).sum(:amount)
     @remaining_days = @budget.draw_days.to_i - drawn_count
@@ -77,7 +77,7 @@ class MainController < ApplicationController
       return
     end
 
-    month_range = today.beginning_of_month..today.end_of_month
+    month_range = today.all_month
     month_draws = current_user.draws.where(date: month_range)
     drawn_count = month_draws.count
     drawn_sum = month_draws.sum(:amount)
@@ -101,8 +101,8 @@ class MainController < ApplicationController
     max_amt = budget.max_amount.to_i
 
     # 残り回数・残り予算に矛盾しない実現可能レンジ
-    min_feasible = [min_amt, remaining_budget - max_amt * (remaining_days - 1)].max
-    max_feasible = [max_amt, remaining_budget - min_amt * (remaining_days - 1)].min
+    min_feasible = [min_amt, remaining_budget - (max_amt * (remaining_days - 1))].max
+    max_feasible = [max_amt, remaining_budget - (min_amt * (remaining_days - 1))].min
 
     ceil10  = ->(n) { ((n + 9) / 10) * 10 }
     floor10 = ->(n) { (n / 10) * 10 }
@@ -111,9 +111,9 @@ class MainController < ApplicationController
     max10 = floor10.call(max_feasible)
 
     pick_from_band = lambda do |start_yen, end_yen|
-      ticks = (end_yen - start_yen) / 10 + 1
+      ticks = ((end_yen - start_yen) / 10) + 1
       idx   = rand(ticks)
-      start_yen + idx * 10
+      start_yen + (idx * 10)
     end
 
     if remaining_days == 1
@@ -129,7 +129,7 @@ class MainController < ApplicationController
         amount = (min_feasible.to_f / 10).round * 10
         amount = amount.clamp(min_feasible, max_feasible)
       else
-        ticks_total = (max10 - min10) / 10 + 1
+        ticks_total = ((max10 - min10) / 10) + 1
 
         low_ticks  = [(ticks_total * width_low ).floor, 1].max
         mid_ticks  = [(ticks_total * width_mid ).floor, 1].max
@@ -144,9 +144,9 @@ class MainController < ApplicationController
         end
 
         low_min  = min10
-        low_max  = low_min + (low_ticks - 1) * 10
+        low_max  = low_min + ((low_ticks - 1) * 10)
         mid_min  = low_max + 10
-        mid_max  = mid_min + (mid_ticks - 1) * 10
+        mid_max  = mid_min + ((mid_ticks - 1) * 10)
         high_min = mid_max + 10
         high_max = max10
 
