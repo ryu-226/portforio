@@ -30,7 +30,7 @@
   <% if @budget.present? && @remaining_days.to_i <= 0 %>
     <!-- 残り回数 0：ボタンを出さずに案内だけ -->
     <div class="mt-4 px-4 py-2 bg-yellow-50 border border-secondary text-secondary text-sm rounded text-center">
-      今月のガチャできる日数が上限に達しました。<br>
+      今月のガチャ日数が上限に達しました。<br>
       <%= link_to "設定を変更する", edit_budget_path, class: "text-accent underline hover:text-accent/60 font-semibold" %>
     </div>
   <% elsif !@draw %>

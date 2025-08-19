@@ -3,3 +3,7 @@ vendor
 log
 tmp
 node_modules
+config/master.key
+config/credentials/*.key
+.env
+.env.*

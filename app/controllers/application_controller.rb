@@ -18,7 +18,7 @@ class ApplicationController < ActionController::Base
     budget = current_user.budget_for(ym)
 
     today          = Date.current
-    month_range    = today.beginning_of_month..today.end_of_month
+    month_range    = today.all_month
     draws_this_mon = current_user.draws.where(date: month_range)
 
     @drawn_count   = draws_this_mon.count

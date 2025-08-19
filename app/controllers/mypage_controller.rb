@@ -10,7 +10,7 @@ class MypageController < ApplicationController
     @gacha_count = @user.draws.count
 
     if @budget
-      month_range = Date.current.beginning_of_month..Date.current.end_of_month
+      month_range = Date.current.all_month
       used_count = @user.draws.where(date: month_range).count
       used_sum = @user.draws.where(date: month_range).sum(:amount)
 

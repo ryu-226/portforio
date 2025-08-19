@@ -11,10 +11,18 @@ class BudgetsController < ApplicationController
     end
 
     if existing_budget
-      redirect_to edit_budget_path(existing_budget)
+      redirect_to edit_budget_path
     else
       @budget = Budget.new(user: current_user, year_month: year_month)
     end
+  end
+
+  def edit
+    unless @budget
+      redirect_to new_budget_path, alert: "まだ条件を設定していません。まずは各種条件を設定してください。"
+      return
+    end
+    set_remaining_status
   end
 
   def create
@@ -30,14 +38,6 @@ class BudgetsController < ApplicationController
     else
       render :new, status: :unprocessable_entity
     end
-  end
-
-  def edit
-    unless @budget
-      redirect_to new_budget_path, alert: "まだ条件を設定していません。まずは各種条件を設定してください。"
-      return
-    end
-    set_remaining_status
   end
 
   def update
@@ -60,7 +60,7 @@ class BudgetsController < ApplicationController
   end
 
   def set_remaining_status
-    month_range = Date.current.beginning_of_month..Date.current.end_of_month
+    month_range = Date.current.all_month
     used_count = current_user.draws.where(date: month_range).count
     used_sum = current_user.draws.where(date: month_range).sum(:amount)
 
