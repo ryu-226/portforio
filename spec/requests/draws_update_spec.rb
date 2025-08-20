@@ -1,7 +1,7 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "Draws update", type: :request do
-  it "actual_amount の更新に成功すると history にリダイレクト" do
+RSpec.describe 'Draws update', type: :request do
+  it 'actual_amount の更新に成功すると history にリダイレクト' do
     user = create(:user)
     sign_in user
     draw = create(:draw, user: user, actual_amount: nil)

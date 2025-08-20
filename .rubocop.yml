@@ -4,8 +4,26 @@ inherit_from:
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.1
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**/*'
+    - 'db/schema.rb'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'coverage/**/*'
 
-require:
+plugins:
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
+
+Style/Documentation:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
+  Exclude:
+    - 'spec/**/*'

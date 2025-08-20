@@ -65,12 +65,13 @@ class Budget < ApplicationRecord
 
     if draw_days.to_i > max_possible
       suffix = drawn_today ? "（今日分はガチャ済）" : ""
-      errors.add(:draw_days, "は今月すでにガチャ済みの#{used}回と、今日から月末まで#{suffix}の残り#{available_days}日を合わせた#{max_possible}日以内で設定してください")
+      errors.add(:draw_days, 
+                 "は今月すでにガチャ済みの#{used}回と、今日から月末まで#{suffix}の残り#{available_days}日を合わせた#{max_possible}日以内で設定してください")
     end
   end
 
   def remaining_budget_within_limits
-    return unless user.present? && draw_days.present? && monthly_budget.present? && min_amount.present? && max_amount.present?
+    return unless [user, draw_days, monthly_budget, min_amount, max_amount].all?(&:present?)
 
     used_count = draws_this_month_count
     used_sum = draws_this_month_sum

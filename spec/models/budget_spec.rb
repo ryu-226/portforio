@@ -13,7 +13,7 @@ RSpec.describe Budget, type: :model do
     days = [[remaining_days - 1, 1].max, 10].min
     min = 500
     max = 1500
-    monthly = [min * days + ((max - min) * days) / 2, max + 1].max
+    monthly = [(min * days) + (((max - min) * days) / 2), max + 1].max
 
     Budget.new({
       user: user,

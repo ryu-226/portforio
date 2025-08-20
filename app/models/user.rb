@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable, :omniauthable, omniauth_providers: [:google_oauth2]
+  devise :database_authenticatable, :registerable, :recoverable, :rememberable, :validatable, :confirmable,
+         :omniauthable, omniauth_providers: [:google_oauth2]
 
   has_many :draws, dependent: :destroy
   has_many :budgets
@@ -20,7 +21,10 @@ class User < ApplicationRecord
     return nil if email.blank?
 
     if (user = find_by(email: email))
-      user.update(provider: auth.provider, uid: auth.uid, image: auth.info.image) if user.provider.blank? || user.uid.blank?
+      if user.provider.blank? || user.uid.blank?
+        user.update(provider: auth.provider, uid: auth.uid,
+                    image: auth.info.image)
+      end
       return user
     end
 

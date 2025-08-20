@@ -1,7 +1,7 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "Budgets edit redirect", type: :request do
-  it "当月予算が無ければ /budget/new にリダイレクト" do
+RSpec.describe 'Budgets edit redirect', type: :request do
+  it '当月予算が無ければ /budget/new にリダイレクト' do
     user = create(:user)
     sign_in user
     get edit_budget_path
