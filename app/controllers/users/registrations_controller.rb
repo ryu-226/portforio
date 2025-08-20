@@ -10,7 +10,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # サニタイザに「必ず」password系を含める
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:nickname])
-    devise_parameter_sanitizer.permit(:account_update, keys: [:nickname, :email, :password, :password_confirmation, :current_password])
+    devise_parameter_sanitizer.permit(:account_update,
+                                      keys: [:nickname, :email, :password, :password_confirmation, :current_password])
   end
 
   # Devise の更新ロジックを条件付きで変更

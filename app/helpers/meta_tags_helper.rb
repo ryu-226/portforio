@@ -1,5 +1,6 @@
 module MetaTagsHelper
-  def set_meta_tags_for(title:, description:, image_url:, url: request.original_url, type: "website", twitter_card: "summary_large_image")
+  def set_meta_tags_for(title:, description:, image_url:, url: request.original_url, type: "website",
+                        twitter_card: "summary_large_image")
     tags = []
     # Open Graph
     tags << tag.meta(property: "og:title",       content: title)

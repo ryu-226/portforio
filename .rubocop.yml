@@ -7,11 +7,9 @@ AllCops:
   SuggestExtensions: false
   Exclude:
     - 'bin/**/*'
-    - 'db/**/*'
+    - 'db/schema.rb'
     - 'node_modules/**/*'
     - 'vendor/**/*'
-    - 'tmp/**/*'
-    - 'app/assets/builds/**/*'
     - 'coverage/**/*'
 
 plugins:
@@ -19,12 +17,13 @@ plugins:
   - rubocop-rails
   - rubocop-rspec
 
-RSpec/MultipleExpectations:
-  Max: 8
-  Exclude:
-    - 'spec/requests/**/*'
+Style/Documentation:
+  Enabled: false
 
-RSpec/ExampleLength:
-  Max: 25
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Layout/LineLength:
+  Max: 120
   Exclude:
-    - 'spec/requests/**/*'
+    - 'spec/**/*'
