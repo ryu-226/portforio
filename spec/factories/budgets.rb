@@ -16,7 +16,8 @@ FactoryBot.define do
 
     monthly_budget do
       d = draw_days.to_i
-      (min_amount * d) + (((max_amount - min_amount) * d) / 2)
+      mid = (min_amount * d) + (((max_amount - min_amount) * d) / 2)
+      [mid, max_amount + 1].max
     end
   end
 end
