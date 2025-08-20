@@ -4,8 +4,27 @@ inherit_from:
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.1
+  SuggestExtensions: false
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'node_modules/**/*'
+    - 'vendor/**/*'
+    - 'tmp/**/*'
+    - 'app/assets/builds/**/*'
+    - 'coverage/**/*'
 
-require:
+plugins:
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
+
+RSpec/MultipleExpectations:
+  Max: 8
+  Exclude:
+    - 'spec/requests/**/*'
+
+RSpec/ExampleLength:
+  Max: 25
+  Exclude:
+    - 'spec/requests/**/*'
