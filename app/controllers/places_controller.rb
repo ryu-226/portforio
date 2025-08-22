@@ -35,9 +35,7 @@ class PlacesController < ApplicationController
     body = res.body.to_s.force_encoding("UTF-8")
 
     # デバッグしやすく：エラー時はレスポンス本文をそのまま返す（必要なら削除OK）
-    if res.code.to_i >= 400
-      Rails.logger.error("[Places] #{res.code} #{body}")
-    end
+    Rails.logger.error("[Places] #{res.code} #{body}") if res.code.to_i >= 400
 
     render json: JSON.parse(body), status: res.code.to_i
   rescue JSON::ParserError
