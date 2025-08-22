@@ -12,6 +12,7 @@ class User < ApplicationRecord
   # Google経由作成時はパスワード未入力で作成OKにする
   def password_required?
     return false if provider.present? && uid.present? && !password.present?
+
     super
   end
 
@@ -49,8 +50,7 @@ class User < ApplicationRecord
 
   def password_complexity
     return if password.blank?
-    unless password =~ /[a-zA-Z]/ && password =~ /\d/
-      errors.add :password, "は英字と数字の両方を含めてください"
-    end
+
+    errors.add :password, "は英字と数字の両方を含めてください" unless password =~ /[a-zA-Z]/ && password =~ /\d/
   end
 end

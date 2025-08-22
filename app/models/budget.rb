@@ -38,18 +38,16 @@ class Budget < ApplicationRecord
 
   def draw_days_cannot_exceed_days_in_month
     return if draw_days.blank?
+
     total_days = Date.current.end_of_month.day
-    if draw_days.to_i > total_days
-      errors.add(:draw_days, "は今月の日数（#{total_days}日）以内で設定してください")
-    end
+    errors.add(:draw_days, "は今月の日数（#{total_days}日）以内で設定してください") if draw_days.to_i > total_days
   end
 
   def draw_days_changeable
     return unless persisted? && user.present?
+
     used = draws_this_month_count
-    if draw_days.present? && draw_days.to_i < used
-      errors.add(:draw_days, "は、すでにガチャ済みの日数（#{used}回）より少なくはできません")
-    end
+    errors.add(:draw_days, "は、すでにガチャ済みの日数（#{used}回）より少なくはできません") if draw_days.present? && draw_days.to_i < used
   end
 
   def draw_days_within_used_plus_remaining_days

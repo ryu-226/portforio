@@ -42,139 +42,80 @@ class MainController < ApplicationController
     ]
     @draw_message = nil
 
-    if @draw
-      min = @budget.min_amount
-      max = @budget.max_amount
-      range = max - min
-      twenty_percent = (range * 0.2).round
+    return unless @draw
 
-      low_max = min + twenty_percent
-      high_min = max - twenty_percent + 1
+    picker = DrawPicker.new(
+      min: @budget.min_amount,
+      max: @budget.max_amount,
+      remaining_days: @remaining_days,
+      remaining_budget: @remaining_budget
+    )
 
-      amount = @draw.amount
-
-      if amount <= low_max
-        @draw_message = @low_messages.sample
-      elsif amount >= high_min
-        @draw_message = @high_messages.sample
-      else
-        @draw_message = @middle_messages.sample
+    @draw_message =
+      case picker.classify(@draw.amount)
+      when :low  then @low_messages.sample
+      when :high then @high_messages.sample
+      else            @middle_messages.sample
       end
-    end
   end
 
   def draw
     today = Time.zone.today
     budget = current_user.budget_for(today.strftime('%Y-%m'))
-    
+
     unless budget
-      redirect_to new_budget_path, alert: "まずは予算を設定してください"
+      redirect_to new_budget_path, alert: I18n.t('draws.need_budget', default: 'まずは予算を設定してください')
       return
     end
 
     if current_user.draws.exists?(date: today)
-      redirect_to main_path, alert: "本日はすでにガチャを回しています"
+      redirect_to main_path, alert: I18n.t('draws.already_drawn_today', default: '本日はすでにガチャを回しています')
       return
     end
 
     month_range = today.all_month
-    month_draws = current_user.draws.where(date: month_range)
-    drawn_count = month_draws.count
-    drawn_sum = month_draws.sum(:amount)
-
+    drawn_count = current_user.draws.where(date: month_range).count
+    drawn_sum = current_user.draws.where(date: month_range).sum(:amount)
     remaining_days = budget.draw_days.to_i - drawn_count
     remaining_budget = budget.monthly_budget.to_i - drawn_sum
 
     if remaining_days <= 0
-      redirect_to main_path, alert: "今月のガチャできる日数が上限に達しました。設定を見直してください。"
+      redirect_to main_path, alert: I18n.t('draws.days_limit', default: '今月のガチャできる日数が上限に達しました。設定を見直してください。')
       return
     end
 
     if (remaining_days * budget.min_amount.to_i) > remaining_budget ||
        (remaining_days * budget.max_amount.to_i) < remaining_budget
-      redirect_to edit_budget_path, alert: "残り予算と残りガチャ日数に合わない条件です。設定を見直してください。"
+      redirect_to edit_budget_path,
+                  alert: I18n.t('draws.infeasible_combo', default: '残り予算と残りガチャ日数に合わない条件です。設定を見直してください。')
       return
     end
 
-    # ===== ここから金額決定ロジック =====
-    min_amt = budget.min_amount.to_i
-    max_amt = budget.max_amount.to_i
+    amount = DrawPicker.new(
+      min: budget.min_amount,
+      max: budget.max_amount,
+      remaining_days: remaining_days,
+      remaining_budget: remaining_budget
+    ).pick
 
-    # 残り回数・残り予算に矛盾しない実現可能レンジ
-    min_feasible = [min_amt, remaining_budget - (max_amt * (remaining_days - 1))].max
-    max_feasible = [max_amt, remaining_budget - (min_amt * (remaining_days - 1))].min
-
-    ceil10  = ->(n) { ((n + 9) / 10) * 10 }
-    floor10 = ->(n) { (n / 10) * 10 }
-
-    min10 = ceil10.call(min_feasible)
-    max10 = floor10.call(max_feasible)
-
-    pick_from_band = lambda do |start_yen, end_yen|
-      ticks = ((end_yen - start_yen) / 10) + 1
-      idx   = rand(ticks)
-      start_yen + (idx * 10)
-    end
-
-    if remaining_days == 1
-      # 最終日は残り予算を10円刻みに切り下げ（数十円余りOK）、かつ min/max を超えない
-      amount = floor10.call(remaining_budget).clamp(min_feasible, max_feasible)
-    else
-      # 帯の“幅”は Mid 広め（25%/50%/25%）、出やすさは Low/High 厚め（40%/20%/40%）
-      width_low, width_mid, width_high = 0.35, 0.30, 0.35
-      w_low,   w_mid,   w_high         = 0.30, 0.40, 0.30
-
-      if min10 > max10
-        # 10円グリッドに乗らないほど狭い → 近い10円に丸めてクランプ
-        amount = (min_feasible.to_f / 10).round * 10
-        amount = amount.clamp(min_feasible, max_feasible)
+    # 競合対策
+    already_drawn = false
+    current_user.with_lock do
+      if current_user.draws.exists?(date: today)
+        already_drawn = true
       else
-        ticks_total = ((max10 - min10) / 10) + 1
-
-        low_ticks  = [(ticks_total * width_low ).floor, 1].max
-        mid_ticks  = [(ticks_total * width_mid ).floor, 1].max
-        high_ticks =  ticks_total - low_ticks - mid_ticks
-        if high_ticks < 1
-          take = 1 - high_ticks
-          reduce_mid = [take, mid_ticks - 1].min
-          mid_ticks -= reduce_mid
-          take -= reduce_mid
-          low_ticks -= [take, low_ticks - 1].min
-          high_ticks = 1
-        end
-
-        low_min  = min10
-        low_max  = low_min + ((low_ticks - 1) * 10)
-        mid_min  = low_max + 10
-        mid_max  = mid_min + ((mid_ticks - 1) * 10)
-        high_min = mid_max + 10
-        high_max = max10
-
-        r = rand
-        band = if r < w_low
-                :low
-              elsif r < (w_low + w_mid)
-                :mid
-              else
-                :high
-              end
-
-        range =
-          case band
-          when :low  then (low_min  <= low_max  ? [low_min,  low_max]  : [min10, max10])
-          when :mid  then (mid_min  <= mid_max  ? [mid_min,  mid_max]  : [min10, max10])
-          when :high then (high_min <= high_max ? [high_min, high_max] : [min10, max10])
-          end
-
-        amount = pick_from_band.call(*range)
+        @draw = current_user.draws.create!(date: today, amount: amount)
       end
     end
+    if already_drawn
+      redirect_to main_path, alert: I18n.t('draws.already_drawn_today', default: '本日はすでにガチャを回しています')
+      return
+    end
 
-    # 念のためクランプ
-    amount = amount.clamp(min_feasible, max_feasible)
-
-    @draw = current_user.draws.create!(date: today, amount: amount)
     flash[:draw_amount] = amount
     redirect_to main_path
+  rescue ActiveRecord::RecordNotUnique
+    # ユニーク制約（user_id, date）が競合した場合も安全に案内
+    redirect_to main_path, alert: I18n.t('draws.already_drawn_today', default: '本日はすでにガチャを回しています')
   end
 end
