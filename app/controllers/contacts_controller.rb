@@ -8,7 +8,7 @@ class ContactsController < ApplicationController
     message = params[:message].to_s.strip
 
     if name.blank? || email.blank? || message.blank?
-      flash.now[:alert] = "すべての項目を入力してください"
+      flash.now[:alert] = t('contact.missing_item_input')
       render :new, status: :unprocessable_entity
       return
     end
@@ -18,6 +18,6 @@ class ContactsController < ApplicationController
       .inquiry_email
       .deliver_now
 
-    redirect_to new_contact_path, notice: "お問い合わせを送信しました。"
+    redirect_to new_contact_path, notice: t('contact.send_success')
   end
 end

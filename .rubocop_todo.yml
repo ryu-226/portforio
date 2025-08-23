@@ -24,14 +24,6 @@ Layout/ArgumentAlignment:
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
-Layout/ElseAlignment:
-  Exclude:
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EmptyLineBetweenMethodDefs, EmptyLineBetweenClassDefs, EmptyLineBetweenModuleDefs, DefLikeMacros, AllowAdjacentOneLineDefs, NumberOfEmptyLines.
 Layout/EmptyLineBetweenDefs:
   Exclude:
@@ -52,21 +44,6 @@ Layout/EmptyLinesAroundBlockBody:
   Exclude:
     - 'Gemfile'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleAlignWith, Severity.
-# SupportedStylesAlignWith: keyword, variable, start_of_line
-Layout/EndAlignment:
-  Exclude:
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowForAlignment, AllowBeforeTrailingComments, ForceEqualSignAlignment.
-Layout/ExtraSpacing:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/users/registrations_controller.rb'
-
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: IndentationWidth.
@@ -86,18 +63,6 @@ Layout/HashAlignment:
     - 'app/helpers/share_helper.rb'
     - 'db/migrate/20250810203354_add_unique_index_on_draws_user_date.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Width, AllowedPatterns.
-Layout/IndentationWidth:
-  Exclude:
-    - 'app/controllers/budgets_controller.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowHeredoc, AllowURI, AllowQualifiedName, URISchemes, IgnoreCopDirectives, AllowedPatterns, SplitStrings.
-# URISchemes: http, https
-
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowForAlignment, EnforcedStyleForExponentOperator, EnforcedStyleForRationalLiterals.
@@ -116,48 +81,12 @@ Layout/SpaceInsideArrayLiteralBrackets:
   Exclude:
     - 'config/environments/production.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: space, compact, no_space
-Layout/SpaceInsideParens:
-  Exclude:
-
 # Offense count: 6
 # This cop supports safe autocorrection (--autocorrect).
 Layout/SpaceInsidePercentLiteralDelimiters:
   Exclude:
     - 'Gemfile'
     - 'config/initializers/assets.rb'
-
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: final_newline, final_blank_line
-Layout/TrailingEmptyLines:
-  Exclude:
-    - 'app/controllers/contacts_controller.rb'
-    - 'app/controllers/history_controller.rb'
-    - 'app/controllers/places_controller.rb'
-    - 'app/controllers/static_controller.rb'
-    - 'app/controllers/users/omniauth_callbacks_controller.rb'
-    - 'app/helpers/meta_tags_helper.rb'
-    - 'app/helpers/share_helper.rb'
-    - 'app/models/budget.rb'
-    - 'config/initializers/assets.rb'
-    - 'config/initializers/i18n_pluralization.rb'
-
-# Offense count: 8
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowInHeredoc.
-Layout/TrailingWhitespace:
-  Exclude:
-    - 'Gemfile'
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/static_controller.rb'
-    - 'app/controllers/users/omniauth_callbacks_controller.rb'
-    - 'app/models/budget.rb'
-    - 'config/environments/production.rb'
 
 # Offense count: 1
 # Configuration parameters: AllowComments, AllowNil.
@@ -172,12 +101,6 @@ Lint/SuppressedException:
 Lint/UnusedMethodArgument:
   Exclude:
     - 'app/controllers/users/registrations_controller.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect.
-Lint/UselessAssignment:
-  Exclude:
 
 # Offense count: 16
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes.
@@ -288,14 +211,6 @@ Rails/HasManyOrHasOneDependent:
   Exclude:
     - 'app/models/user.rb'
 
-# Offense count: 14
-Rails/I18nLocaleTexts:
-  Exclude:
-    - 'app/controllers/budgets_controller.rb'
-    - 'app/controllers/contacts_controller.rb'
-    - 'app/controllers/draws_controller.rb'
-    - 'app/controllers/users/omniauth_callbacks_controller.rb'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Include.
@@ -375,9 +290,6 @@ Style/GuardClause:
     - 'app/models/budget.rb'
     - 'app/models/user.rb'
 
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns.
@@ -390,11 +302,6 @@ Style/NumericPredicate:
 Style/OpenStructUse:
   Exclude:
     - 'spec/models/user_from_omniauth_spec.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/ParallelAssignment:
-  Exclude:
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).

@@ -55,7 +55,7 @@ class Budget < ApplicationRecord
 
     used = draws_this_month_count
     today = Date.current
-    
+
     remaining_calendar_days = (today..today.end_of_month).count
     drawn_today = user.draws.exists?(date: today)
     available_days = remaining_calendar_days - (drawn_today ? 1 : 0)
@@ -63,7 +63,7 @@ class Budget < ApplicationRecord
 
     if draw_days.to_i > max_possible
       suffix = drawn_today ? "（今日分はガチャ済）" : ""
-      errors.add(:draw_days, 
+      errors.add(:draw_days,
                  "は今月すでにガチャ済みの#{used}回と、今日から月末まで#{suffix}の残り#{available_days}日を合わせた#{max_possible}日以内で設定してください")
     end
   end

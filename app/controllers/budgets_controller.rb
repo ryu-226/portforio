@@ -17,7 +17,7 @@ class BudgetsController < ApplicationController
 
   def edit
     unless @budget
-      redirect_to new_budget_path, alert: "まだ条件を設定していません。まずは各種条件を設定してください。"
+      redirect_to new_budget_path, alert: t('budgets.not_have_set')
       return
     end
     set_remaining_status
@@ -29,9 +29,9 @@ class BudgetsController < ApplicationController
 
     if @budget.save
       if params[:from_signup] == "1"
-        redirect_to main_path, notice: "条件を設定しました"
+        redirect_to main_path, notice: t('budgets.set_conditions')
       else
-        redirect_to mypage_path, notice: "条件を設定しました"
+        redirect_to mypage_path, notice: t('budgets.set_conditions')
       end
     else
       render :new, status: :unprocessable_entity
@@ -40,7 +40,7 @@ class BudgetsController < ApplicationController
 
   def update
     if @budget.update(budget_params)
-      redirect_to mypage_path, notice: "条件を更新しました"
+      redirect_to mypage_path, notice: t('budgets.update_set')
     else
       set_remaining_status
       render :edit, status: :unprocessable_entity

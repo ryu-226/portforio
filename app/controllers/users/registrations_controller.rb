@@ -25,7 +25,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         resource.update(attrs)
       else
         # パスワード未入力＝メール等だけ変更したい場合は今まで通り
-        resource.update_without_password(attrs)  # password を触らない更新
+        resource.update_without_password(attrs) # password を触らない更新
       end
     else
       super
