@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
 
   def set_draw_status
     return unless user_signed_in?
-    
+
     ym     = Date.current.strftime('%Y-%m')
     budget = current_user.budget_for(ym)
 
@@ -25,7 +25,7 @@ class ApplicationController < ActionController::Base
     @drawn_sum     = draws_this_mon.sum(:amount)
 
     if budget.present?
-      @remaining_days   = budget.draw_days.to_i     - @drawn_count
+      @remaining_days   = budget.draw_days.to_i - @drawn_count
       @remaining_budget = budget.monthly_budget.to_i - @drawn_sum
     else
       @remaining_days   = nil

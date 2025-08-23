@@ -19,6 +19,8 @@ module App
     # config.eager_load_paths << Rails.root.join("extras")
     config.time_zone = 'Asia/Tokyo'
     config.active_record.default_timezone = :utc
+    config.i18n.available_locales = %i[ja en]
     config.i18n.default_locale = :ja
+    config.i18n.fallbacks = [:en]
   end
 end

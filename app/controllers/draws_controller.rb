@@ -17,9 +17,9 @@ class DrawsController < ApplicationController
   def update
     draw = current_user.draws.find(params[:id])
     if draw.update(actual_amount: params[:actual_amount])
-      redirect_back fallback_location: history_path, notice: "金額を保存しました"
+      redirect_back fallback_location: history_path, notice: t('actual.save_success')
     else
-      redirect_back fallback_location: history_path, alert: "保存に失敗しました"
+      redirect_back fallback_location: history_path, alert: t('actual.save_failure')
     end
   end
 end

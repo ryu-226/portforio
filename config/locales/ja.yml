@@ -28,6 +28,44 @@ ja:
         restrict_dependent_destroy:
           has_one: "%{record}が存在しているので削除できません"
           has_many: "%{record}が存在しているので削除できません"
+  draws:
+    need_budget: "まずは予算を設定してください"
+    already_drawn_today: "本日はすでにガチャを回しています"
+    days_limit: "今月のガチャできる日数が上限に達しました。設定を見直してください。"
+    infeasible_combo: "残り予算と残りガチャ日数に合わない条件です。設定を見直してください。"
+  main:
+    draw_messages:
+      low:
+        - "セーブデー！賢く使おう"
+        - "節約ランチでお得気分♪"
+        - "ランチの工夫が腕の見せどころ！"
+        - "今日はお財布にやさしく！"
+        - "コスパ最強ランチを狙おう！"
+      mid:
+        - "ランチタイムでひと休み♪"
+        - "ランチ仲間とシェアするのもおすすめ！"
+        - "迷ったら定番メニュー！"
+        - "おいしいランチでリフレッシュ！"
+        - "バランスの良い食事を心がけよう！"
+      high:
+        - "今日は豪華ランチいけるかも！"
+        - "たまにはご褒美ランチも♪"
+        - "今日はお気に入りのお店に行くチャンス！"
+        - "ランチ仲間とプチ贅沢しよう！"
+        - "美味しいもの食べて午後も頑張ろう！"
+  actual:
+    save_success: "金額を保存しました"
+    save_failure: "保存に失敗しました"
+  contact:
+    send_success: "お問い合わせを送信しました。"
+    missing_item_input: "すべての項目を入力してください"
+  omniauth:
+    login_failure: "Googleログインに失敗しました"
+    canceled_or_failed: "Googleログインがキャンセル/失敗しました"
+  budgets:
+    not_have_set: "まだ条件を設定していません。まずは各種条件を設定してください。"
+    set_conditions: "条件を設定しました"
+    update_set: "条件を更新しました"
   date:
     abbr_day_names:
     - 日
