@@ -136,6 +136,17 @@ class DrawPicker
     :mid
   end
 
+  # 可否判定
+  def self.feasible?(min:, max:, remaining_days:, remaining_budget:)
+    min = min.to_i
+    max = max.to_i
+    rd  = remaining_days.to_i
+    rb  = remaining_budget.to_i
+    return false if rd <= 0
+
+    rb.between?(rd * min, rd * max)
+  end
+
   private
 
   # pick/bands 共通の実現可能レンジ

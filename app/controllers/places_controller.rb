@@ -12,8 +12,8 @@ class PlacesController < ApplicationController
     uri = URI("https://places.googleapis.com/v1/#{endpoint}")
 
     headers = {
-      "Content-Type"    => "application/json",
-      "X-Goog-Api-Key"  => ENV.fetch("GOOGLE_PLACES_API_KEY"),
+      "Content-Type" => "application/json",
+      "X-Goog-Api-Key" => ENV.fetch("GOOGLE_PLACES_API_KEY"),
       "X-Goog-FieldMask" => [
         "places.id",
         "places.displayName",

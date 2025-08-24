@@ -28,7 +28,7 @@ RSpec.describe HistoryController, type: :controller do
     expect(response).to have_http_status(:ok)
     expect(assigns(:sum_amount)).to eq 3_000
     expect(assigns(:sum_actual)).to eq 3_400
-    expect(assigns(:month_diff_total)).to eq 400
-    expect(assigns(:cumulative_diff_total)).to eq 200
+    expect(assigns(:month_diff_total)).to eq(-400)
+    expect(assigns(:cumulative_diff_total)).to eq(-200)
   end
 end

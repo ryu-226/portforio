@@ -17,9 +17,9 @@ class DrawsController < ApplicationController
   def update
     draw = current_user.draws.find(params[:id])
     if draw.update(actual_amount: params[:actual_amount])
-      redirect_back fallback_location: history_path, notice: t('actual.save_success')
+      redirect_to history_path, notice: t('actual.save_success')
     else
-      redirect_back fallback_location: history_path, alert: t('actual.save_failure')
+      redirect_to history_path, alert: t('actual.save_failure')
     end
   end
 end

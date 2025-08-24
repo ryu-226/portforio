@@ -10,7 +10,7 @@ Rails.application.config.assets.version = "1.0"
 # application.js, application.css, and all non-JS/CSS in the app/assets
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
-Rails.application.config.assets.precompile += %w[ *.mp4 *.webm ]
+Rails.application.config.assets.precompile += %w[*.mp4 *.webm]
 Rails.application.config.assets.configure do |env|
   env.register_mime_type 'video/mp4',  extensions: ['.mp4']
   env.register_mime_type 'video/webm', extensions: ['.webm']

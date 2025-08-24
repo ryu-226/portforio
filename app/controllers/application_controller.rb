@@ -14,23 +14,14 @@ class ApplicationController < ActionController::Base
   def set_draw_status
     return unless user_signed_in?
 
-    ym     = Date.current.strftime('%Y-%m')
-    budget = current_user.budget_for(ym)
+    today  = Date.current
+    budget = current_user.budget_for(today.strftime('%Y-%m'))
+    stats  = DrawStats.for(user: current_user, budget: budget, date: today)
 
-    today          = Date.current
-    month_range    = today.all_month
-    draws_this_mon = current_user.draws.where(date: month_range)
-
-    @drawn_count   = draws_this_mon.count
-    @drawn_sum     = draws_this_mon.sum(:amount)
-
-    if budget.present?
-      @remaining_days   = budget.draw_days.to_i - @drawn_count
-      @remaining_budget = budget.monthly_budget.to_i - @drawn_sum
-    else
-      @remaining_days   = nil
-      @remaining_budget = nil
-    end
+    @drawn_count      = stats.drawn_count
+    @drawn_sum        = stats.drawn_sum
+    @remaining_days   = stats.remaining_days
+    @remaining_budget = stats.remaining_budget
   end
 
   def post_login_path_for(user, created_now: false)

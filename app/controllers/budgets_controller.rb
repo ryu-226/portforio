@@ -7,12 +7,9 @@ class BudgetsController < ApplicationController
     existing_budget = current_user.budget_for(year_month)
 
     return redirect_to new_budget_path(from_signup: '1') if existing_budget.nil? && params[:from_signup] != '1'
+    return redirect_to edit_budget_path if existing_budget
 
-    if existing_budget
-      redirect_to edit_budget_path
-    else
-      @budget = Budget.new(user: current_user, year_month: year_month)
-    end
+    @budget = Budget.new(user: current_user, year_month: year_month)
   end
 
   def edit
@@ -26,16 +23,9 @@ class BudgetsController < ApplicationController
   def create
     year_month = Date.current.strftime("%Y-%m")
     @budget = Budget.new(budget_params.merge(user: current_user, year_month: year_month))
+    return render(:new, status: :unprocessable_entity) unless @budget.save
 
-    if @budget.save
-      if params[:from_signup] == "1"
-        redirect_to main_path, notice: t('budgets.set_conditions')
-      else
-        redirect_to mypage_path, notice: t('budgets.set_conditions')
-      end
-    else
-      render :new, status: :unprocessable_entity
-    end
+    redirect_to after_create_path, notice: t('budgets.set_conditions')
   end
 
   def update
@@ -49,6 +39,10 @@ class BudgetsController < ApplicationController
 
   private
 
+  def after_create_path
+    params[:from_signup] == "1" ? main_path : mypage_path
+  end
+
   def set_budget
     @budget = current_user.budget_for(Date.current.strftime("%Y-%m"))
   end
@@ -58,22 +52,17 @@ class BudgetsController < ApplicationController
   end
 
   def set_remaining_status
-    month_range = Date.current.all_month
-    used_count = current_user.draws.where(date: month_range).count
-    used_sum = current_user.draws.where(date: month_range).sum(:amount)
+    stats = DrawStats.for(user: current_user, budget: @budget, date: Date.current)
 
-    draw_days = @budget.draw_days
-    monthly_budget = @budget.monthly_budget
-
-    @remaining_days = draw_days.to_i - used_count
-    @remaining_budget = monthly_budget.to_i - used_sum
+    @remaining_days = stats.remaining_days
+    @remaining_budget = stats.remaining_budget
 
     today = Date.current
-    @used_count = used_count
+    @used_count = stats.drawn_count
     @drawn_today = current_user.draws.exists?(date: today)
+    @days_in_month = today.end_of_month.day
 
     @remaining_calendar_days = (today..today.end_of_month).count
     @available_days = @remaining_calendar_days - (@drawn_today ? 1 : 0)
-    @days_in_month = today.end_of_month.day
   end
 end
