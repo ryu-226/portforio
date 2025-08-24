@@ -1,3 +1,7 @@
+# めしガチャ
+### サービスURL : https://www.meshigacha.com/
+![Image](app/assets/images/l.png)
+
 ■サービス概要 
 外食好きでも節約したい！予算内で楽しめる“ランチ額抽選”アプリ。
 その月の好きな日数と月の予算を設定することでその日使える飲食代がランダムで抽選されます。
@@ -53,9 +57,9 @@ MVPリリース
 ・SNS共有機能（今日の抽選金額をXでシェア）
 　　XのIntent URLを使ったシェアリンクを生成
 
-■画面遷移図 <br>
+## ■ 画面遷移図
 [figma](https://www.figma.com/design/ekoo5KtKJYKnr7l2XwvynN/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=jgNeXuRBdksFHd2S-1)
 
-■ER図 <br>
+## ■ ER図
 [draw.io](https://app.diagrams.net/#G1DhmoeFF9IfUQto57Znhw6MFcriCfRWOV#%7B%22pageId%22%3A%22R2lEEEUBdFMjLlhIrx00%22%7D)
 ![ER図](https://i.gyazo.com/60fc2612747976f8ded5cf0cb50d4028.png)
