@@ -57,5 +57,5 @@ MVPリリース
 [figma](https://www.figma.com/design/ekoo5KtKJYKnr7l2XwvynN/%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA%E7%94%BB%E9%9D%A2%E9%81%B7%E7%A7%BB%E5%9B%B3?node-id=0-1&t=jgNeXuRBdksFHd2S-1)
 
 ■ER図 <br>
-[draw.io](https://viewer.diagrams.net/?lightbox=1&nav=1&edit=_blank&title=ER.drawio#Uhttps://raw.githubusercontent.com/<user>/<repo>/main/docs/er/er.drawio)
+[draw.io](https://drive.google.com/file/d/1DhmoeFF9IfUQto57Znhw6MFcriCfRWOV/view?usp=sharing)
 ![ER図](https://i.gyazo.com/60fc2612747976f8ded5cf0cb50d4028.png)
