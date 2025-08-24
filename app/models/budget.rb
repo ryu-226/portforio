@@ -40,14 +40,14 @@ class Budget < ApplicationRecord
     return if draw_days.blank?
 
     total_days = Date.current.end_of_month.day
-    errors.add(:draw_days, "は今月の日数（#{total_days}日）以内で設定してください") if draw_days.to_i > total_days
+    errors.add(:draw_days, "は今月の日数（#{total_days}日）以内で設定してください") if draw_days > total_days
   end
 
   def draw_days_changeable
     return unless persisted? && user.present?
 
     used = draws_this_month_count
-    errors.add(:draw_days, "は、すでにガチャ済みの日数（#{used}回）より少なくはできません") if draw_days.present? && draw_days.to_i < used
+    errors.add(:draw_days, "は、すでにガチャ済みの日数（#{used}回）より少なくはできません") if draw_days.present? && draw_days < used
   end
 
   def draw_days_within_used_plus_remaining_days
@@ -61,7 +61,7 @@ class Budget < ApplicationRecord
     available_days = remaining_calendar_days - (drawn_today ? 1 : 0)
     max_possible = used + available_days
 
-    if draw_days.to_i > max_possible
+    if draw_days > max_possible
       suffix = drawn_today ? "（今日分はガチャ済）" : ""
       errors.add(:draw_days,
                  "は今月すでにガチャ済みの#{used}回と、今日から月末まで#{suffix}の残り#{available_days}日を合わせた#{max_possible}日以内で設定してください")
@@ -74,7 +74,7 @@ class Budget < ApplicationRecord
     used_count = draws_this_month_count
     used_sum = draws_this_month_sum
 
-    remain_count = draw_days.to_i - used_count
+    remain_count = draw_days - used_count
     remain_budget = monthly_budget.to_i - used_sum
 
     return if remain_count <= 0
