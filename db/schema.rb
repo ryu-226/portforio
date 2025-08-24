@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_14_030054) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_24_054710) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "budgets", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "monthly_budget", null: false
-    t.text "draw_days", null: false
+    t.integer "draw_days", null: false
     t.integer "min_amount", null: false
     t.integer "max_amount", null: false
     t.datetime "created_at", null: false
@@ -25,6 +25,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_14_030054) do
     t.string "year_month", null: false
     t.index ["user_id", "year_month"], name: "index_budgets_on_user_id_and_year_month", unique: true
     t.index ["user_id"], name: "index_budgets_on_user_id"
+    t.check_constraint "draw_days > 0", name: "chk_budgets_draw_days_positive"
   end
 
   create_table "draws", force: :cascade do |t|
