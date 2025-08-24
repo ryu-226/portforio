@@ -4,18 +4,15 @@ class MypageController < ApplicationController
 
   def index
     @user = current_user
-    current_year_month = Date.current.strftime('%Y-%m')
-    @budget = @user.budget_for(current_year_month)
+    ym = Date.current.strftime('%Y-%m')
+    @budget = @user.budget_for(ym)
     @member_days = (Time.zone.today - @user.created_at.in_time_zone('Asia/Tokyo').to_date).to_i + 1
     @gacha_count = @user.draws.count
 
     if @budget
-      month_range = Date.current.all_month
-      used_count = @user.draws.where(date: month_range).count
-      used_sum = @user.draws.where(date: month_range).sum(:amount)
-
-      @remaining_days = @budget.draw_days.to_i - used_count
-      @remaining_budget = @budget.monthly_budget.to_i - used_sum
+      stats = DrawStats.for(user: @user, budget: @budget, date: Date.current)
+      @remaining_days = stats.remaining_days
+      @remaining_budget = stats.remaining_budget
     end
 
     rel = current_user.draws.where.not(actual_amount: nil)

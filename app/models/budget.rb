@@ -90,10 +90,10 @@ class Budget < ApplicationRecord
 
   # 共通メソッド
   def draws_this_month_count
-    user.draws.where(date: Date.current.all_month).count
+    user.draws.in_month(Date.current).count
   end
 
   def draws_this_month_sum
-    user.draws.where(date: Date.current.all_month).sum(:amount)
+    user.draws.in_month(Date.current).sum(:amount)
   end
 end

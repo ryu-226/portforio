@@ -21,8 +21,8 @@
     </div>
   </div>
 
-  <% month_diff = @sum_amount - @sum_actual %>
-  <% cumulative_diff = @all_draws.sum { |d| d.amount - (d.actual_amount || d.amount) } %>
+  <% month_diff = @month_diff_total %>
+  <% cumulative_diff = @cumulative_diff_total %>
 
   <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-4 md:mb-6">
     <div class="rounded-xl border border-gray-200 p-3 shadow-sm">

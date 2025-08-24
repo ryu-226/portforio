@@ -3,7 +3,7 @@ module ShareHelper
     base = "https://twitter.com/intent/tweet"
     params = {
       text: text,
-      url:  url,
+      url: url,
       hashtags: (hashtags.presence && hashtags.join(",")),
       via: via.presence
     }.compact_blank
