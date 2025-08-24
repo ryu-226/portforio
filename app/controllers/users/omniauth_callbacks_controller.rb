@@ -10,7 +10,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
     if @user&.persisted?
       sign_in(@user)
-      remember_me(@user)
+      remember_me(@user) if @user.encrypted_password.present?
       redirect_to post_login_path_for(@user, created_now: created_now)
     else
       redirect_to new_user_session_path, alert: t('omniauth.login_failure')
