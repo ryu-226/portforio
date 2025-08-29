@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Budgets", type: :request do
   let(:user) { create(:user) }
 
+  around { |ex| travel_to(Time.zone.local(2025, 1, 15, 12)) { ex.run } }
+
   describe "GET /budget/new" do
     it "未ログインはログインへ" do
       get new_budget_path

@@ -23,6 +23,37 @@
 
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
     <%= javascript_include_tag "application", "data-turbo-track": "reload" %>
+
+    <% if Rails.env.production? && ENV['GA_MEASUREMENT_ID'].present? %>
+      <script async src="https://www.googletagmanager.com/gtag/js?id=<%= ENV['GA_MEASUREMENT_ID'] %>"></script>
+      <script>
+        (function () {
+          var GA_ID = '<%= ENV['GA_MEASUREMENT_ID'] %>';
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){ dataLayer.push(arguments); }
+          window.gtag = window.gtag || gtag;
+          gtag('js', new Date());
+
+          gtag('config', GA_ID, { send_page_view: false });
+
+          var lastPath = null;
+          function sendPV() {
+            if (!window.gtag) return;
+            var path = location.pathname + location.search;
+            if (path === lastPath) return;
+            lastPath = path;
+            gtag('event', 'page_view', {
+              page_title: document.title,
+              page_location: location.href,
+              page_path: path
+            });
+          }
+          document.addEventListener('DOMContentLoaded', sendPV);
+          document.addEventListener('turbo:load', sendPV);
+        })();
+      </script>
+    <% end %>
   </head>
 
   <body class="font-sans">
