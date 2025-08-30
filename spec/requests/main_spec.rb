@@ -3,6 +3,8 @@ require "rails_helper"
 RSpec.describe "Main", type: :request do
   let(:user) { create(:user) }
 
+  around { |ex| travel_to(Time.zone.local(2025, 1, 15, 12)) { ex.run } }
+
   describe "GET /main" do
     it "ログイン済 & 予算未設定でも 200" do
       sign_in user
@@ -12,7 +14,7 @@ RSpec.describe "Main", type: :request do
 
     it "ログイン済 & 予算ありでも 200" do
       sign_in user
-      create(:budget, user:)
+      create(:budget, user: user, monthly_budget: 12_000, draw_days: 10, min_amount: 500, max_amount: 1_500)
       get main_path
       expect(response).to have_http_status(:ok)
     end
