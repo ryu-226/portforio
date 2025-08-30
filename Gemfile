@@ -67,6 +67,7 @@ group :development, :test do
   gem 'rubocop-performance', '~> 1.21', require: false
   gem 'rubocop-rails', '~> 2.25', require: false
   gem 'rubocop-rspec', '~> 3.0', require: false
+  gem "sitemap_generator"
 end
 
 group :development do
