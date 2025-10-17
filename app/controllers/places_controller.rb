@@ -1,13 +1,10 @@
 require 'net/http'
 
 class PlacesController < ApplicationController
-  protect_from_forgery except: :search
-
   def search
     req_body = request.raw_post
     parsed   = JSON.parse(req_body) rescue {}
 
-    # Text Search を使う条件（textQueryがある時）: 価格帯で絞るならこちらを送る設計にすると◎
     endpoint = parsed["textQuery"].present? ? "places:searchText" : "places:searchNearby"
     uri = URI("https://places.googleapis.com/v1/#{endpoint}")
 
@@ -34,7 +31,6 @@ class PlacesController < ApplicationController
     res  = http.post(uri.path, req_body, headers)
     body = res.body.to_s.force_encoding("UTF-8")
 
-    # デバッグしやすく：エラー時はレスポンス本文をそのまま返す（必要なら削除OK）
     Rails.logger.error("[Places] #{res.code} #{body}") if res.code.to_i >= 400
 
     render json: JSON.parse(body), status: res.code.to_i

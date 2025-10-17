@@ -267,10 +267,18 @@
       }
     };
 
+    // CSRFトークンを取得
+    const token = document.querySelector('meta[name="csrf-token"]')?.content;
+
     try {
       const res = await fetch('/places/search', {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": token,
+          "X-Requested-With": "XMLHttpRequest"
+        },
+        credentials: "same-origin",
         body: JSON.stringify(body)
       });
 
