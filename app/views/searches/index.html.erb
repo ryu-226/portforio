@@ -35,16 +35,25 @@
           <label class="block font-semibold mb-1 text-secondary">価格レベル</label>
           <div id="price-levels" class="flex flex-wrap gap-2 max-w-[240px]">
             <label class="inline-flex items-center gap-1 text-primary font-semibold">
-              <input type="checkbox" value="INEXPENSIVE" class="accent-primary"> 低
+              <input type="checkbox" value="INEXPENSIVE" class="accent-primary"> ～ ¥1000
             </label>
             <label class="inline-flex items-center gap-1 text-primary font-semibold">
-              <input type="checkbox" value="MODERATE" class="accent-primary"> 中
+              <input type="checkbox" value="MODERATE" class="accent-primary"> ¥1000 ～ ¥2000
             </label>
             <label class="inline-flex items-center gap-1 text-primary font-semibold">
-              <input type="checkbox" value="EXPENSIVE" class="accent-primary"> 高
+              <input type="checkbox" value="EXPENSIVE" class="accent-primary"> ¥2000 ～
             </label>
           </div>
-          <p class="text-xs text-gray-500 mt-1">※ 指定すると価格帯情報の無い店舗は除外されます</p>
+          <!-- ▼ トグル部分 -->
+          <details class="mt-2 bg-gray-50 border border-gray-200 rounded-lg p-2">
+            <summary class="cursor-pointer text-sm font-semibold text-gray-500 select-none">
+              <span class="text-yellow-300"><i class="fa-solid fa-triangle-exclamation"></i></span> 価格レベルについて
+            </summary>
+            <div class="mt-2 text-xs text-gray-600 space-y-1 pl-1">
+              <p>・指定すると、価格帯情報の無い店舗は除外されます。</p>
+              <p>・表示している価格帯はおおよその目安です。</p>
+            </div>
+          </details>
         </div>
         <div>
           <label class="block font-semibold mb-1 text-secondary">ジャンル</label>

@@ -400,18 +400,28 @@
   function priceLevelToLabel(level) {
     switch (level) {
       case 'PRICE_LEVEL_FREE': return '無料';
-      case 'PRICE_LEVEL_INEXPENSIVE': return '低';
-      case 'PRICE_LEVEL_MODERATE': return '中';
-      case 'PRICE_LEVEL_EXPENSIVE': return '高';
-      case 'PRICE_LEVEL_VERY_EXPENSIVE': return '高級';
+      case 'PRICE_LEVEL_INEXPENSIVE': return '～¥1000';
+      case 'PRICE_LEVEL_MODERATE': return '¥1000～¥2000';
+      case 'PRICE_LEVEL_EXPENSIVE': return '¥2000～';
+      case 'PRICE_LEVEL_VERY_EXPENSIVE': return '¥2000～ (高級)';
       default: return '';
     }
   }
 
-  // チェック済みの価格帯を列挙体に変換
+  // チェック済みの価格帯を列挙体に変換（高は VERY_EXPENSIVE も内包）
   function selectedPriceLevels() {
-    return Array.from(document.querySelectorAll('#price-levels input[type="checkbox"]:checked'))
-      .map(cb => `PRICE_LEVEL_${cb.value}`); // 例: "INEXPENSIVE" -> "PRICE_LEVEL_INEXPENSIVE"
+    const raw = Array.from(document.querySelectorAll('#price-levels input[type="checkbox"]:checked'))
+      .map(cb => cb.value); // INEXPENSIVE / MODERATE / EXPENSIVE
+
+    const expanded = [];
+    for (const v of raw) {
+      if (v === 'EXPENSIVE') {
+        expanded.push('PRICE_LEVEL_EXPENSIVE', 'PRICE_LEVEL_VERY_EXPENSIVE');
+      } else {
+        expanded.push(`PRICE_LEVEL_${v}`);
+      }
+    }
+    return expanded;
   }
 
   window.initMap = initMap;
